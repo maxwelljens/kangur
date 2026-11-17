@@ -20,7 +20,7 @@ const PART_NAMES: Array[StringName] = [
 ]
 
 ## Body-part damage multipliers applied to weapon base damage (design §7).
-const PART_DAMAGE_MULT: Array[float] = [3.5, 1.0, 0.75, 0.75, 0.8, 0.8]
+const PART_DAMAGE_MULT: Array[float] = [3.0, 1.0, 0.75, 0.75, 0.8, 0.8]
 
 static func team_name(team: int) -> StringName:
 	return &"BASTION" if team == Team.BASTION else &"SIROCCO"

@@ -46,6 +46,10 @@ Project skills (load via skill tool): `kangur-content` (add weapons/maps/classes
 
 ## Commands
 
+**ALWAYS invoke Godot via `tools/godot.sh`** (flock-serialized wrapper) —
+concurrent godot runs race on the `.godot` cache and corrupt imports.
+Parallel agents share this lock; never call `/usr/bin/godot` directly.
+
 ```bash
 # Editor
 godot --path . -e

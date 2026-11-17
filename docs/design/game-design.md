@@ -67,10 +67,14 @@ NPC personalities, routes, and lingering are re-rolled per match from a seed.
   better accuracy), SPRINT (hold, stamina).
 - **Speeds** (px/s): walk 130, sprint 215, crouch 65. Focus (RMB) ×0.5.
   Crippled leg ×0.55 and no sprint. Class multipliers 0.92–1.08.
-- **Feel**: Source-engine-style acceleration + friction, not instant velocity.
-  Ground accel 1400 px/s², friction coefficient 10/s (exponential decay),
-  air control N/A (no jumping). Direction changes carry momentum; counter-
-  strafing (tapping opposite direction) stops you fast — a skill expression.
+- **Feel**: Source-engine-style acceleration + friction (rate-based, per Valve
+  SDK): friction first — `control = max(speed, stopspeed=60)`,
+  `drop = control·friction·dt`, scale velocity; then accelerate —
+  `accelspeed = accel·dt·wishspeed`, `addspeed = wishspeed − vel·wishdir`,
+  clamp. **accel rate 10/s, friction 9/s**. Terminal speed = stance max
+  (130/215/65), reached in ~0.15 s; counter-strafing stops you fast — a skill
+  expression. (Research fix: absolute accel 1400 px/s² + friction 10/s would
+  cap at 140 px/s; the rate form preserves the intended ~1300 px/s² at walk.)
 - **Stamina**: 100. Sprint drains 18/s, regen 12/s after 1 s rest. Exhausted at
   0 → forced walk until 30. Sprint widens spread massively and narrows vision
   cone (tunnel vision).
@@ -138,11 +142,13 @@ Switchable (X) where the weapon supports it. Semi-auto rewards click discipline
 (RPM cap = weapon cycle rate, no macro benefit).
 
 **Damage & penetration**: base damage per weapon; body-part multipliers
-(head ×3.5, torso ×1.0, arms ×0.75, legs ×0.8). Falloff linear from
+(head ×3.0, torso ×1.0, arms ×0.75, legs ×0.8). Head 35 HP ×3.0 = unprotected
+head is lethal from any weapon (realistic); helmet 60% absorb gives a gradient
+(pistol/SMG/shotgun headshot vs helmet survives one, rifle+ kills). Falloff linear from
 `falloff_start` to `falloff_end` px down to `min_mult`. Penetration: bullets
 can pass thin walls/wood/glass with damage ×0.55 and deflection up to 4°;
 concrete/stone stops everything except sniper (×0.35 through thin concrete).
-Armor (class): vest absorbs 40% torso damage, helmet 50% head, each with
+Armor (class): vest absorbs 40% torso damage, helmet 60% head, each with
 durability that degrades per hit.
 
 **Draft weapon roster** (fictional names; stats grounded in research doc
@@ -168,14 +174,16 @@ damage), **flash** (LOS-gated blind 1.5–3 s + ringing, NPCs affected too),
 **smoke** (vision-blocking cloud 12 s, AI respects it). Throw arc = topdown
 lob with shadow, G to throw, cookable frag (hold).
 
-**TTK targets** (stationary, unarmored torso): rifle 3 hits ≈ 0.28–0.4 s,
-pistol 4–5 ≈ 0.6 s, sniper 1, shotgun ≤1 at close. High lethality is the point;
-positioning beats reflexes.
+**TTK targets** (stationary, unarmored torso, 80 HP): rifle 3 hits ≈ 0.18–0.2 s
+(600–650 RPM), pistol 4 hits ≈ 0.43 s (420 RPM), SMG 4 hits ≈ 0.22 s, sniper 1,
+shotgun ≤1 at close. High lethality is the point; positioning beats reflexes.
+Final values are sim-tuned (`tests/simulation/`), all live in `data/weapons/`.
 
 ## 7. Health, Wounds, Bandaging
 
-Body parts with separate HP: **head 30, torso 70, arm L/R 18 each,
+Body parts with separate HP: **head 35, torso 80, arm L/R 18 each,
 leg L/R 22 each**. Death: head ≤ 0, torso ≤ 0, or bleed-out (total blood loss).
+Torso 80 is calibrated so rifle (30 dmg) = 3 hits, pistol (24) = 4 hits.
 
 - **Bleeding**: limb wound below 50% part HP → bleed 1.5 HP/s (from torso pool);
   torso wound below 35% → 2.5 HP/s. Stacked wounds stack bleed. HUD shows

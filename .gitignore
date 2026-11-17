@@ -12,6 +12,10 @@ export/
 # Test/screenshot/balance reports (generated artifacts)
 reports/
 
+# Godot misc
+*.translation
+.nomedia
+
 # OS/editor noise
 .DS_Store
 Thumbs.db

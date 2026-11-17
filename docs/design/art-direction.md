@@ -96,10 +96,12 @@ on walls (2D shadows; verify Compatibility renderer via screenshot).
   **Share Tech Mono** (numerals/killfeed). Google Fonts GitHub raw TTFs.
 - Crosshair: 4 brackets expanding with live bloom + center dot; presets
   (brackets/cross/dot), color setting; hitmarker overlay.
-- Menus: generated key art (title: dusk European port, two operator
-  silhouettes, holo overlays; lobby map cards: baked minimap + briefing),
-  generated faction emblems (BASTION: angular shield/bastion star; SIROCCO:
-  stylized scirocco wind swirl). Emblem SVG sources kept for scaling.
+- Menus: **procedural vector title diorama** (parallax dusk European port:
+  gradient sky, crane/container silhouettes, control tower, wet-concrete
+  reflection, holo grid + scanlines, faction emblems) — cohesive with the
+  in-game vector art. Image generation is unavailable in this environment;
+  emblems are hand-authored SVG (`assets/ui/art/*.svg`, original, EUPL).
+  Lobby map cards: baked minimap + briefing text.
 - Motion: 120–180 ms eases, staggered list entrances, hover glow, button
   press depth. Respect `make-interfaces-feel-better` principles.
 

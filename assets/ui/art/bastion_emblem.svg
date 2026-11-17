@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <!-- BASTION Security Group — angular bastion-fortress star/shield mark.
+       Original art, EUPL-1.2 project. Slate #3E5C76 + amber #F2A541. -->
+  <rect width="128" height="128" rx="18" fill="#0B0E14"/>
+  <!-- outer shield -->
+  <path d="M64 14 L104 30 V62 C104 88 86 104 64 114 C42 104 24 88 24 62 V30 Z"
+        fill="none" stroke="#3E5C76" stroke-width="5" stroke-linejoin="round"/>
+  <!-- bastion star (four-point fortress) -->
+  <path d="M64 30 L74 50 L96 54 L80 70 L84 92 L64 82 L44 92 L48 70 L32 54 L54 50 Z"
+        fill="#3E5C76" stroke="#F2A541" stroke-width="2.5" stroke-linejoin="round"/>
+  <!-- inner keep -->
+  <path d="M64 48 L72 56 V70 L64 76 L56 70 V56 Z" fill="#0B0E14" stroke="#F2A541" stroke-width="2"/>
+  <!-- amber accent baseline -->
+  <path d="M40 100 H88" stroke="#F2A541" stroke-width="3" stroke-linecap="round"/>
+</svg>

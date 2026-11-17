@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <!-- SIROCCO Extraction Corps — three-blade angular wind swirl mark.
+       Original art, EUPL-1.2 project. Burnt orange #C4552D + gunmetal #4A4E54. -->
+  <rect width="128" height="128" rx="18" fill="#0B0E14"/>
+  <g fill="#C4552D" stroke="#4A4E54" stroke-width="2" stroke-linejoin="round">
+    <!-- blade 1 (top, sweeping right) -->
+    <path d="M64 64 C64 40 76 26 98 22 C88 38 84 50 84 62 C78 56 72 58 64 64 Z"/>
+    <!-- blade 2 (bottom-right, sweeping down-left) -->
+    <path d="M64 64 C84 76 88 92 80 112 C70 98 60 90 50 86 C58 82 62 74 64 64 Z"/>
+    <!-- blade 3 (left, sweeping up) -->
+    <path d="M64 64 C44 66 30 58 22 38 C38 42 50 42 60 38 C56 46 58 56 64 64 Z"/>
+  </g>
+  <!-- center eye -->
+  <circle cx="64" cy="64" r="7" fill="#0B0E14" stroke="#C4552D" stroke-width="2.5"/>
+  <circle cx="64" cy="64" r="2.5" fill="#C4552D"/>
+  <!-- gunmetal accent ring arcs -->
+  <path d="M28 96 A48 48 0 0 0 96 100" fill="none" stroke="#4A4E54" stroke-width="3" stroke-linecap="round"/>
+</svg>
