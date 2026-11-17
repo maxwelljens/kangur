@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://cggqntou41kc8"
+path="res://.godot/imported/44 Magnum Eject One Casing.wav-d09215722d7865f6d0bca5cca79b4f15.sample"
+
+[deps]
+
+source_file="res://assets/audio/weapons/357/action/44 Magnum Eject One Casing.wav"
+dest_files=["res://.godot/imported/44 Magnum Eject One Casing.wav-d09215722d7865f6d0bca5cca79b4f15.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

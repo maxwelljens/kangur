@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://ogwybgsl60w4"
+path="res://.godot/imported/AMB_Nature Pack Vol 1_Weather_Light Rain.mp3-ac8f6c730ff733153f428d5eb53bed83.mp3str"
+
+[deps]
+
+source_file="res://assets/audio/ambience/weather/AMB_Nature Pack Vol 1_Weather_Light Rain.mp3"
+dest_files=["res://.godot/imported/AMB_Nature Pack Vol 1_Weather_Light Rain.mp3-ac8f6c730ff733153f428d5eb53bed83.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

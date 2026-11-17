@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://dw16vdjcr46kq"
+path="res://.godot/imported/308 Double Tap Isolated.wav-94b7f75d6aeb62de4a4b39474278b9d8.sample"
+
+[deps]
+
+source_file="res://assets/audio/weapons/308/fire/308 Double Tap Isolated.wav"
+dest_files=["res://.godot/imported/308 Double Tap Isolated.wav-94b7f75d6aeb62de4a4b39474278b9d8.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

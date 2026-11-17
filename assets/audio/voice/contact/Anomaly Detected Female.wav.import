@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://c2ig7216ekobh"
+path="res://.godot/imported/Anomaly Detected Female.wav-40899dfe3828b12008d68873ef9df312.sample"
+
+[deps]
+
+source_file="res://assets/audio/voice/contact/Anomaly Detected Female.wav"
+dest_files=["res://.godot/imported/Anomaly Detected Female.wav-40899dfe3828b12008d68873ef9df312.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://bqexkmneit2g6"
+path="res://.godot/imported/9mm Pistol Rack Part 2.wav-066a04a6c645cb08f49b3e824d1d2928.sample"
+
+[deps]
+
+source_file="res://assets/audio/weapons/9mm/action/9mm Pistol Rack Part 2.wav"
+dest_files=["res://.godot/imported/9mm Pistol Rack Part 2.wav-066a04a6c645cb08f49b3e824d1d2928.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://cbinkxefvjhdo"
+path="res://.godot/imported/32 SW Single Load.wav-f14f09b9c82a4bfed81750009ccc9f4e.sample"
+
+[deps]
+
+source_file="res://assets/audio/weapons/357/reload/32 SW Single Load.wav"
+dest_files=["res://.godot/imported/32 SW Single Load.wav-f14f09b9c82a4bfed81750009ccc9f4e.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

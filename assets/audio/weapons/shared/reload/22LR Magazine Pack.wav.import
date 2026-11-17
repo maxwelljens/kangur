@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://bgem67by47ucj"
+path="res://.godot/imported/22LR Magazine Pack.wav-bb2aaeb8c6e85846bacd6ae12b92546d.sample"
+
+[deps]
+
+source_file="res://assets/audio/weapons/shared/reload/22LR Magazine Pack.wav"
+dest_files=["res://.godot/imported/22LR Magazine Pack.wav-bb2aaeb8c6e85846bacd6ae12b92546d.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

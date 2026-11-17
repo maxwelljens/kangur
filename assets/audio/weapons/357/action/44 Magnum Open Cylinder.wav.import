@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://cu43qn4tdfnxn"
+path="res://.godot/imported/44 Magnum Open Cylinder.wav-657f7bb105d249c64db7172116ab0bbd.sample"
+
+[deps]
+
+source_file="res://assets/audio/weapons/357/action/44 Magnum Open Cylinder.wav"
+dest_files=["res://.godot/imported/44 Magnum Open Cylinder.wav-657f7bb105d249c64db7172116ab0bbd.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

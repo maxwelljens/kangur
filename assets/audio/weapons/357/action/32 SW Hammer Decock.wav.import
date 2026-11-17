@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://dla5ca1j8i4af"
+path="res://.godot/imported/32 SW Hammer Decock.wav-be845ca8d72332db8b5f5978d5a38189.sample"
+
+[deps]
+
+source_file="res://assets/audio/weapons/357/action/32 SW Hammer Decock.wav"
+dest_files=["res://.godot/imported/32 SW Hammer Decock.wav-be845ca8d72332db8b5f5978d5a38189.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

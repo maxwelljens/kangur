@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://dmi5qc0bpiwbw"
+path="res://.godot/imported/Warning Low Oxygen Male.wav-db308dad19b0572919f923e91fb0a834.sample"
+
+[deps]
+
+source_file="res://assets/audio/voice/warning/Warning Low Oxygen Male.wav"
+dest_files=["res://.godot/imported/Warning Low Oxygen Male.wav-db308dad19b0572919f923e91fb0a834.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

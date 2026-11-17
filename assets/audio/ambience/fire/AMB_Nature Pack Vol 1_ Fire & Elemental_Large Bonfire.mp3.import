@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bwao5bycy7csb"
+path="res://.godot/imported/AMB_Nature Pack Vol 1_ Fire & Elemental_Large Bonfire.mp3-513cc3c43b49672db0803ac3412a6985.mp3str"
+
+[deps]
+
+source_file="res://assets/audio/ambience/fire/AMB_Nature Pack Vol 1_ Fire & Elemental_Large Bonfire.mp3"
+dest_files=["res://.godot/imported/AMB_Nature Pack Vol 1_ Fire & Elemental_Large Bonfire.mp3-513cc3c43b49672db0803ac3412a6985.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

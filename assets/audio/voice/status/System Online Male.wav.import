@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://j7qldhxho5ex"
+path="res://.godot/imported/System Online Male.wav-64e94c2c5ff5f7acc02a389a18fe8917.sample"
+
+[deps]
+
+source_file="res://assets/audio/voice/status/System Online Male.wav"
+dest_files=["res://.godot/imported/System Online Male.wav-64e94c2c5ff5f7acc02a389a18fe8917.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

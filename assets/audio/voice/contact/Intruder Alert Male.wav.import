@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://cdvigm4njeopp"
+path="res://.godot/imported/Intruder Alert Male.wav-8653a3a023b75358994f263729ac9902.sample"
+
+[deps]
+
+source_file="res://assets/audio/voice/contact/Intruder Alert Male.wav"
+dest_files=["res://.godot/imported/Intruder Alert Male.wav-8653a3a023b75358994f263729ac9902.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

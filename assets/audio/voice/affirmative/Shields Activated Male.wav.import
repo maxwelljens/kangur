@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://c7vdv5d3fh2is"
+path="res://.godot/imported/Shields Activated Male.wav-e3ff2674cc67b9f59ae177e080aba098.sample"
+
+[deps]
+
+source_file="res://assets/audio/voice/affirmative/Shields Activated Male.wav"
+dest_files=["res://.godot/imported/Shields Activated Male.wav-e3ff2674cc67b9f59ae177e080aba098.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

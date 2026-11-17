@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://dsvcoki5c84sw"
+path="res://.godot/imported/308 Burst Isolated.wav-1c64299a51d1ad65be43079fade9ba91.sample"
+
+[deps]
+
+source_file="res://assets/audio/weapons/308/fire/308 Burst Isolated.wav"
+dest_files=["res://.godot/imported/308 Burst Isolated.wav-1c64299a51d1ad65be43079fade9ba91.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

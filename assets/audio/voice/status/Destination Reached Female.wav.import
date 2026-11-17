@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://cfq80ss4llug1"
+path="res://.godot/imported/Destination Reached Female.wav-cb3655538725e495a8f38c1d55ac2617.sample"
+
+[deps]
+
+source_file="res://assets/audio/voice/status/Destination Reached Female.wav"
+dest_files=["res://.godot/imported/Destination Reached Female.wav-cb3655538725e495a8f38c1d55ac2617.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://bnugndmp5q6n1"
+path="res://.godot/imported/44 Magnum Eject Empty Full.wav-117d153d5f05a4447d5c16ea2a3bff8b.sample"
+
+[deps]
+
+source_file="res://assets/audio/weapons/357/action/44 Magnum Eject Empty Full.wav"
+dest_files=["res://.godot/imported/44 Magnum Eject Empty Full.wav-117d153d5f05a4447d5c16ea2a3bff8b.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

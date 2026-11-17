@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://b85kq64rckpoc"
+path="res://.godot/imported/System Offline Female.wav-7df6d3a0ac2a2c7adeea05cc947dbbd2.sample"
+
+[deps]
+
+source_file="res://assets/audio/voice/status/System Offline Female.wav"
+dest_files=["res://.godot/imported/System Offline Female.wav-7df6d3a0ac2a2c7adeea05cc947dbbd2.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://ddxfiwh2edmv0"
+path="res://.godot/imported/44 Magnum Eject Part 1.wav-bb9e2505ffb374071671840603c745fe.sample"
+
+[deps]
+
+source_file="res://assets/audio/weapons/357/reload/44 Magnum Eject Part 1.wav"
+dest_files=["res://.godot/imported/44 Magnum Eject Part 1.wav-bb9e2505ffb374071671840603c745fe.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://bimn71urd2nof"
+path="res://.godot/imported/Boot Sequence Comple Female.wav-21eba7dd31ae936c357536989dfbb6f2.sample"
+
+[deps]
+
+source_file="res://assets/audio/voice/status/Boot Sequence Comple Female.wav"
+dest_files=["res://.godot/imported/Boot Sequence Comple Female.wav-21eba7dd31ae936c357536989dfbb6f2.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

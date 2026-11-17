@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://cwamh4qqpyp2p"
+path="res://.godot/imported/Access Granted Female.wav-df1d7954aa20cceec95c2d7fd5cc831b.sample"
+
+[deps]
+
+source_file="res://assets/audio/voice/affirmative/Access Granted Female.wav"
+dest_files=["res://.godot/imported/Access Granted Female.wav-df1d7954aa20cceec95c2d7fd5cc831b.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

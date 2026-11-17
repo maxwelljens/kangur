@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://6olo83p1k5w6"
+path="res://.godot/imported/Processing Female.wav-98174f37f662e587b0775390a501ff3c.sample"
+
+[deps]
+
+source_file="res://assets/audio/voice/affirmative/Processing Female.wav"
+dest_files=["res://.godot/imported/Processing Female.wav-98174f37f662e587b0775390a501ff3c.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2
