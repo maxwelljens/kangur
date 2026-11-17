@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://c0smokecore0"]
+
+[ext_resource type="Script" path="res://tools/smoke_core.gd" id="1"]
+
+[node name="SmokeCore" type="Node"]
+script = ExtResource("1")

@@ -10,6 +10,7 @@ config/description="Singleplayer topdown tactical shooter. Corporate mercenaries
 config/version="0.1.0"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 config/icon="res://assets/ui/icons/kangur_icon.svg"
+run/main_scene="res://src/core/boot.tscn"
 
 [display]
 
@@ -31,3 +32,15 @@ renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
 textures/canvas_textures/default_texture_filter=1
 environment/defaults/default_clear_color=Color(0.043, 0.055, 0.078, 1)
+
+[autoload]
+
+EventBus="*res://src/core/event_bus.gd"
+Defs="*res://src/core/defs.gd"
+Settings="*res://src/core/settings.gd"
+Game="*res://src/core/game.gd"
+Dev="*res://src/core/dev.gd"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/godot-vision-cone/plugin.cfg", "res://addons/gdUnit4/plugin.cfg", "res://addons/at-icons/plugin.cfg")

@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128" role="img" aria-label="Kangur emblem">
+  <title>Kangur</title>
+  <rect width="128" height="128" rx="18" fill="#0B0E14"/>
+  <rect x="4.5" y="4.5" width="119" height="119" rx="15" fill="none" stroke="#3E5C76" stroke-width="1.5"/>
+
+  <!-- bracket-corner motif: two open frames, offset like a targeting reticle -->
+  <path d="M28 22 H18 V32 M100 22 H110 V32 M28 106 H18 V96 M100 106 H110 V96"
+        fill="none" stroke="#F2A541" stroke-width="4" stroke-linecap="square"/>
+  <path d="M40 34 H34 V40 M88 34 H94 V40 M40 94 H34 V88 M88 94 H94 V88"
+        fill="none" stroke="#3E5C76" stroke-width="2.5" stroke-linecap="square"/>
+
+  <!-- angular K: a vertical stave with two hard diagonals -->
+  <path d="M46 40 V88" fill="none" stroke="#F2A541" stroke-width="8" stroke-linecap="square"/>
+  <path d="M46 64 L76 34 M46 64 L78 94" fill="none" stroke="#F2A541" stroke-width="8"
+        stroke-linecap="square" stroke-linejoin="miter"/>
+
+  <!-- holographic slit through the lower arm -->
+  <path d="M54 82 H70" stroke="#0B0E14" stroke-width="3"/>
+  <circle cx="90" cy="64" r="3" fill="#F2A541"/>
+</svg>
