@@ -54,13 +54,13 @@ func _init(has_vest: bool = true, has_helmet: bool = true) -> void:
 
 ## Apply one bullet. `attacker_info` is opaque to the model (killfeed/score
 ## bookkeeping only); the node keeps it, the pure model just ignores it.
-func apply_hit(part: int, base_dmg: float, pen_mult: float, _attacker_info: Variant = null) -> HitResult:
+func apply_hit(part: int, base_dmg: float, pen_mult: float, _attacker_info: Variant = null, armor_piercing: bool = false) -> HitResult:
 	var result := HitResult.new()
 	if not alive:
 		return result
 	var dmg := base_dmg * Enums.PART_DAMAGE_MULT[part] * pen_mult
 	var before := hp[part]
-	var absorbed := _absorb_damage(part, dmg)
+	var absorbed := 0.0 if armor_piercing else _absorb_damage(part, dmg)
 	dmg -= absorbed
 	result.absorbed = absorbed
 	_set_hp(part, before - dmg)

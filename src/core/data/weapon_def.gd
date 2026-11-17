@@ -36,6 +36,9 @@ extends Resource
 
 ## Wall penetration power (design §6: concrete/wood thresholds per surface).
 @export var penetration: float = 1.0
+## Armor-piercing (sniper/.338): bypasses vest/helmet absorption entirely so
+## the Lynx one-shots torso per design §6. Realistic high-caliber AP behavior.
+@export var armor_piercing: bool = false
 ## Damage falloff is linear from start to end px, down to min_mult.
 @export var falloff_start: float = 500.0
 @export var falloff_end: float = 1400.0
@@ -51,6 +54,17 @@ extends Resource
 @export var icon_path: String = ""
 @export var tracer_color: Color = Color(0.95, 0.65, 0.25, 1.0)
 @export var shell_color: Color = Color(0.78, 0.62, 0.32, 1.0)
+
+## Procedural rig silhouette params (art-direction §1). The rig draws the weapon
+## from these so the visible muzzle == the ballistic muzzle. Units: px (32px/m).
+@export var body_len: float = 14.0      ## receiver length
+@export var barrel_len: float = 10.0    ## barrel beyond receiver (muzzle at tip)
+@export var body_width: float = 3.5
+@export var mag_len: float = 6.0
+@export var mag_offset: float = 2.0     ## mag well forward of grip
+@export var stock_len: float = 5.0      ## 0 = no stock (pistols)
+@export var has_scope: bool = false
+@export var gun_color: Color = Color(0.227, 0.239, 0.259, 1.0)  ## gunmetal #3A3D42
 
 func validate() -> Array[String]:
 	var errors: Array[String] = []
