@@ -1,0 +1,22 @@
+# Godot 4 editor/import cache (regenerated on import; *.import metadata IS committed)
+.godot/
+
+# Build/export output
+build/
+export/
+*.x86_64
+*.exe
+*.pck
+*.zip
+
+# Test/screenshot/balance reports (generated artifacts)
+reports/
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+*.swp
+*~
+
+# Local scratch
+scratch/

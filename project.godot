@@ -1,0 +1,33 @@
+; Kangur — Godot 4.7 project configuration.
+; Contracts: docs/architecture.md. Autoloads registered by src/core framework.
+
+config_version=5
+
+[application]
+
+config/name="Kangur"
+config/description="Singleplayer topdown tactical shooter. Corporate mercenaries. Europe, 2041."
+config/version="0.1.0"
+config/features=PackedStringArray("4.7", "GL Compatibility")
+config/icon="res://assets/ui/icons/kangur_icon.svg"
+
+[display]
+
+window/size/viewport_width=1600
+window/size/viewport_height=900
+window/size/window_width_override=1280
+window/size/window_height_override=720
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
+
+[physics]
+
+2d/default_gravity=0.0
+common/physics_ticks_per_second=60
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
+textures/canvas_textures/default_texture_filter=1
+environment/defaults/default_clear_color=Color(0.043, 0.055, 0.078, 1)
