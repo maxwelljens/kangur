@@ -38,6 +38,10 @@ var dry_fire: bool = false
 
 ## Injected by Arsenal from the crippled arm (1.3) — slows the reload channel.
 var reload_mult: float = 1.0
+## Injected by Arsenal from the class perk: Ram pumps/bolts cycle ×0.8.
+var cycle_mult: float = 1.0
+## Injected by Arsenal from the class perk: Longshot focus spread ×0.4 (0 = default).
+var focus_spread_override: float = 0.0
 
 var _ctx: Dictionary = {}
 var _rng := RandomNumberGenerator.new()
@@ -74,7 +78,7 @@ func try_fire(intent: Intent, origin: Vector2, aim: Vector2) -> Array[ShotReques
 		return shots
 	if mag <= 0:
 		dry_fire = true
-		cycle_timer += fire_interval()
+		cycle_timer += cycle_interval()
 		burst_left = 0
 		return shots
 	dry_fire = false
@@ -121,6 +125,14 @@ func fire_mode() -> int:
 func fire_interval() -> float:
 	return 60.0 / def.rpm if def.rpm > 0.0 else 0.0
 
+## Actual pause between shots: bolt/pump actions follow the perk cycle factor
+## (Ram ×0.8), automatic/semi cadences are RPM-limited and unaffected.
+func cycle_interval() -> float:
+	var interval := fire_interval()
+	if fire_mode() == Enums.FireMode.BOLT or fire_mode() == Enums.FireMode.PUMP:
+		return interval * maxf(cycle_mult, 0.0)
+	return interval
+
 func is_reloading() -> bool:
 	return reload_stage != STAGE_NONE
 
@@ -145,7 +157,8 @@ func current_spread_deg() -> float:
 	var stance: int = _ctx.get("stance", Enums.Stance.STAND)
 	var focus: bool = _ctx.get("focus", false)
 	var arm_mult: float = _ctx.get("arm_mult", 1.0)
-	return Ballistics.spread_deg(def.spread_base, bloom, vel, vmax, stance, focus, arm_mult)
+	return Ballistics.spread_deg(def.spread_base, bloom, vel, vmax, stance, focus,
+		arm_mult, focus_spread_override)
 
 func _trigger_pulled(intent: Intent) -> bool:
 	match fire_mode():
@@ -185,9 +198,9 @@ func _fire(origin: Vector2, aim: Vector2, shots: Array[ShotRequest]) -> void:
 	recoil_offset += Ballistics.recoil_kick(aim, rng, recoil)
 	if fire_mode() == Enums.FireMode.BURST:
 		burst_left = maxi(0, burst_left - 1)
-		cycle_timer += fire_interval() * (BURST_PAUSE_MULT if burst_left == 0 else 1.0)
+		cycle_timer += cycle_interval() * (BURST_PAUSE_MULT if burst_left == 0 else 1.0)
 	else:
-		cycle_timer += fire_interval()
+		cycle_timer += cycle_interval()
 
 func _rng_for_shot() -> RandomNumberGenerator:
 	var injected: RandomNumberGenerator = _ctx.get("rng")

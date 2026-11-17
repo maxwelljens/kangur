@@ -19,15 +19,17 @@ const RECOIL_JITTER_MAX := 1.0
 
 
 ## Effective cone half-angle in degrees.
-## `stance` is an Enums.Stance value; `arm_mult` is 1.6 for a crippled arm.
+## `stance` is an Enums.Stance value; `arm_mult` is 1.6 for a crippled arm;
+## `focus_override` is the class-perk focus multiplier (0 = use the default).
 static func spread_deg(
 	base: float, bloom: float, vel: float, vmax: float,
-	stance: int, focus: bool, arm_mult: float
+	stance: int, focus: bool, arm_mult: float, focus_override: float = 0.0
 ) -> float:
 	var ratio := 0.0 if vmax <= 0.0 else clampf(vel / vmax, 0.0, 1.0)
 	var move_mult := 1.0 + MOVE_SPREAD_COEFF * pow(ratio, MOVE_SPREAD_EXP)
 	var stance_mult := CROUCH_SPREAD_MULT if stance == Enums.Stance.CROUCH else 1.0
-	var focus_mult := FOCUS_SPREAD_MULT if focus else 1.0
+	var focus_mult_value := focus_override if focus_override > 0.0 else FOCUS_SPREAD_MULT
+	var focus_mult := focus_mult_value if focus else 1.0
 	return (base + bloom) * move_mult * stance_mult * focus_mult * arm_mult
 
 ## One pellet direction: uniform random angle inside ±spread_deg of `aim`.
