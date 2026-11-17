@@ -1,0 +1,274 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://src/world/blockout_def.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"dustworks"
+size = Vector2i(80, 64)
+carve = [{
+"h": 8,
+"surface": "sand",
+"w": 20,
+"x": 30,
+"y": 54
+}, {
+"h": 8,
+"surface": "concrete",
+"w": 20,
+"x": 30,
+"y": 2
+}, {
+"h": 44,
+"surface": "sand",
+"w": 6,
+"x": 37,
+"y": 10
+}, {
+"h": 14,
+"surface": "sand",
+"w": 18,
+"x": 58,
+"y": 8
+}, {
+"h": 14,
+"surface": "sand",
+"w": 18,
+"x": 4,
+"y": 8
+}, {
+"h": 6,
+"surface": "sand",
+"w": 24,
+"x": 50,
+"y": 52
+}, {
+"h": 42,
+"surface": "sand",
+"w": 6,
+"x": 68,
+"y": 14
+}, {
+"h": 4,
+"surface": "concrete",
+"w": 15,
+"x": 43,
+"y": 20
+}, {
+"h": 4,
+"surface": "concrete",
+"w": 8,
+"x": 50,
+"y": 8
+}, {
+"h": 6,
+"surface": "sand",
+"w": 24,
+"x": 6,
+"y": 52
+}, {
+"h": 34,
+"surface": "sand",
+"w": 6,
+"x": 6,
+"y": 22
+}, {
+"h": 4,
+"surface": "concrete",
+"w": 8,
+"x": 22,
+"y": 12
+}]
+blocks = [{
+"h": 2,
+"low_cover": true,
+"material": "concrete_block",
+"w": 2,
+"x": 39,
+"y": 30
+}, {
+"cover": "crate",
+"h": 2,
+"low_cover": true,
+"material": "concrete_block",
+"w": 2,
+"x": 62,
+"y": 12
+}, {
+"cover": "crate",
+"h": 2,
+"low_cover": true,
+"material": "concrete_block",
+"w": 3,
+"x": 69,
+"y": 16
+}, {
+"cover": "crate",
+"h": 1,
+"low_cover": true,
+"material": "concrete_block",
+"w": 2,
+"x": 60,
+"y": 18
+}, {
+"cover": "crate",
+"h": 2,
+"low_cover": true,
+"material": "concrete_block",
+"w": 2,
+"x": 72,
+"y": 9
+}, {
+"cover": "crate",
+"h": 3,
+"low_cover": true,
+"material": "concrete_block",
+"w": 3,
+"x": 8,
+"y": 12
+}, {
+"cover": "crate",
+"h": 2,
+"low_cover": true,
+"material": "concrete_block",
+"w": 2,
+"x": 16,
+"y": 10
+}, {
+"cover": "crate",
+"h": 1,
+"low_cover": true,
+"material": "concrete_block",
+"w": 2,
+"x": 12,
+"y": 18
+}, {
+"cover": "crate",
+"h": 2,
+"low_cover": true,
+"material": "concrete_block",
+"w": 2,
+"x": 70,
+"y": 30
+}, {
+"cover": "crate",
+"h": 1,
+"low_cover": true,
+"material": "concrete_block",
+"w": 2,
+"x": 68,
+"y": 44
+}, {
+"cover": "crate",
+"h": 2,
+"low_cover": true,
+"material": "concrete_block",
+"w": 2,
+"x": 60,
+"y": 53
+}, {
+"cover": "crate",
+"h": 2,
+"low_cover": true,
+"material": "concrete_block",
+"w": 2,
+"x": 8,
+"y": 36
+}, {
+"cover": "crate",
+"h": 2,
+"low_cover": true,
+"material": "concrete_block",
+"w": 1,
+"x": 10,
+"y": 26
+}, {
+"cover": "crate",
+"h": 1,
+"low_cover": true,
+"material": "concrete_block",
+"w": 2,
+"x": 48,
+"y": 21
+}, {
+"cover": "crate",
+"h": 2,
+"low_cover": true,
+"material": "concrete_block",
+"w": 2,
+"x": 56,
+"y": 54
+}, {
+"cover": "crate",
+"h": 2,
+"low_cover": true,
+"material": "concrete_block",
+"w": 2,
+"x": 32,
+"y": 56
+}, {
+"cover": "crate",
+"h": 2,
+"low_cover": true,
+"material": "concrete_block",
+"w": 2,
+"x": 46,
+"y": 56
+}, {
+"cover": "crate",
+"h": 2,
+"low_cover": true,
+"material": "concrete_block",
+"w": 2,
+"x": 32,
+"y": 4
+}, {
+"cover": "crate",
+"h": 2,
+"low_cover": true,
+"material": "concrete_block",
+"w": 2,
+"x": 46,
+"y": 4
+}]
+spawn_rects = [{
+"count": 12,
+"h": 8,
+"team": 1,
+"w": 20,
+"x": 30,
+"y": 54
+}, {
+"count": 12,
+"h": 8,
+"team": 0,
+"w": 20,
+"x": 30,
+"y": 2
+}]
+lanes = [{
+"from": Vector2i(40, 54),
+"id": &"mid",
+"to": Vector2i(40, 10)
+}, {
+"from": Vector2i(54, 54),
+"id": &"long",
+"to": Vector2i(71, 22)
+}, {
+"from": Vector2i(12, 54),
+"id": &"tunnels",
+"to": Vector2i(9, 24)
+}, {
+"from": Vector2i(52, 10),
+"id": &"ramp_a",
+"to": Vector2i(66, 14)
+}, {
+"from": Vector2i(26, 12),
+"id": &"window_b",
+"to": Vector2i(14, 12)
+}, {
+"from": Vector2i(44, 22),
+"id": &"catwalk",
+"to": Vector2i(58, 22)
+}]
+objectives = []

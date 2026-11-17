@@ -1,0 +1,220 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://src/world/blockout_def.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"compound"
+size = Vector2i(72, 56)
+carve = [{
+"h": 16,
+"surface": "concrete",
+"w": 8,
+"x": 2,
+"y": 20
+}, {
+"h": 16,
+"surface": "concrete",
+"w": 8,
+"x": 62,
+"y": 20
+}, {
+"h": 20,
+"surface": "concrete",
+"w": 24,
+"x": 24,
+"y": 18
+}, {
+"h": 6,
+"surface": "metal",
+"w": 52,
+"x": 10,
+"y": 6
+}, {
+"h": 6,
+"surface": "concrete",
+"w": 52,
+"x": 10,
+"y": 44
+}, {
+"h": 32,
+"surface": "grass",
+"w": 14,
+"x": 10,
+"y": 12
+}, {
+"h": 32,
+"surface": "grass",
+"w": 14,
+"x": 48,
+"y": 12
+}, {
+"h": 6,
+"surface": "concrete",
+"w": 12,
+"x": 30,
+"y": 12
+}, {
+"h": 6,
+"surface": "concrete",
+"w": 12,
+"x": 30,
+"y": 38
+}]
+blocks = [{
+"cover": "car",
+"h": 2,
+"low_cover": true,
+"material": "container",
+"w": 3,
+"x": 20,
+"y": 8
+}, {
+"cover": "car",
+"h": 2,
+"low_cover": true,
+"material": "container",
+"w": 4,
+"x": 40,
+"y": 7
+}, {
+"cover": "car",
+"h": 2,
+"low_cover": true,
+"material": "container",
+"w": 2,
+"x": 52,
+"y": 9
+}, {
+"cover": "car",
+"h": 2,
+"low_cover": true,
+"material": "container",
+"w": 3,
+"x": 18,
+"y": 46
+}, {
+"cover": "car",
+"h": 2,
+"low_cover": true,
+"material": "container",
+"w": 4,
+"x": 38,
+"y": 45
+}, {
+"cover": "car",
+"h": 2,
+"low_cover": true,
+"material": "container",
+"w": 2,
+"x": 54,
+"y": 46
+}, {
+"h": 2,
+"low_cover": false,
+"material": "concrete_block",
+"w": 2,
+"x": 28,
+"y": 22
+}, {
+"h": 2,
+"low_cover": false,
+"material": "concrete_block",
+"w": 2,
+"x": 42,
+"y": 22
+}, {
+"h": 2,
+"low_cover": false,
+"material": "concrete_block",
+"w": 2,
+"x": 28,
+"y": 32
+}, {
+"h": 2,
+"low_cover": false,
+"material": "concrete_block",
+"w": 2,
+"x": 42,
+"y": 32
+}, {
+"h": 2,
+"low_cover": false,
+"material": "concrete_block",
+"w": 2,
+"x": 35,
+"y": 27
+}, {
+"cover": "sandbag",
+"h": 3,
+"low_cover": true,
+"material": "concrete_block",
+"w": 2,
+"x": 14,
+"y": 16
+}, {
+"cover": "sandbag",
+"h": 3,
+"low_cover": true,
+"material": "concrete_block",
+"w": 2,
+"x": 16,
+"y": 36
+}, {
+"cover": "sandbag",
+"h": 3,
+"low_cover": true,
+"material": "concrete_block",
+"w": 2,
+"x": 54,
+"y": 16
+}, {
+"cover": "sandbag",
+"h": 3,
+"low_cover": true,
+"material": "concrete_block",
+"w": 2,
+"x": 52,
+"y": 36
+}]
+spawn_rects = [{
+"count": 12,
+"h": 16,
+"team": 0,
+"w": 8,
+"x": 2,
+"y": 20
+}, {
+"count": 12,
+"h": 16,
+"team": 1,
+"w": 8,
+"x": 62,
+"y": 20
+}]
+lanes = [{
+"from": Vector2i(10, 22),
+"id": &"west_yard",
+"to": Vector2i(36, 14)
+}, {
+"from": Vector2i(10, 40),
+"id": &"south_yard",
+"to": Vector2i(62, 46)
+}, {
+"from": Vector2i(36, 10),
+"id": &"north_lane",
+"to": Vector2i(62, 10)
+}, {
+"from": Vector2i(36, 26),
+"id": &"hall",
+"to": Vector2i(36, 34)
+}, {
+"from": Vector2i(30, 15),
+"id": &"north_gap",
+"to": Vector2i(36, 26)
+}, {
+"from": Vector2i(36, 40),
+"id": &"south_gap",
+"to": Vector2i(36, 30)
+}]
+objectives = []
