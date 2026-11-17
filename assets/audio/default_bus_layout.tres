@@ -1,0 +1,82 @@
+[gd_resource type="AudioBusLayout" format=3]
+
+[sub_resource type="AudioEffectHardLimiter" id="AudioEffectHardLimiter_mwo4r"]
+ceiling_db = -0.5
+
+[sub_resource type="AudioEffectBandPassFilter" id="AudioEffectBandPassFilter_radio"]
+cutoff_hz = 1800.0
+resonance = 0.7
+db = 1
+
+[sub_resource type="AudioEffectLowPassFilter" id="AudioEffectLowPassFilter_pldmy"]
+cutoff_hz = 20500.0
+db = 1
+
+[sub_resource type="AudioEffectLowPassFilter" id="AudioEffectLowPassFilter_1c8n0"]
+cutoff_hz = 4200.0
+db = 1
+
+[sub_resource type="AudioEffectLowPassFilter" id="AudioEffectLowPassFilter_uvk5q"]
+cutoff_hz = 1300.0
+db = 1
+
+[sub_resource type="AudioEffectLowPassFilter" id="AudioEffectLowPassFilter_c08tm"]
+cutoff_hz = 550.0
+db = 1
+
+[resource]
+bus/0/volume_db = -1.94
+bus/1/name = &"Music"
+bus/1/solo = false
+bus/1/mute = false
+bus/1/bypass_fx = false
+bus/1/volume_db = -4.44
+bus/1/send = &"Master"
+bus/2/name = &"SFX"
+bus/2/solo = false
+bus/2/mute = false
+bus/2/bypass_fx = false
+bus/2/volume_db = -1.94
+bus/2/send = &"Master"
+bus/2/effect/0/effect = SubResource("AudioEffectHardLimiter_mwo4r")
+bus/2/effect/0/enabled = true
+bus/3/name = &"Voice"
+bus/3/solo = false
+bus/3/mute = false
+bus/3/bypass_fx = false
+bus/3/volume_db = -1.94
+bus/3/send = &"Master"
+bus/3/effect/0/effect = SubResource("AudioEffectBandPassFilter_radio")
+bus/3/effect/0/enabled = true
+bus/4/name = &"SFX_Open"
+bus/4/solo = false
+bus/4/mute = false
+bus/4/bypass_fx = false
+bus/4/volume_db = 0.0
+bus/4/send = &"SFX"
+bus/4/effect/0/effect = SubResource("AudioEffectLowPassFilter_pldmy")
+bus/4/effect/0/enabled = true
+bus/5/name = &"SFX_Light"
+bus/5/solo = false
+bus/5/mute = false
+bus/5/bypass_fx = false
+bus/5/volume_db = -4.0
+bus/5/send = &"SFX"
+bus/5/effect/0/effect = SubResource("AudioEffectLowPassFilter_1c8n0")
+bus/5/effect/0/enabled = true
+bus/6/name = &"SFX_Heavy"
+bus/6/solo = false
+bus/6/mute = false
+bus/6/bypass_fx = false
+bus/6/volume_db = -9.0
+bus/6/send = &"SFX"
+bus/6/effect/0/effect = SubResource("AudioEffectLowPassFilter_uvk5q")
+bus/6/effect/0/enabled = true
+bus/7/name = &"SFX_Muffled"
+bus/7/solo = false
+bus/7/mute = false
+bus/7/bypass_fx = false
+bus/7/volume_db = -14.0
+bus/7/send = &"SFX"
+bus/7/effect/0/effect = SubResource("AudioEffectLowPassFilter_c08tm")
+bus/7/effect/0/enabled = true

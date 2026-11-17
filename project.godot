@@ -38,8 +38,13 @@ environment/defaults/default_clear_color=Color(0.043, 0.055, 0.078, 1)
 EventBus="*res://src/core/event_bus.gd"
 Defs="*res://src/core/defs.gd"
 Settings="*res://src/core/settings.gd"
+AudioDirector="*res://src/audio/audio_director.gd"
 Game="*res://src/core/game.gd"
 Dev="*res://src/core/dev.gd"
+
+[audio]
+
+buses/default_bus_layout="res://assets/audio/default_bus_layout.tres"
 
 [editor_plugins]
 
