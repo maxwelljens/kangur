@@ -214,7 +214,30 @@ being sourced separately.
 
 ---
 
-## Rejected / unshipped sources
+## 8. Fonts — SIL Open Font License 1.1
+
+Both faces ship as unmodified TTFs in `assets/ui/fonts/`, each with the upstream
+`OFL.txt` copied alongside. OFL permits bundling in a game, including a
+commercially distributed one, provided the licence text ships and the fonts are
+not sold on their own.
+
+| File | Family | Author | Licence |
+|---|---|---|---|
+| `ChakraPetch-{Regular,Medium,SemiBold,Bold}.ttf` | **Chakra Petch** | Copyright 2018 The Chakra Petch Project Authors (<https://github.com/m4rc1e/Chakra-Petch>) | OFL 1.1 (`OFL-ChakraPetch.txt`) |
+| `ShareTechMono-Regular.ttf` | **Share Tech Mono** | Copyright 2012 Carrois Type Design, Ralph du Carrois | OFL 1.1 (`OFL-ShareTechMono.txt`) |
+
+Sources: `google/fonts` → `ofl/chakrapetch/*` and `ofl/sharetechmono/*` (raw
+GitHub TTFs). Usage: Chakra Petch = display/UI text; Share Tech Mono = all
+numerals (HUD ammo, timers, killfeed) so the columns stay tabular.
+
+## 9. Engine & tools
+
+- **Godot Engine 4.7.2** — MIT (godotengine.org)
+- **gdUnit4** — MIT © 2023 Mike Schulze (vendored in `addons/gdUnit4/`)
+- **@icons** — MIT © 2026–present Valentin Fossati (Voxybuns) & contributors
+- **Vision Cone 2D** — Apache-2.0 © sirdorius
+
+## 10. Rejected / unshipped sources
 
 Kept out of `assets/` deliberately. Do not add these without a new licence check.
 

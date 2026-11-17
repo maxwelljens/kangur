@@ -333,6 +333,66 @@ Battle: respawn waves via `spawn_requested`. `MatchResult` → Game.to_debrief.
 - **CI-style gate**: `tools/verify.sh` runs unit tests + 3 quick sims +
   screenshots of title/lobby/match HUD; nonzero exit on failure.
 
+## 11a. UI Module (`src/ui/`)
+
+Landed UI wave. Paths are fixed by `Game` (§3.5) — rename only together.
+
+```
+src/ui/theme.gd            KangurTheme: palette consts + Theme builder (source of truth)
+src/ui/kangur_theme.tres   the one Theme resource; every screen assigns it
+src/ui/holo_widgets.gd     custom _draw widgets (Plate, Bar, BodyDiagram, ArmorPips,
+                           MinimapFrame, ObjectiveChain, Crosshair, Hitmarker,
+                           DamageArcs, LowHpVignette, KillfeedEntry, RadioLine,
+                           WeaponGlyph, EquipIcon, Rule)
+src/ui/holo_button.gd      HoloButton (Button subclass: bracket plate, hover glow)
+src/ui/menu_screen.gd      MenuScreen base: theme, scanlines, entrance, Esc→back
+src/ui/ui_fx.gd            UiFx: 120–180 ms eases, staggered entrances, UI blips
+src/ui/title/…             title_screen + port_diorama (procedural dusk port)
+src/ui/menus/…             lobby, settings, credits, debrief
+src/ui/pause/pause_menu.tscn   overlay, Esc-toggled, inside the HUD CanvasLayer
+src/ui/hud/hud.tscn|gd     match HUD (CanvasLayer, layer 10)
+tools/shot_ui_*.tscn       screenshot fixtures (HUD mock, debrief, pause, tabbed settings)
+```
+
+**HUD ↔ entity wiring (thin bind layer, no Character dependency).**
+`hud.bind_character(character)` reads, defensively via `get()`:
+`team:int`, `callsign:String`, `class_def:ClassDef`,
+`get_body_model()->BodyModel` (fallback property `body_model`),
+`get_weapon_model()->WeaponModel` (fallback `weapon_model`),
+`get_bandages()->int` (fallback `bandages`, then `class_def.bandages`),
+`get_equipment_counts()->Array[Dictionary]` of `{kind: Enums.EquipKind, count: int}`
+(optional). Everything is null-tolerant: an unbound HUD renders a healthy
+silhouette and empty blocks, so menus/tests never depend on a spawned entity.
+`hud.refresh()` is safe at any rate; the HUD also self-ticks at 10 Hz.
+
+**Feeds the match runtime pushes** (no EventBus invented for these):
+`set_roster(rows)` (MatchResult.characters shape + `alive:bool`),
+`set_minimap_blips([{pos:Vector2 0..1, kind:&"player|ally|enemy|sound",
+color:Color, dir:Vector2}])`, `set_minimap_cone({pos, dir, half_deg, dist})`,
+`set_objectives([{id, letter, state, team, progress, contested, pos}])`,
+`set_alive_counts(bastion, sirocco)`, `set_tickets(bastion, sirocco)`,
+`set_equipment([...])`, `show_damage_angle(rad)`, `show_killcam(...)`,
+`clear_killcam()`.
+
+EventBus listeners already wired: `character_died` (killfeed + killcam),
+`character_hit` (kill hitmarker), `radio_message` (lines, own team only),
+`objective_progress` (chain + minimap), `tickets_changed` (bars + warning),
+`settings_changed` (HUD scale relayout, crosshair style/colour).
+
+**VisionSystem / minimap hook**: `MinimapFrame` owns the holo frame, grid,
+objective markers and a normalised blip API. The world module only has to hand
+it normalised positions (`pos - bounds.position / bounds.size`) — it never
+draws the frame itself. Baked `MapDef.minimap_path` textures are used as the
+floor layer when present.
+
+**UI audio** goes through `UiFx.play_sound(key)` on `assets/audio/ui/*.ogg`
+(one shared `AudioStreamPlayer` on the tree root, headless no-op). Music is
+still AudioDirector's job; screens only play interface blips.
+
+**Screenshot gate**: `tools/shot_ui_all.sh` captures every screen at
+2560×1440 (1.6 stretch = the 1600×900 design viewport) into
+`reports/screenshots/ui_*.png`.
+
 ## 12. Conventions
 
 - GDScript official style: snake_case funcs/vars, PascalCase classes/nodes,

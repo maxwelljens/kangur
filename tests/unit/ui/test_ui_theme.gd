@@ -122,8 +122,9 @@ func test_body_diagram_binds_model_and_reports_bleed_state() -> void:
 	var body := BodyModel.new(true, true)
 	diagram.bind(body)
 	assert_object(diagram.body).is_same(body)
-	# Crippling the left arm must change its colour state.
-	body.apply_hit(Enums.Part.ARM_L, 16.0, 1.0)
+	# Crippling the left arm must change its colour state. 18 base dmg × 0.75
+	# arm multiplier leaves 4.5/18 HP — under the cripple threshold.
+	body.apply_hit(Enums.Part.ARM_L, 18.0, 1.0)
 	assert_bool(body.part_ratio(Enums.Part.ARM_L) < BodyModel.CRIPPLE_RATIO).is_true()
 	assert_that(KangurTheme.part_color(body.part_ratio(Enums.Part.ARM_L))).is_equal(
 		KangurTheme.DANGER)
@@ -183,8 +184,8 @@ func test_hud_scale_setting_stays_in_designed_range() -> void:
 
 
 func test_credits_markdown_converts_without_leaking_syntax() -> void:
-	var Credits := load("res://src/ui/menus/credits_screen.gd")
-	var bbcode := Credits.markdown_to_bbcode(
+	var credits_script: GDScript = load("res://src/ui/menus/credits_screen.gd")
+	var bbcode: String = credits_script.markdown_to_bbcode(
 		"## 1. Audio\n\n### Pack — **CC0**\n- `file.wav` by **Author**\n")
 	assert_str(bbcode).contains("[font_size=17]")
 	assert_str(bbcode).contains("Audio")
@@ -193,7 +194,22 @@ func test_credits_markdown_converts_without_leaking_syntax() -> void:
 	assert_bool(bbcode.contains("`")).is_false()
 	assert_str(bbcode).contains("[b]")
 	# Per-title music credit lines (Incompetech requirement) stay verbatim.
-	var music := Credits.markdown_to_bbcode(
+	var music: String = credits_script.markdown_to_bbcode(
 		"\"Static Motion\" Kevin MacLeod (incompetech.com) / Licensed under Creative Commons")
 	assert_str(music).contains("\"Static Motion\"")
 	assert_str(music).contains("incompetech.com")
+
+func test_music_credits_name_every_incompetech_title() -> void:
+	# CC BY 4.0 and the Incompetech FAQ require each track by its actual title,
+	# plus a statement that the files were edited. This is a licence obligation,
+	# so it is asserted rather than eyeballed.
+	var credits_script: GDScript = load("res://src/ui/menus/credits_screen.gd")
+	var source := FileAccess.get_file_as_string("res://docs/research/music-attribution.md")
+	var rendered: String = credits_script.markdown_to_bbcode(source)
+	for title: String in ["Static Motion", "Industrial Cinematic",
+			"Controlled Chaos - no percussion", "Controlled Chaos", "Oppressive Gloom",
+			"Peaceful Desolation", "Lost Time"]:
+		assert_bool(rendered.contains(title)).override_failure_message(
+			"missing Incompetech title: %s" % title).is_true()
+	assert_bool(rendered.contains("Licensed under Creative Commons: By Attribution 4.0")).is_true()
+	assert_bool(rendered.contains("converted to Ogg Vorbis and edited for looping")).is_true()
