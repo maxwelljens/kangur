@@ -1,0 +1,28 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://tools/probe_vision_cone.gd" id="1_probe"]
+[ext_resource type="Script" uid="uid://bo744wpycscqd" path="res://addons/godot-vision-cone/vision_cone_2d.gd" id="2_cone"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wall"]
+size = Vector2(400, 20)
+
+[node name="ProbeVisionCone" type="Node2D"]
+script = ExtResource("1_probe")
+
+[node name="VisionCone2D" type="Node2D" parent="." node_paths=PackedStringArray("write_polygon2d")]
+script = ExtResource("2_cone")
+angle_deg = 90
+ray_count = 30
+max_distance = 300.0
+collision_layer_mask = 1
+write_polygon2d = NodePath("VisionConeRenderer")
+
+[node name="VisionConeRenderer" type="Polygon2D" parent="VisionCone2D"]
+
+[node name="Wall" type="StaticBody2D" parent="."]
+position = Vector2(0, 150)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Wall"]
+shape = SubResource("RectangleShape2D_wall")
