@@ -1,0 +1,287 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://src/world/blockout_def.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"terminal"
+size = Vector2i(96, 64)
+carve = [{
+"h": 6,
+"surface": "concrete",
+"w": 24,
+"x": 36,
+"y": 56
+}, {
+"h": 6,
+"surface": "concrete",
+"w": 24,
+"x": 36,
+"y": 2
+}, {
+"h": 10,
+"surface": "concrete",
+"w": 16,
+"x": 40,
+"y": 42
+}, {
+"h": 16,
+"surface": "metal",
+"w": 24,
+"x": 60,
+"y": 24
+}, {
+"h": 12,
+"surface": "concrete",
+"w": 20,
+"x": 36,
+"y": 8
+}, {
+"h": 46,
+"surface": "concrete",
+"w": 8,
+"x": 44,
+"y": 10
+}, {
+"h": 26,
+"surface": "concrete",
+"w": 8,
+"x": 8,
+"y": 30
+}, {
+"h": 10,
+"surface": "grass",
+"w": 20,
+"x": 8,
+"y": 20
+}, {
+"h": 20,
+"surface": "concrete",
+"w": 16,
+"x": 76,
+"y": 36
+}, {
+"h": 12,
+"surface": "metal",
+"w": 12,
+"x": 80,
+"y": 24
+}, {
+"h": 8,
+"surface": "concrete",
+"w": 16,
+"x": 44,
+"y": 42
+}, {
+"h": 6,
+"surface": "concrete",
+"w": 12,
+"x": 52,
+"y": 28
+}, {
+"h": 6,
+"surface": "concrete",
+"w": 10,
+"x": 52,
+"y": 18
+}, {
+"h": 6,
+"surface": "concrete",
+"w": 16,
+"x": 28,
+"y": 24
+}]
+blocks = [{
+"h": 2,
+"low_cover": false,
+"material": "container",
+"w": 3,
+"x": 10,
+"y": 34
+}, {
+"h": 2,
+"low_cover": false,
+"material": "container",
+"w": 3,
+"x": 12,
+"y": 44
+}, {
+"h": 2,
+"low_cover": false,
+"material": "container",
+"w": 3,
+"x": 10,
+"y": 52
+}, {
+"h": 2,
+"low_cover": false,
+"material": "container",
+"w": 3,
+"x": 78,
+"y": 40
+}, {
+"h": 2,
+"low_cover": false,
+"material": "container",
+"w": 3,
+"x": 84,
+"y": 44
+}, {
+"h": 2,
+"low_cover": false,
+"material": "container",
+"w": 3,
+"x": 80,
+"y": 50
+}, {
+"h": 2,
+"low_cover": false,
+"material": "container",
+"w": 2,
+"x": 86,
+"y": 36
+}, {
+"h": 2,
+"low_cover": false,
+"material": "concrete_block",
+"w": 2,
+"x": 64,
+"y": 28
+}, {
+"h": 2,
+"low_cover": false,
+"material": "concrete_block",
+"w": 2,
+"x": 76,
+"y": 28
+}, {
+"h": 2,
+"low_cover": false,
+"material": "concrete_block",
+"w": 2,
+"x": 64,
+"y": 36
+}, {
+"h": 2,
+"low_cover": false,
+"material": "concrete_block",
+"w": 2,
+"x": 76,
+"y": 36
+}, {
+"h": 2,
+"low_cover": false,
+"material": "concrete_block",
+"w": 2,
+"x": 70,
+"y": 32
+}, {
+"h": 2,
+"low_cover": false,
+"material": "concrete_block",
+"w": 2,
+"x": 44,
+"y": 44
+}, {
+"h": 2,
+"low_cover": false,
+"material": "concrete_block",
+"w": 2,
+"x": 52,
+"y": 46
+}, {
+"h": 2,
+"low_cover": false,
+"material": "concrete_block",
+"w": 2,
+"x": 40,
+"y": 10
+}, {
+"h": 2,
+"low_cover": false,
+"material": "concrete_block",
+"w": 2,
+"x": 50,
+"y": 14
+}]
+spawn_rects = [{
+"count": 12,
+"h": 6,
+"team": 1,
+"w": 24,
+"x": 36,
+"y": 56
+}, {
+"count": 12,
+"h": 6,
+"team": 0,
+"w": 24,
+"x": 36,
+"y": 2
+}]
+lanes = [{
+"from": Vector2i(48, 54),
+"id": &"main_road",
+"to": Vector2i(48, 12)
+}, {
+"from": Vector2i(30, 26),
+"id": &"west_link",
+"to": Vector2i(43, 26)
+}, {
+"from": Vector2i(12, 28),
+"id": &"dock_lane",
+"to": Vector2i(12, 54)
+}, {
+"from": Vector2i(10, 24),
+"id": &"crane_yard",
+"to": Vector2i(26, 24)
+}, {
+"from": Vector2i(83, 52),
+"id": &"east_yard",
+"to": Vector2i(83, 26)
+}, {
+"from": Vector2i(82, 48),
+"id": &"container_yard",
+"to": Vector2i(82, 38)
+}, {
+"from": Vector2i(44, 47),
+"id": &"obj_a_gate",
+"to": Vector2i(56, 47)
+}, {
+"from": Vector2i(64, 33),
+"id": &"obj_b_warehouse",
+"to": Vector2i(80, 33)
+}, {
+"from": Vector2i(42, 16),
+"id": &"obj_c_control",
+"to": Vector2i(50, 12)
+}, {
+"from": Vector2i(56, 20),
+"id": &"road_b_c",
+"to": Vector2i(56, 31)
+}]
+objectives = [{
+"capture_time": 20.0,
+"h": 6,
+"id": &"a",
+"order": 1,
+"w": 12,
+"x": 42,
+"y": 44
+}, {
+"capture_time": 24.0,
+"h": 8,
+"id": &"b",
+"order": 2,
+"w": 16,
+"x": 64,
+"y": 28
+}, {
+"capture_time": 28.0,
+"h": 8,
+"id": &"c",
+"order": 3,
+"w": 12,
+"x": 40,
+"y": 10
+}]

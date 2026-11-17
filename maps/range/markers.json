@@ -1,0 +1,213 @@
+[
+ {
+  "id": "firing_line_08",
+  "kind": "firing_line",
+  "x": 8,
+  "y": 26,
+  "lane": 1
+ },
+ {
+  "id": "firing_line_16",
+  "kind": "firing_line",
+  "x": 16,
+  "y": 26,
+  "lane": 2
+ },
+ {
+  "id": "firing_line_24",
+  "kind": "firing_line",
+  "x": 24,
+  "y": 26,
+  "lane": 3
+ },
+ {
+  "id": "firing_line_32",
+  "kind": "firing_line",
+  "x": 32,
+  "y": 26,
+  "lane": 4
+ },
+ {
+  "id": "firing_line_40",
+  "kind": "firing_line",
+  "x": 40,
+  "y": 26,
+  "lane": 5
+ },
+ {
+  "id": "target_dummy_1_10m",
+  "kind": "target_dummy",
+  "x": 8,
+  "y": 20,
+  "lane": 1,
+  "distance_m": 10,
+  "rail": true
+ },
+ {
+  "id": "target_dummy_1_20m",
+  "kind": "target_dummy",
+  "x": 8,
+  "y": 14,
+  "lane": 1,
+  "distance_m": 20,
+  "rail": true
+ },
+ {
+  "id": "target_dummy_1_30m",
+  "kind": "target_dummy",
+  "x": 8,
+  "y": 6,
+  "lane": 1,
+  "distance_m": 30,
+  "rail": true
+ },
+ {
+  "id": "target_dummy_2_10m",
+  "kind": "target_dummy",
+  "x": 16,
+  "y": 20,
+  "lane": 2,
+  "distance_m": 10,
+  "rail": false
+ },
+ {
+  "id": "target_dummy_2_20m",
+  "kind": "target_dummy",
+  "x": 16,
+  "y": 14,
+  "lane": 2,
+  "distance_m": 20,
+  "rail": false
+ },
+ {
+  "id": "target_dummy_2_30m",
+  "kind": "target_dummy",
+  "x": 16,
+  "y": 6,
+  "lane": 2,
+  "distance_m": 30,
+  "rail": false
+ },
+ {
+  "id": "target_dummy_3_10m",
+  "kind": "target_dummy",
+  "x": 24,
+  "y": 20,
+  "lane": 3,
+  "distance_m": 10,
+  "rail": false
+ },
+ {
+  "id": "target_dummy_3_20m",
+  "kind": "target_dummy",
+  "x": 24,
+  "y": 14,
+  "lane": 3,
+  "distance_m": 20,
+  "rail": false
+ },
+ {
+  "id": "target_dummy_3_30m",
+  "kind": "target_dummy",
+  "x": 24,
+  "y": 6,
+  "lane": 3,
+  "distance_m": 30,
+  "rail": false
+ },
+ {
+  "id": "target_dummy_4_10m",
+  "kind": "target_dummy",
+  "x": 32,
+  "y": 20,
+  "lane": 4,
+  "distance_m": 10,
+  "rail": false
+ },
+ {
+  "id": "target_dummy_4_20m",
+  "kind": "target_dummy",
+  "x": 32,
+  "y": 14,
+  "lane": 4,
+  "distance_m": 20,
+  "rail": false
+ },
+ {
+  "id": "target_dummy_4_30m",
+  "kind": "target_dummy",
+  "x": 32,
+  "y": 6,
+  "lane": 4,
+  "distance_m": 30,
+  "rail": false
+ },
+ {
+  "id": "target_dummy_5_10m",
+  "kind": "target_dummy",
+  "x": 40,
+  "y": 20,
+  "lane": 5,
+  "distance_m": 10,
+  "rail": true
+ },
+ {
+  "id": "target_dummy_5_20m",
+  "kind": "target_dummy",
+  "x": 40,
+  "y": 14,
+  "lane": 5,
+  "distance_m": 20,
+  "rail": true
+ },
+ {
+  "id": "target_dummy_5_30m",
+  "kind": "target_dummy",
+  "x": 40,
+  "y": 6,
+  "lane": 5,
+  "distance_m": 30,
+  "rail": true
+ },
+ {
+  "id": "weapon_rack_08",
+  "kind": "weapon_rack",
+  "x": 8,
+  "y": 28,
+  "lane": 1
+ },
+ {
+  "id": "weapon_rack_16",
+  "kind": "weapon_rack",
+  "x": 16,
+  "y": 28,
+  "lane": 2
+ },
+ {
+  "id": "weapon_rack_24",
+  "kind": "weapon_rack",
+  "x": 24,
+  "y": 28,
+  "lane": 3
+ },
+ {
+  "id": "weapon_rack_32",
+  "kind": "weapon_rack",
+  "x": 32,
+  "y": 28,
+  "lane": 4
+ },
+ {
+  "id": "weapon_rack_40",
+  "kind": "weapon_rack",
+  "x": 40,
+  "y": 28,
+  "lane": 5
+ },
+ {
+  "id": "bandage_dummy",
+  "kind": "bandage_dummy",
+  "x": 44,
+  "y": 22
+ }
+]

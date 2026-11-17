@@ -4,6 +4,8 @@ extends SceneTree
 ##
 ## Output: maps/<id>/map.tscn — Ground/Walls/Deco TileMapLayers (TileSet from
 ## tools/gen_tiles.gd), Nav (MapNavigation, baked), Spawns (12/team grid-jitter),
+## ForwardSpawns (Battle: spawn_fwd_<obj> behind each chained objective),
+## Markers (optional `maps/<id>/markers.json`: Range training points),
 ## Cover (CoverPoint on block faces toward lanes), Objectives (Battle),
 ## Bounds (Min/Max markers). Deterministic: geometry comes from the blockout,
 ## jitter from a fixed seed, so rebuilds are diff-stable.
@@ -19,6 +21,15 @@ const SEED := 20410
 const SPAWN_SPACING := 3
 const COVER_SCAN_RADIUS := 14.0
 const LANE_ANGLE_DEG := 45.0
+## Attackers advance south→north (maps.md), so a captured objective's forward
+## spawn sits in the strip just south of its capture rect: "place spawn_fwd_a/b
+## near each zone". Only chained objectives advance — the last ends the match.
+const FWD_SPAWN_DEPTH := 2
+const FWD_SPAWN_COUNT := 6
+## Optional extra markers per map: `{id, kind, x, y, meta: {...}}`, tile coords.
+## Kept out of BlockoutDef so Training-only data does not grow the shared
+## schema; Range ships one, other maps simply have no file.
+const MARKERS_FILE := "markers.json"
 
 var _def: BlockoutDef
 var _tile_set: TileSet
@@ -64,6 +75,8 @@ func _build(map_id: String) -> void:
 	var spawns := _make_spawns(root)
 	var cover := _make_cover(root, spawns)
 	var objectives := _make_objectives(root)
+	var fwd := _make_forward_spawns(root, objectives)
+	var markers := _make_markers(root, map_id)
 	_make_bounds(root)
 
 	# Nav bakes from the live tile colliders, so wait for them to register.
@@ -98,6 +111,7 @@ func _build(map_id: String) -> void:
 	print("  spawns=%d cover_points=%d objectives=%d nav_polygons=%d nav_verts=%d" % [
 		spawns.get_child_count(), cover.get_child_count(), objectives.get_child_count(),
 		nav.navigation_polygon.get_polygon_count(), nav.navigation_polygon.get_vertices().size()])
+	print("  forward_spawns=%d markers=%d" % [_child_count(fwd), _child_count(markers)])
 	# Detach before quitting: frees the temp scene cleanly (no leak spam).
 	get_root().remove_child(root)
 	root.free()
@@ -388,8 +402,70 @@ func _make_objectives(root: Node2D) -> Node2D:
 	return objectives
 
 
-## ------------------------------------------------------------------ bounds --
+## --------------------------------------------------------- forward spawns --
 
+## `spawn_fwd_<obj>` block for every chained (not last) objective: a FWD_SPAWN_
+## DEPTH-tall strip of free floor directly behind (south of) the capture rect,
+## so attackers respawn at the last objective they took (maps.md Terminal/
+## Oldtown). South is +y: the strip starts on the first row below the rect.
+func _make_forward_spawns(root: Node2D, objectives: Node2D) -> Node2D:
+	if objectives.get_child_count() < 2:
+		return _empty_node()
+	var fwd := Node2D.new()
+	fwd.name = "ForwardSpawns"
+	root.add_child(fwd)
+	var walls := root.get_node(^"Walls") as TileMapLayer
+	for node: Node in objectives.get_children():
+		var zone := node as ObjectiveZone
+		if zone == null or zone.order >= objectives.get_child_count():
+			continue
+		var rect := (zone.get_node(^"CollisionShape2D") as CollisionShape2D)
+		var box := Vector2i((rect.shape as RectangleShape2D).size / Tiles.SIZE)
+		var top_left := Vector2i(zone.position / Tiles.SIZE - Vector2(box) * 0.5)
+		var strip := Rect2i(top_left + Vector2i(0, box.y), Vector2i(box.x, FWD_SPAWN_DEPTH))
+		var cells := _free_cells(strip, walls)
+		if cells.is_empty():
+			push_warning("build_map: no forward spawn room south of objective %s" % zone.obj_id)
+			continue
+		for index: int in mini(FWD_SPAWN_COUNT, cells.size()):
+			var marker := SpawnMarker.new()
+			marker.name = "spawn_fwd_%s_%02d" % [zone.obj_id, index + 1]
+			# Attacker (SIROCCO) forwards; attackers are the ones advancing.
+			marker.team = Enums.Team.SIROCCO
+			marker.position = (Vector2(cells[index]) + Vector2(0.5, 0.5)) * Tiles.SIZE
+			fwd.add_child(marker)
+	return fwd
+
+
+## ---------------------------------------------------------------- markers --
+
+## Extra Marker2D points from `maps/<id>/markers.json` (Training Range's firing
+## line, targets, racks). Each node is named `<id>`, carries `kind` in its
+## metadata, plus every optional field. Missing file = no Markers node at all.
+func _make_markers(root: Node2D, map_id: String) -> Node2D:
+	var path := "%s/%s/%s" % [MAP_DIR, map_id, MARKERS_FILE]
+	if not FileAccess.file_exists(path):
+		return _empty_node()
+	var markers := Node2D.new()
+	markers.name = "Markers"
+	root.add_child(markers)
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
+	if not (parsed is Array):
+		push_error("build_map: %s must be a JSON array" % path)
+		return markers
+	for entry: Dictionary in parsed:
+		var marker := Marker2D.new()
+		marker.name = str(entry.get("id", "marker"))
+		marker.position = Vector2(float(entry.get("x", 0)) + 0.5,
+			float(entry.get("y", 0)) + 0.5) * Tiles.SIZE
+		for key: String in entry:
+			if key != "x" and key != "y":
+				marker.set_meta(StringName(key), entry[key])
+		markers.add_child(marker)
+	return markers
+
+
+## ------------------------------------------------------------------ bounds --
 ## Marker pair for camera clamp / minimap extent (architecture §7).
 func _make_bounds(root: Node2D) -> void:
 	var bounds := Node2D.new()
@@ -400,6 +476,17 @@ func _make_bounds(root: Node2D) -> void:
 		marker.name = pair[0]
 		marker.position = pair[1]
 		bounds.add_child(marker)
+
+
+## Placeholder returned when an optional node group is skipped, so no empty
+## node ships in maps that do not need one (Dustworks/Compound stay identical).
+func _empty_node() -> Node2D:
+	return null
+
+
+## Child count of an optional node group (0 when the group was skipped).
+func _child_count(node: Node) -> int:
+	return node.get_child_count() if node != null else 0
 
 
 ## PackedScene.pack() only serialises nodes whose `owner` is the root.

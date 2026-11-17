@@ -1,0 +1,254 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://src/world/blockout_def.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"oldtown"
+size = Vector2i(88, 72)
+carve = [{
+"h": 6,
+"surface": "concrete",
+"w": 20,
+"x": 34,
+"y": 64
+}, {
+"h": 6,
+"surface": "concrete",
+"w": 20,
+"x": 34,
+"y": 2
+}, {
+"h": 12,
+"surface": "concrete",
+"w": 24,
+"x": 32,
+"y": 50
+}, {
+"h": 16,
+"surface": "concrete",
+"w": 16,
+"x": 36,
+"y": 28
+}, {
+"h": 14,
+"surface": "concrete",
+"w": 24,
+"x": 32,
+"y": 6
+}, {
+"h": 52,
+"surface": "concrete",
+"w": 8,
+"x": 40,
+"y": 12
+}, {
+"h": 40,
+"surface": "concrete",
+"w": 6,
+"x": 12,
+"y": 20
+}, {
+"h": 44,
+"surface": "concrete",
+"w": 6,
+"x": 70,
+"y": 16
+}, {
+"h": 6,
+"surface": "concrete",
+"w": 14,
+"x": 18,
+"y": 52
+}, {
+"h": 6,
+"surface": "concrete",
+"w": 18,
+"x": 18,
+"y": 32
+}, {
+"h": 6,
+"surface": "concrete",
+"w": 14,
+"x": 18,
+"y": 10
+}, {
+"h": 6,
+"surface": "concrete",
+"w": 14,
+"x": 56,
+"y": 54
+}, {
+"h": 6,
+"surface": "concrete",
+"w": 18,
+"x": 52,
+"y": 34
+}, {
+"h": 6,
+"surface": "concrete",
+"w": 14,
+"x": 56,
+"y": 10
+}]
+blocks = [{
+"h": 8,
+"low_cover": false,
+"material": "brick",
+"w": 14,
+"x": 20,
+"y": 22
+}, {
+"h": 8,
+"low_cover": false,
+"material": "brick",
+"w": 14,
+"x": 20,
+"y": 40
+}, {
+"h": 8,
+"low_cover": false,
+"material": "brick",
+"w": 14,
+"x": 54,
+"y": 22
+}, {
+"h": 8,
+"low_cover": false,
+"material": "brick",
+"w": 14,
+"x": 54,
+"y": 42
+}, {
+"h": 4,
+"low_cover": false,
+"material": "brick",
+"w": 8,
+"x": 24,
+"y": 6
+}, {
+"h": 4,
+"low_cover": false,
+"material": "brick",
+"w": 8,
+"x": 56,
+"y": 6
+}, {
+"h": 6,
+"low_cover": false,
+"material": "brick",
+"w": 10,
+"x": 8,
+"y": 56
+}, {
+"h": 6,
+"low_cover": false,
+"material": "brick",
+"w": 10,
+"x": 70,
+"y": 56
+}, {
+"h": 8,
+"low_cover": false,
+"material": "concrete_block",
+"w": 8,
+"x": 40,
+"y": 32
+}, {
+"cover": "sandbag",
+"h": 4,
+"low_cover": true,
+"material": "concrete_block",
+"w": 4,
+"x": 42,
+"y": 55
+}, {
+"cover": "crate",
+"h": 1,
+"low_cover": true,
+"material": "concrete_block",
+"w": 2,
+"x": 38,
+"y": 10
+}, {
+"cover": "crate",
+"h": 1,
+"low_cover": true,
+"material": "concrete_block",
+"w": 2,
+"x": 48,
+"y": 14
+}]
+spawn_rects = [{
+"count": 12,
+"h": 6,
+"team": 1,
+"w": 20,
+"x": 34,
+"y": 64
+}, {
+"count": 12,
+"h": 6,
+"team": 0,
+"w": 20,
+"x": 34,
+"y": 2
+}]
+lanes = [{
+"from": Vector2i(44, 62),
+"id": &"main_street",
+"to": Vector2i(44, 14)
+}, {
+"from": Vector2i(15, 56),
+"id": &"west_alley",
+"to": Vector2i(15, 22)
+}, {
+"from": Vector2i(72, 56),
+"id": &"east_lane",
+"to": Vector2i(72, 18)
+}, {
+"from": Vector2i(36, 56),
+"id": &"plaza_a",
+"to": Vector2i(52, 56)
+}, {
+"from": Vector2i(38, 36),
+"id": &"church_ring",
+"to": Vector2i(50, 36)
+}, {
+"from": Vector2i(36, 13),
+"id": &"admin_c",
+"to": Vector2i(52, 13)
+}, {
+"from": Vector2i(22, 54),
+"id": &"plaza_west",
+"to": Vector2i(32, 54)
+}, {
+"from": Vector2i(56, 57),
+"id": &"plaza_east",
+"to": Vector2i(68, 57)
+}]
+objectives = [{
+"capture_time": 20.0,
+"h": 8,
+"id": &"a",
+"order": 1,
+"w": 16,
+"x": 36,
+"y": 52
+}, {
+"capture_time": 24.0,
+"h": 12,
+"id": &"b",
+"order": 2,
+"w": 12,
+"x": 38,
+"y": 30
+}, {
+"capture_time": 28.0,
+"h": 10,
+"id": &"c",
+"order": 3,
+"w": 16,
+"x": 36,
+"y": 8
+}]
