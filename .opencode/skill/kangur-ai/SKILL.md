@@ -64,6 +64,21 @@ must choose differently. Never hardcode a trait response — weight it.
 3. Watch a match with F3 debug overlay (AI state, cones, nav, danger map).
 4. Screenshot nothing — AI is verified by sims + overlays, not stills.
 
+## Where it lives (implemented)
+- Pure models: `memory_model`, `personality`, `blackboard`, `utility_ai`,
+  `danger_map`, `team_intel` (all RefCounted). Node shells: `ai_controller`
+  (the brain; `src/entities/ai_controller.gd` is now a thin alias of it) and
+  `squad_coordinator` (one per team, self-creating: `SquadCoordinator.for_team`).
+- Behaviors: `src/ai/behaviors/*.gd`, all extending `behavior.gd`.
+- Headless probes: `tools/godot.sh --headless --path . tools/shot_ai.tscn --
+  --ai-selftest` (wiring) and `--ai-sim=<seconds>` (action histogram, kills,
+  radio lines, fairness denials). Overlay screenshot: `--shot=res://tools/
+  shot_ai.tscn:600:reports/screenshots/ai_overlay.png` (needs DISPLAY).
+- Tests: `tests/unit/ai/` — fairness suite is `test_fairness.gd`.
+- Tuning knobs are consts at the top of each behavior and blackboard (linger,
+  check-six window, spacing, hysteresis, dwell budget). Difficulty only shifts
+  aggression/discipline and Aim (never sensors).
+
 ## Common failure modes
 - Bots bunch → check personal offsets + avoidance enabled + role spacing.
 - Bots stalemate → check Suppress/Flank scores rise with stall timer (>6 s).

@@ -187,6 +187,29 @@ UseEquipment, CaptureObjective, DefendObjective.
 `SquadCoordinator` (Node, per team) owns `TeamIntel` (radio-delayed sightings,
 danger map grid 64 px cells with decay) and assigns loose roles per phase.
 
+**Match interface (objective_info)** — the puzzle piece Match must feed. The
+coordinator holds one dict per team and `AIController.set_objective_info()`
+forwards a per-NPC override; both merge, so unknown keys are safe:
+```gdscript
+{ mode: Enums.Mode, obj_id: StringName, obj_pos: Vector2, obj_order: int,
+  attacking: bool, phase: StringName,   # &"hunt"|&"push"|&"hold"
+  obj_contested: bool }
+```
+Defaults (`ELIMINATION`, `hunt`) mean free hunt, so arenas and sims need no
+Match. Capture/Defend score zero outside BATTLE; Battle attackers obey the
+coordinator's wave gate (`wave_open()`), defenders anchor and rotate.
+
+**Fairness enforcement (implementation, not just doc).** `_justified_fire()`
+is the single gate on `Intent.fire`: it requires a first-hand sighting ≤0.9 s
+old (LOS at fire, tolerating one missed 0.5 s Perception refresh) or an active
+Suppress inside 4 s of a personally seen contact. Radio/hearing never qualify.
+`_audit_fairness()` runs each decision tick in debug builds and appends any
+contact without a perception provenance to `AIController.fairness_violations`
+(sim harness reads it). `src/ai/ai_controller.gd` never enumerates the
+`characters` group and never reads an enemy's `global_position`; the only
+enemy payload it accepts is Perception's `enemy_spotted(spotter, enemy, pos)`,
+from which it copies `id + pos` and drops the node.
+
 ## 5. EventBus Signals (exact contract)
 
 Loose types (Node/Variant) to avoid class cycles; concrete types documented.
