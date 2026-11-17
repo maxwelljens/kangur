@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="EquipmentDef" format=3]
+
+[ext_resource type="Script" path="res://src/core/data/equipment_def.gd" id="1_d0gdo"]
+
+[resource]
+script = ExtResource("1_d0gdo")
+id = &"flash"
+display_name = "Flashbang"
+kind = 1
+fuse = 1.6
+radius = 220.0
+damage = 0.0
+vision_block_time = 2.5

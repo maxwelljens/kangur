@@ -1,0 +1,33 @@
+[gd_resource type="Resource" script_class="SoundSetDef" format=3]
+
+[ext_resource type="AudioStream" path="res://assets/audio/weapons/308/fire/308 Single Isolated.wav" id="1_vjcuj"]
+[ext_resource type="AudioStream" path="res://assets/audio/weapons/357/action/44 Magnum Cock Hammer.wav" id="2_psh2j"]
+[ext_resource type="AudioStream" path="res://assets/audio/weapons/357/action/32 SW Rotate Cylinder.wav" id="3_ctbvf"]
+[ext_resource type="AudioStream" path="res://assets/audio/weapons/357/action/44 Magnum Open Cylinder.wav" id="4_pbvl6"]
+[ext_resource type="AudioStream" path="res://assets/audio/weapons/357/action/44 Magnum Eject Empty Full.wav" id="5_j1sd6"]
+[ext_resource type="AudioStream" path="res://assets/audio/weapons/357/reload/44 Magnum Single Load.wav" id="6_6svsu"]
+[ext_resource type="AudioStream" path="res://assets/audio/weapons/357/action/44 Magnum Close Cylinder.wav" id="7_ibday"]
+[ext_resource type="AudioStream" path="res://assets/audio/weapons/357/action/44 Magnum Decock Hammer.wav" id="8_18663"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/impacts/wood/wood_chip_1.ogg" id="9_w11uc"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/impacts/metal/metal_ping_1.ogg" id="10_ejmv2"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/impacts/metal/metal_ping_2.ogg" id="11_rj8qs"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/impacts/metal/metal_clang_1.ogg" id="12_rpahb"]
+[ext_resource type="Script" path="res://src/core/data/sound_set_def.gd" id="13_eg46s"]
+
+[resource]
+script = ExtResource("13_eg46s")
+id = &"357"
+display_name = ".357 revolver (Judge)"
+actions = Dictionary[StringName, Array]({
+&"cycle": [ExtResource("2_psh2j"), ExtResource("3_ctbvf")],
+&"draw": [ExtResource("4_pbvl6")],
+&"dry": [ExtResource("8_18663")],
+&"fire": [ExtResource("1_vjcuj")],
+&"reload_end": [ExtResource("6_6svsu"), ExtResource("7_ibday")],
+&"reload_start": [ExtResource("4_pbvl6"), ExtResource("5_j1sd6")]
+})
+impacts = Dictionary[int, Array]({
+0: [ExtResource("9_w11uc")],
+2: [ExtResource("10_ejmv2"), ExtResource("11_rj8qs"), ExtResource("12_rpahb")],
+4: [ExtResource("9_w11uc")]
+})

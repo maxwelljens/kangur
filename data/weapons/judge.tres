@@ -1,0 +1,38 @@
+[gd_resource type="Resource" script_class="WeaponDef" format=3]
+
+[ext_resource type="Script" path="res://src/core/data/weapon_def.gd" id="1_gqknj"]
+
+[resource]
+script = ExtResource("1_gqknj")
+id = &"judge"
+display_name = "R-357 \"Judge\""
+category = &"pistol"
+fire_modes = Array[int]([0])
+rpm = 150.0
+mag_size = 6
+reserve_mags = 3
+reload_time = 2.6
+equip_time = 0.35
+bullet_speed = 5200.0
+damage = 55.0
+spread_base = 0.7
+bloom_per_shot = 0.75
+bloom_max = 4.5
+bloom_recovery = 10.0
+recoil_kick = 2.6
+recoil_recovery = 9.0
+penetration = 0.8
+falloff_start = 320.0
+falloff_end = 900.0
+min_mult = 0.5
+move_speed_mult = 1.04
+weight = 1.2
+sound_set = &"357"
+tracer_color = Color(1, 0.82, 0.45, 1)
+body_len = 11.0
+barrel_len = 6.0
+body_width = 3.4
+mag_len = 0.0
+mag_offset = 0.0
+stock_len = 0.0
+gun_color = Color(0.3, 0.31, 0.33, 1)

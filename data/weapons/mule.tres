@@ -1,0 +1,38 @@
+[gd_resource type="Resource" script_class="WeaponDef" format=3]
+
+[ext_resource type="Script" path="res://src/core/data/weapon_def.gd" id="1_uw5ta"]
+
+[resource]
+script = ExtResource("1_uw5ta")
+id = &"mule"
+display_name = "LMG \"Mule\""
+category = &"lmg"
+fire_modes = Array[int]([2])
+rpm = 700.0
+mag_size = 100
+reserve_mags = 2
+reload_time = 5.5
+equip_time = 1.1
+bullet_speed = 6000.0
+damage = 28.0
+spread_base = 0.8
+bloom_per_shot = 0.3
+bloom_max = 7.0
+bloom_recovery = 5.45
+move_penalty_scale = 1.833
+recoil_kick = 1.6
+recoil_recovery = 5.5
+penetration = 1.1
+falloff_start = 600.0
+falloff_end = 1600.0
+move_speed_mult = 0.85
+weight = 8.5
+sound_set = &"lmg"
+tracer_color = Color(1, 0.72, 0.3, 1)
+body_len = 20.0
+barrel_len = 14.0
+body_width = 4.6
+mag_len = 10.0
+mag_offset = 5.0
+stock_len = 7.0
+gun_color = Color(0.2, 0.21, 0.23, 1)

@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="DifficultyDef" format=3]
+
+[ext_resource type="Script" path="res://src/core/data/difficulty_def.gd" id="1_r7omg"]
+
+[resource]
+script = ExtResource("1_r7omg")
+id = &"veteran"
+display_name = "Veteran"
+reaction_range = Vector2(180, 280)
+aim_error_range = Vector2(1.5, 3.5)
+turn_rate_range = Vector2(380, 520)
+aggression_bias = 0.15
+discipline_bias = 0.2
+burst_range = Vector2i(4, 7)

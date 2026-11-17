@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="SoundSetDef" format=3]
+
+[ext_resource type="AudioStream" path="res://assets/audio/weapons/308/fire/308 Single.wav" id="1_cc5ga"]
+[ext_resource type="AudioStream" path="res://assets/audio/weapons/308/fire/308 Single Isolated.wav" id="2_bhscy"]
+[ext_resource type="AudioStream" path="res://assets/audio/weapons/shared/reload/AR PolyMag Unpack.wav" id="3_78a6i"]
+[ext_resource type="AudioStream" path="res://assets/audio/weapons/shared/reload/AR PolyMag Pack.wav" id="4_jmvro"]
+[ext_resource type="AudioStream" path="res://assets/audio/weapons/9mm/action/9mm Pistol Dry Fire.wav" id="5_fddtk"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/impacts/wood/wood_chip_1.ogg" id="6_brupv"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/impacts/metal/metal_ping_1.ogg" id="7_try3w"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/impacts/metal/metal_ping_2.ogg" id="8_fjmr5"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/impacts/metal/metal_clang_1.ogg" id="9_acc1n"]
+[ext_resource type="Script" path="res://src/core/data/sound_set_def.gd" id="10_yfobj"]
+
+[resource]
+script = ExtResource("10_yfobj")
+id = &"308"
+display_name = ".308 (Volk / Falx / Sokol)"
+actions = Dictionary[StringName, Array]({
+&"draw": [ExtResource("3_78a6i")],
+&"dry": [ExtResource("5_fddtk")],
+&"fire": [ExtResource("1_cc5ga"), ExtResource("2_bhscy")],
+&"reload_end": [ExtResource("4_jmvro")],
+&"reload_start": [ExtResource("3_78a6i")]
+})
+impacts = Dictionary[int, Array]({
+0: [ExtResource("6_brupv")],
+2: [ExtResource("7_try3w"), ExtResource("8_fjmr5"), ExtResource("9_acc1n")],
+4: [ExtResource("6_brupv")]
+})

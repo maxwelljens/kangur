@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="MapDef" format=3]
+
+[ext_resource type="Script" path="res://src/core/data/map_def.gd" id="1_6qe4q"]
+
+[resource]
+script = ExtResource("1_6qe4q")
+id = &"dustworks"
+display_name = "Dustworks"
+scene_path = "res://maps/dustworks/map.tscn"
+supported_modes = Array[int]([0])
+briefing = "Sixty hectares of bonded sand depot outside Marseille, leased to Bastion for the quarter. Two arenas, one mid lane, and a tunnel network the previous tenant never declared. Contract: deny the site."
+minimap_path = "res://maps/dustworks/minimap.png"
+ambience_id = &"wind"
+music_id = &"match_calm"

@@ -1,0 +1,36 @@
+[gd_resource type="Resource" script_class="WeaponDef" format=3]
+
+[ext_resource type="Script" path="res://src/core/data/weapon_def.gd" id="1_6jw3t"]
+
+[resource]
+script = ExtResource("1_6jw3t")
+id = &"kedr"
+display_name = "SMG \"Kedr\""
+category = &"smg"
+fire_modes = Array[int]([2])
+rpm = 1000.0
+mag_size = 20
+reload_time = 2.0
+equip_time = 0.5
+bullet_speed = 4200.0
+damage = 18.0
+spread_base = 0.9
+bloom_per_shot = 0.42
+bloom_max = 5.0
+bloom_recovery = 10.7
+move_penalty_scale = 1.333
+recoil_kick = 0.9
+recoil_recovery = 9.0
+penetration = 0.6
+falloff_start = 400.0
+falloff_end = 800.0
+min_mult = 0.55
+weight = 2.4
+sound_set = &"9mm"
+tracer_color = Color(1, 0.82, 0.45, 1)
+body_len = 13.0
+barrel_len = 6.0
+body_width = 3.2
+mag_len = 7.0
+mag_offset = 3.0
+stock_len = 3.0

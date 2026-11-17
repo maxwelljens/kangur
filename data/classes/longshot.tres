@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ClassDef" format=3]
+
+[ext_resource type="Script" path="res://src/core/data/class_def.gd" id="1_sxeea"]
+
+[resource]
+script = ExtResource("1_sxeea")
+id = &"longshot"
+display_name = "Longshot"
+description = "Marksman. Paid to end the fight before it starts."
+armor_vest = 40.0
+bandages = 2
+primary_categories = Array[StringName]([&"dmr", &"sniper", &"br"])
+equipment = Array[StringName]([&"smoke", &"frag"])
+perk_id = &"longshot"

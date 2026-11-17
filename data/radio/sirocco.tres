@@ -1,0 +1,43 @@
+[gd_resource type="Resource" script_class="RadioDef" format=3]
+
+[ext_resource type="Script" path="res://src/core/data/radio_def.gd" id="1_e7sr0"]
+
+[resource]
+script = ExtResource("1_e7sr0")
+id = &"sirocco"
+display_name = "Sirocco Extraction Corps"
+lines = Dictionary[StringName, Array]({
+&"armor_broken": ["Plate's gone!", "Armor cracked."],
+&"bandage_done": ["Good. Moving.", "Back in it."],
+&"bandage_start": ["Patching, cover me.", "Bleeding — give me a sec."],
+&"check_six": ["Six's clear.", "Watching back.", "Rear check."],
+&"contact": ["Contact {grid}.", "On me, {grid}.", "Found them, {grid}."],
+&"contact_multiple": ["{count} of them, {grid}.", "Crowd at {grid}, pushing."],
+&"death": ["{callsign}'s down!", "Lost {callsign}!", "Man down {grid}!"],
+&"enemy_flash": ["Flash, turn!", "Blinded!"],
+&"enemy_smoke": ["Smoke {grid}.", "Screened, wait it out."],
+&"flank": ["Flanking {grid}.", "Going wide.", "Around the side."],
+&"flash_out": ["Flash!", "Blinding!"],
+&"frag_out": ["Frag!", "Grenade out."],
+&"hold": ["Holding {grid}.", "Pinned here, watching."],
+&"kill": ["Dropped.", "One down.", "Extracted."],
+&"kill_streak": ["They're breaking. Push.", "Keep the momentum."],
+&"killzone": ["{grid} ate {count} of us — go around!", "Don't cross {grid}, it's a blender.", "Kill zone {grid}, flank it."],
+&"last_man": ["Just me. Fine.", "Solo. I'll finish it."],
+&"lose": ["Contract's blown. Fall back.", "Cut losses. Out."],
+&"low_hp": ["Hit bad!", "Bleeding here!"],
+&"objective_captured": ["{obj} ours. Next.", "Taken. Keep moving."],
+&"objective_contested": ["{obj}'s contested, push!", "They're on {obj}!"],
+&"objective_lost": ["Lost {obj}, retake!", "{obj} gone — rotate!"],
+&"objective_start": ["Push {obj}, go.", "{obj} is the job. Move."],
+&"regroup": ["On me, now.", "Stack up {grid}."],
+&"reload": ["Reloading!", "Cover, dry.", "Mag!"],
+&"retreat": ["Back! Back!", "Disengage, {grid}."],
+&"smoke_out": ["Smoke out.", "Screening."],
+&"spawn": ["Back in.", "Reinserted."],
+&"spot_lmg": ["MG {grid}, don't peek!"],
+&"spot_sniper": ["Sniper {grid}!", "Long gun, keep down."],
+&"suppress": ["Suppressing!", "Heads down {grid}!"],
+&"tickets_low": ["We're almost out of lives. Commit.", "Last replacements. Make it count."],
+&"win": ["Extraction complete. Paid in full.", "Job's done. Move out."]
+})

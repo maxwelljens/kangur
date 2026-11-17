@@ -31,6 +31,10 @@ resolved; keep this current for orchestration continuity.
       — coordinator applies after core agent lands (follow-up mechanism failed).
 
 ## Content / balance
+- [ ] Map art-polish pass: blockouts are structurally correct but visually flat
+      (uniform gray wall mass, simple speckle floors). Add surface variation,
+      decals, props (containers/cars/furniture), dusk lighting + occluders,
+      detail tiles. Verified readable via reports/screenshots/dustworks.png.
 - [ ] Weapon sound-set .tres instances (filename→weapon mapping in docs/credits.md §1).
 - [ ] Radio line .tres instances from docs/design/radio-lines.md.
 - [ ] Balance suite: 200-seed winrates per map/mode, TTK tables, cover% — after AI+Match land.

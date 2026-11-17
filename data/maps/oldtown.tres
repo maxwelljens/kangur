@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="MapDef" format=3]
+
+[ext_resource type="Script" path="res://src/core/data/map_def.gd" id="1_5fte4"]
+
+[resource]
+script = ExtResource("1_5fte4")
+id = &"oldtown"
+display_name = "Oldtown"
+scene_path = "res://maps/oldtown/map.tscn"
+supported_modes = Array[int]([1])
+briefing = "Four blocks of a Portuguese administrative quarter, emptied for a structural survey. Plaza, church, administration building. Narrow alleys, stone walls, and a fountain that will not stop running."
+minimap_path = "res://maps/oldtown/minimap.png"
+ambience_id = &"city_murmur"
+music_id = &"match_calm"
+lighting_preset = &"dusk"

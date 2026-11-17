@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="MapDef" format=3]
+
+[ext_resource type="Script" path="res://src/core/data/map_def.gd" id="1_bgdmi"]
+
+[resource]
+script = ExtResource("1_bgdmi")
+id = &"range"
+display_name = "Range"
+scene_path = "res://maps/range/map.tscn"
+supported_modes = Array[int]([2])
+briefing = "A leased concrete pad with paper targets and a rack of every weapon on the books. No contract, no clock, no paperwork. Training use only."
+minimap_path = "res://maps/range/minimap.png"
+ambience_id = &"wind"

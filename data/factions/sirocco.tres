@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="FactionDef" format=3]
+
+[ext_resource type="Script" path="res://src/core/data/faction_def.gd" id="1_sbcrq"]
+
+[resource]
+script = ExtResource("1_sbcrq")
+id = &"sirocco"
+display_name = "Sirocco Extraction Corps"
+color_primary = Color(0.769, 0.333, 0.176, 1)
+color_accent = Color(0.29, 0.306, 0.329, 1)
+emblem_path = "res://assets/ui/art/sirocco_emblem.svg"
+callsigns = Array[String](["Luca", "Elena", "Rui", "Tomas", "Ines", "Bram", "Nadia", "Milo", "Sofia", "Mateo", "Katja", "Nuno", "Ilse", "Andre", "Vera", "Dario"])
+radio_set = &"sirocco"
+doctrine = Dictionary[StringName, float]({
+&"advance": 1.3,
+&"camp": 0.75,
+&"capture_objective": 1.2,
+&"engage": 1.05,
+&"flank": 1.25,
+&"hold_angle": 0.85,
+&"investigate": 1.0,
+&"peek": 0.95,
+&"regroup": 0.95,
+&"suppress": 1.1,
+&"take_cover": 0.95
+})

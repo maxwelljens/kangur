@@ -1,0 +1,43 @@
+[gd_resource type="Resource" script_class="RadioDef" format=3]
+
+[ext_resource type="Script" path="res://src/core/data/radio_def.gd" id="1_3rslr"]
+
+[resource]
+script = ExtResource("1_3rslr")
+id = &"bastion"
+display_name = "Bastion Security Group"
+lines = Dictionary[StringName, Array]({
+&"armor_broken": ["Plate's cracked.", "Armor's done."],
+&"bandage_done": ["Patched. Back in.", "Stable."],
+&"bandage_start": ["Patching up, hold.", "Bleeding out, need a second."],
+&"check_six": ["Checking rear.", "Rear's clear.", "Watching our six."],
+&"contact": ["Contact, {grid}.", "Eyes on, {grid}.", "Logging contact, {grid}."],
+&"contact_multiple": ["Multiple contacts, {grid}.", "{count} hostiles, {grid}, logging."],
+&"death": ["{callsign} is down.", "Lost {callsign}, {grid}.", "Man down, {grid}."],
+&"enemy_flash": ["Flash! Turn away.", "Blinded, cover."],
+&"enemy_smoke": ["Smoke screen, {grid}.", "Can't see through it. Hold."],
+&"flank": ["Rotating {grid}.", "Taking the long way."],
+&"flash_out": ["Flash out.", "Blinding {grid}."],
+&"frag_out": ["Frag out.", "Ordnance, {grid}."],
+&"hold": ["Holding {grid}.", "Anchor set.", "Static here."],
+&"kill": ["Target down.", "Confirmed, {grid}.", "One less contract."],
+&"kill_streak": ["Site's clearing. Hold.", "Good effect on target."],
+&"killzone": ["Lost {count} at {grid} — kill zone, avoid.", "{grid} is a meat grinder. Hold angles.", "Two down {grid}, nobody crosses."],
+&"last_man": ["I'm the last one. Contract's on me.", "Solo now. Holding."],
+&"lose": ["Contract failed. Fall out.", "We're done here. Withdraw."],
+&"low_hp": ["I'm hit bad.", "Bleeding, need cover."],
+&"objective_captured": ["{obj} secured. Logging.", "{obj} is ours. Next."],
+&"objective_contested": ["{obj} is contested.", "They're on {obj}, push."],
+&"objective_lost": ["Lost {obj}. Recover.", "{obj} is theirs, rotate."],
+&"objective_start": ["Moving on {obj}.", "Contract says {obj}. Move."],
+&"regroup": ["Regroup on me.", "Consolidate, {grid}."],
+&"reload": ["Reloading, cover.", "Mag change.", "Dry, covering."],
+&"retreat": ["Falling back, {grid}.", "Disengaging. Cover."],
+&"smoke_out": ["Smoke deployed.", "Screening {grid}."],
+&"spawn": ["Back on site.", "Replacement deployed."],
+&"spot_lmg": ["Machine gun, {grid}. Don't peek."],
+&"spot_sniper": ["Sniper, {grid}. Keep cover.", "Long gun watching {grid}."],
+&"suppress": ["Suppressing {grid}.", "Keeping heads down."],
+&"tickets_low": ["We're burning replacements. Careful.", "Few lives left. Make them count."],
+&"win": ["Contract complete. Good work.", "Site held. Logging victory."]
+})

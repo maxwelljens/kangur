@@ -1,0 +1,38 @@
+[gd_resource type="Resource" script_class="WeaponDef" format=3]
+
+[ext_resource type="Script" path="res://src/core/data/weapon_def.gd" id="1_ogu8e"]
+
+[resource]
+script = ExtResource("1_ogu8e")
+id = &"sokol"
+display_name = "DMR \"Sokol\""
+category = &"dmr"
+fire_modes = Array[int]([0])
+rpm = 260.0
+mag_size = 15
+reserve_mags = 4
+reload_time = 3.0
+equip_time = 0.75
+bullet_speed = 7600.0
+damage = 55.0
+spread_base = 0.35
+bloom_per_shot = 0.6
+bloom_recovery = 6.0
+move_penalty_scale = 2.0
+recoil_kick = 2.2
+recoil_recovery = 6.5
+penetration = 1.8
+falloff_start = 900.0
+falloff_end = 2200.0
+min_mult = 0.75
+move_speed_mult = 0.92
+weight = 5.0
+sound_set = &"308"
+tracer_color = Color(1, 0.82, 0.45, 1)
+body_len = 20.0
+barrel_len = 16.0
+body_width = 3.4
+mag_offset = 4.5
+stock_len = 8.0
+has_scope = true
+gun_color = Color(0.18, 0.2, 0.22, 1)

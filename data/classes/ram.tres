@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ClassDef" format=3]
+
+[ext_resource type="Script" path="res://src/core/data/class_def.gd" id="1_36juh"]
+
+[resource]
+script = ExtResource("1_36juh")
+id = &"ram"
+display_name = "Ram"
+description = "Breacher. Doors, windows, and anyone standing behind them."
+armor_vest = 110.0
+armor_helmet = 60.0
+bandages = 2
+primary_categories = Array[StringName]([&"shotgun", &"smg"])
+equipment = Array[StringName]([&"flash", &"flash"])
+perk_id = &"ram"

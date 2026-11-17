@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="SoundSetDef" format=3]
+
+[ext_resource type="AudioStream" path="res://assets/audio/weapons/308/fire/308 Single.wav" id="1_t4rac"]
+[ext_resource type="AudioStream" path="res://assets/audio/weapons/308/fire/308 Single Isolated.wav" id="2_inrf8"]
+[ext_resource type="AudioStream" path="res://assets/audio/weapons/357/action/44 Magnum Cock Hammer.wav" id="3_gnsv4"]
+[ext_resource type="AudioStream" path="res://assets/audio/weapons/shared/reload/Bolt Mag Unpack.wav" id="4_rjweo"]
+[ext_resource type="AudioStream" path="res://assets/audio/weapons/shared/reload/Bolt Mag Pack.wav" id="5_3sa7h"]
+[ext_resource type="AudioStream" path="res://assets/audio/weapons/357/action/44 Magnum Close Cylinder.wav" id="6_3aj1j"]
+[ext_resource type="AudioStream" path="res://assets/audio/weapons/9mm/action/9mm Pistol Dry Fire.wav" id="7_qngnt"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/impacts/wood/wood_chip_1.ogg" id="8_qb4yv"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/impacts/metal/metal_ping_1.ogg" id="9_6k7m2"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/impacts/metal/metal_ping_2.ogg" id="10_eukl6"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/impacts/metal/metal_clang_1.ogg" id="11_hl5k8"]
+[ext_resource type="Script" path="res://src/core/data/sound_set_def.gd" id="12_j2658"]
+
+[resource]
+script = ExtResource("12_j2658")
+id = &"308_bolt"
+display_name = ".308 bolt (Lynx)"
+actions = Dictionary[StringName, Array]({
+&"cycle": [ExtResource("3_gnsv4")],
+&"draw": [ExtResource("4_rjweo")],
+&"dry": [ExtResource("7_qngnt")],
+&"fire": [ExtResource("1_t4rac"), ExtResource("2_inrf8")],
+&"reload_end": [ExtResource("5_3sa7h"), ExtResource("6_3aj1j")],
+&"reload_start": [ExtResource("4_rjweo")]
+})
+impacts = Dictionary[int, Array]({
+0: [ExtResource("8_qb4yv")],
+2: [ExtResource("9_6k7m2"), ExtResource("10_eukl6"), ExtResource("11_hl5k8")],
+4: [ExtResource("8_qb4yv")]
+})

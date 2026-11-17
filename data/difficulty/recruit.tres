@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="DifficultyDef" format=3]
+
+[ext_resource type="Script" path="res://src/core/data/difficulty_def.gd" id="1_beo0h"]
+
+[resource]
+script = ExtResource("1_beo0h")
+id = &"recruit"
+display_name = "Recruit"
+reaction_range = Vector2(320, 450)
+aim_error_range = Vector2(4, 7)
+turn_rate_range = Vector2(220, 340)
+aggression_bias = -0.15
+discipline_bias = -0.2
+burst_range = Vector2i(2, 4)

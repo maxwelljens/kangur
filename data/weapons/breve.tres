@@ -1,0 +1,39 @@
+[gd_resource type="Resource" script_class="WeaponDef" format=3]
+
+[ext_resource type="Script" path="res://src/core/data/weapon_def.gd" id="1_6uqje"]
+
+[resource]
+script = ExtResource("1_6uqje")
+id = &"breve"
+display_name = "SG \"Breve\""
+category = &"shotgun"
+fire_modes = Array[int]([4])
+rpm = 70.0
+mag_size = 6
+reserve_mags = 4
+reload_time = 4.0
+equip_time = 0.65
+bullet_speed = 4000.0
+damage = 12.0
+pellets = 8
+spread_base = 4.0
+bloom_per_shot = 0.0
+bloom_recovery = 8.6
+move_penalty_scale = 1.333
+recoil_kick = 3.2
+recoil_recovery = 5.5
+penetration = 0.25
+falloff_start = 150.0
+falloff_end = 480.0
+min_mult = 0.25
+move_speed_mult = 0.97
+weight = 3.4
+sound_set = &"20ga"
+tracer_color = Color(1, 0.82, 0.45, 1)
+shell_color = Color(0.75, 0.15, 0.12, 1)
+body_len = 12.0
+barrel_len = 10.0
+body_width = 5.6
+mag_len = 0.0
+mag_offset = 0.0
+stock_len = 6.0

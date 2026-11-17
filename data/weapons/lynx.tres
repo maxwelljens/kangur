@@ -1,0 +1,41 @@
+[gd_resource type="Resource" script_class="WeaponDef" format=3]
+
+[ext_resource type="Script" path="res://src/core/data/weapon_def.gd" id="1_h1jei"]
+
+[resource]
+script = ExtResource("1_h1jei")
+id = &"lynx"
+display_name = "SR \"Lynx\""
+category = &"sniper"
+fire_modes = Array[int]([3])
+rpm = 45.0
+mag_size = 5
+reserve_mags = 3
+reload_time = 3.4
+equip_time = 0.9
+bullet_speed = 9000.0
+damage = 110.0
+spread_base = 0.15
+bloom_per_shot = 1.5
+bloom_max = 8.0
+bloom_recovery = 5.0
+move_penalty_scale = 2.333
+recoil_kick = 4.0
+recoil_recovery = 4.5
+penetration = 2.5
+armor_piercing = true
+falloff_start = 1200.0
+falloff_end = 2600.0
+min_mult = 0.85
+move_speed_mult = 0.88
+weight = 6.2
+sound_set = &"308_bolt"
+tracer_color = Color(1, 0.95, 0.8, 1)
+body_len = 20.0
+barrel_len = 18.0
+body_width = 3.6
+mag_len = 4.5
+mag_offset = 4.0
+stock_len = 8.0
+has_scope = true
+gun_color = Color(0.18, 0.2, 0.22, 1)

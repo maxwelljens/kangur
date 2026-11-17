@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="SoundSetDef" format=3]
+
+[ext_resource type="AudioStream" path="res://assets/audio/weapons/308/fire/308 Single.wav" id="1_rklka"]
+[ext_resource type="AudioStream" path="res://assets/audio/weapons/308/fire/308 Single Isolated.wav" id="2_jf3w2"]
+[ext_resource type="AudioStream" path="res://assets/audio/weapons/shared/action/Bipod Impact Both Legs.wav" id="3_r6muy"]
+[ext_resource type="AudioStream" path="res://assets/audio/weapons/shared/reload/AK PolyMag Unpack.wav" id="4_bklsv"]
+[ext_resource type="AudioStream" path="res://assets/audio/weapons/shared/reload/AK PolyMag Pack.wav" id="5_omroj"]
+[ext_resource type="AudioStream" path="res://assets/audio/weapons/9mm/action/9mm Pistol Dry Fire.wav" id="6_7rkqi"]
+[ext_resource type="AudioStream" path="res://assets/audio/weapons/shared/action/Bipod Deploy Both Legs.wav" id="7_dcfuq"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/impacts/wood/wood_chip_1.ogg" id="8_12ftv"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/impacts/metal/metal_ping_1.ogg" id="9_tv4g3"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/impacts/metal/metal_ping_2.ogg" id="10_biylb"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/impacts/metal/metal_clang_1.ogg" id="11_vdpce"]
+[ext_resource type="Script" path="res://src/core/data/sound_set_def.gd" id="12_0jmgi"]
+
+[resource]
+script = ExtResource("12_0jmgi")
+id = &"lmg"
+display_name = "LMG (Mule)"
+actions = Dictionary[StringName, Array]({
+&"cycle": [ExtResource("3_r6muy")],
+&"draw": [ExtResource("7_dcfuq")],
+&"dry": [ExtResource("6_7rkqi")],
+&"fire": [ExtResource("1_rklka"), ExtResource("2_jf3w2")],
+&"reload_end": [ExtResource("5_omroj")],
+&"reload_start": [ExtResource("4_bklsv")]
+})
+impacts = Dictionary[int, Array]({
+0: [ExtResource("8_12ftv")],
+2: [ExtResource("9_tv4g3"), ExtResource("10_biylb"), ExtResource("11_vdpce")],
+4: [ExtResource("8_12ftv")]
+})

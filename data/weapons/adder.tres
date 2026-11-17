@@ -1,0 +1,38 @@
+[gd_resource type="Resource" script_class="WeaponDef" format=3]
+
+[ext_resource type="Script" path="res://src/core/data/weapon_def.gd" id="1_asiig"]
+
+[resource]
+script = ExtResource("1_asiig")
+id = &"adder"
+display_name = "P-9 \"Adder\""
+category = &"pistol"
+fire_modes = Array[int]([0])
+rpm = 420.0
+mag_size = 17
+reserve_mags = 4
+reload_time = 1.9
+equip_time = 0.35
+bullet_speed = 4600.0
+damage = 24.0
+spread_base = 0.7
+bloom_per_shot = 0.55
+bloom_max = 3.5
+bloom_recovery = 10.0
+recoil_kick = 0.9
+recoil_recovery = 9.0
+penetration = 0.6
+falloff_start = 320.0
+falloff_end = 900.0
+min_mult = 0.5
+move_speed_mult = 1.04
+weight = 1.0
+sound_set = &"9mm"
+tracer_color = Color(1, 0.82, 0.45, 1)
+body_len = 10.0
+barrel_len = 4.0
+body_width = 3.0
+mag_len = 4.5
+mag_offset = 1.5
+stock_len = 0.0
+gun_color = Color(0.26, 0.27, 0.29, 1)

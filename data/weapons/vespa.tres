@@ -1,0 +1,35 @@
+[gd_resource type="Resource" script_class="WeaponDef" format=3]
+
+[ext_resource type="Script" path="res://src/core/data/weapon_def.gd" id="1_aikj4"]
+
+[resource]
+script = ExtResource("1_aikj4")
+id = &"vespa"
+display_name = "SMG \"Vespa\""
+category = &"smg"
+rpm = 800.0
+mag_size = 32
+reload_time = 2.1
+equip_time = 0.5
+bullet_speed = 4400.0
+damage = 20.0
+spread_base = 0.9
+bloom_per_shot = 0.3
+bloom_max = 4.5
+bloom_recovery = 10.7
+move_penalty_scale = 1.333
+recoil_kick = 0.9
+recoil_recovery = 9.0
+penetration = 0.6
+falloff_start = 400.0
+falloff_end = 1000.0
+min_mult = 0.55
+weight = 2.6
+sound_set = &"9mm"
+tracer_color = Color(1, 0.82, 0.45, 1)
+body_len = 13.0
+barrel_len = 6.0
+body_width = 3.2
+mag_len = 7.0
+mag_offset = 3.0
+stock_len = 3.0

@@ -1,0 +1,39 @@
+[gd_resource type="Resource" script_class="WeaponDef" format=3]
+
+[ext_resource type="Script" path="res://src/core/data/weapon_def.gd" id="1_bd17s"]
+
+[resource]
+script = ExtResource("1_bd17s")
+id = &"falx"
+display_name = "BR \"Falx\""
+category = &"br"
+fire_modes = Array[int]([0, 1])
+rpm = 300.0
+burst_count = 2
+mag_size = 20
+reserve_mags = 4
+reload_time = 2.5
+equip_time = 0.7
+bullet_speed = 7000.0
+damage = 46.0
+spread_base = 0.35
+bloom_per_shot = 0.6
+bloom_recovery = 6.0
+move_penalty_scale = 2.0
+recoil_kick = 2.0
+recoil_recovery = 6.5
+penetration = 1.4
+falloff_start = 800.0
+falloff_end = 2000.0
+min_mult = 0.7
+move_speed_mult = 0.93
+weight = 4.6
+sound_set = &"308"
+tracer_color = Color(1, 0.82, 0.45, 1)
+body_len = 18.0
+barrel_len = 13.0
+body_width = 3.6
+mag_len = 7.0
+mag_offset = 4.5
+stock_len = 7.0
+gun_color = Color(0.2, 0.21, 0.23, 1)

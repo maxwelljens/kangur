@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="MapDef" format=3]
+
+[ext_resource type="Script" path="res://src/core/data/map_def.gd" id="1_mbaap"]
+
+[resource]
+script = ExtResource("1_mbaap")
+id = &"terminal"
+display_name = "Terminal"
+scene_path = "res://maps/terminal/map.tscn"
+supported_modes = Array[int]([1])
+briefing = "Port of Rotterdam, berth 14: gatehouse, warehouse, control tower, in that order. Sirocco holds the docks and the tickets; Bastion holds the concrete. Whoever controls the tower writes the manifest."
+minimap_path = "res://maps/terminal/minimap.png"
+ambience_id = &"harbor_gulls"
+music_id = &"match_calm"
+lighting_preset = &"dusk"

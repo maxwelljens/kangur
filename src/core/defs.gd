@@ -12,6 +12,7 @@ var _factions: Dictionary[StringName, FactionDef] = {}
 var _maps: Dictionary[StringName, MapDef] = {}
 var _difficulties: Dictionary[StringName, DifficultyDef] = {}
 var _sound_sets: Dictionary[StringName, SoundSetDef] = {}
+var _radio: Dictionary[StringName, RadioDef] = {}
 
 func _ready() -> void:
 	refresh()
@@ -25,6 +26,7 @@ func refresh() -> void:
 	_maps.clear()
 	_difficulties.clear()
 	_sound_sets.clear()
+	_radio.clear()
 	_scan(DATA_ROOT)
 
 func weapon(id: StringName) -> WeaponDef:
@@ -69,6 +71,13 @@ func sound_set(id: StringName) -> SoundSetDef:
 		push_error("Defs: unknown sound set id '%s'" % id)
 	return def
 
+## Radio line set for a faction (`FactionDef.radio_set`).
+func radio(id: StringName) -> RadioDef:
+	var def: RadioDef = _radio.get(id)
+	if def == null:
+		push_error("Defs: unknown radio id '%s'" % id)
+	return def
+
 func all_weapons() -> Array[WeaponDef]:
 	var list: Array[WeaponDef] = []
 	list.assign(_weapons.values())
@@ -103,6 +112,18 @@ func all_difficulties() -> Array[DifficultyDef]:
 	var list: Array[DifficultyDef] = []
 	list.assign(_difficulties.values())
 	list.sort_custom(func(a: DifficultyDef, b: DifficultyDef) -> bool: return a.display_name.naturalnocasecmp_to(b.display_name) < 0)
+	return list
+
+func all_radio() -> Array[RadioDef]:
+	var list: Array[RadioDef] = []
+	list.assign(_radio.values())
+	list.sort_custom(func(a: RadioDef, b: RadioDef) -> bool: return a.display_name.naturalnocasecmp_to(b.display_name) < 0)
+	return list
+
+func all_sound_sets() -> Array[SoundSetDef]:
+	var list: Array[SoundSetDef] = []
+	list.assign(_sound_sets.values())
+	list.sort_custom(func(a: SoundSetDef, b: SoundSetDef) -> bool: return a.display_name.naturalnocasecmp_to(b.display_name) < 0)
 	return list
 
 func maps_for_mode(mode: int) -> Array[MapDef]:
@@ -146,6 +167,8 @@ func _index(res: Resource) -> void:
 		_put(_difficulties, res)
 	elif res is SoundSetDef:
 		_put(_sound_sets, res)
+	elif res is RadioDef:
+		_put(_radio, res)
 	# Other resource types legitimately live under data/ (palettes, tilesets);
 	# they are not content defs, so they are silently skipped.
 

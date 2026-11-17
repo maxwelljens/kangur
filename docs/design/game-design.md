@@ -176,7 +176,7 @@ lob with shadow, G to throw, cookable frag (hold).
 
 **TTK targets** (stationary, unarmored torso, 80 HP): rifle 3 hits ≈ 0.18–0.2 s
 (600–650 RPM), pistol 4 hits ≈ 0.43 s (420 RPM), SMG 4 hits ≈ 0.22 s, sniper 1,
-shotgun ≤1 at close. High lethality is the point; positioning beats reflexes.
+shotgun ≤1 at close (pump 8×12=96; auto 6×10=60 is 2-pull but faster follow-up). High lethality is the point; positioning beats reflexes.
 Final values are sim-tuned (`tests/simulation/`), all live in `data/weapons/`.
 
 ## 7. Health, Wounds, Bandaging

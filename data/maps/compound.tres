@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="MapDef" format=3]
+
+[ext_resource type="Script" path="res://src/core/data/map_def.gd" id="1_kc13k"]
+
+[resource]
+script = ExtResource("1_kc13k")
+id = &"compound"
+display_name = "Compound"
+scene_path = "res://maps/compound/map.tscn"
+supported_modes = Array[int]([0])
+briefing = "A private industrial estate on the Rhine corridor: warehouse core, dock lane north, yard lane south, container stacks for both sides. Symmetrical by contract. Whatever happens in the hall, the estate reports a training accident."
+minimap_path = "res://maps/compound/minimap.png"
+ambience_id = &"industrial_hum"
+music_id = &"match_calm"

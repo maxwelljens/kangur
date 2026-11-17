@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="SoundSetDef" format=3]
+
+[ext_resource type="AudioStream" path="res://assets/audio/weapons/20ga/fire/20 Gauge Single.wav" id="1_53lt1"]
+[ext_resource type="AudioStream" path="res://assets/audio/weapons/20ga/fire/20 Gauge Single Isolated.wav" id="2_3do0t"]
+[ext_resource type="AudioStream" path="res://assets/audio/weapons/20ga/reload/Single Shotgun Load.wav" id="3_pgo0i"]
+[ext_resource type="AudioStream" path="res://assets/audio/weapons/9mm/action/9mm Pistol Dry Fire.wav" id="4_a3uci"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/impacts/wood/wood_chip_1.ogg" id="5_paqn1"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/impacts/metal/metal_ping_1.ogg" id="6_y8fia"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/impacts/metal/metal_ping_2.ogg" id="7_pg5ka"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/impacts/metal/metal_clang_1.ogg" id="8_o12h8"]
+[ext_resource type="Script" path="res://src/core/data/sound_set_def.gd" id="9_ycd8e"]
+
+[resource]
+script = ExtResource("9_ycd8e")
+id = &"20ga"
+display_name = "20 gauge (Breve / Automa)"
+actions = Dictionary[StringName, Array]({
+&"draw": [ExtResource("3_pgo0i")],
+&"dry": [ExtResource("4_a3uci")],
+&"fire": [ExtResource("1_53lt1"), ExtResource("2_3do0t")],
+&"reload_end": [ExtResource("3_pgo0i")],
+&"reload_start": [ExtResource("3_pgo0i")]
+})
+impacts = Dictionary[int, Array]({
+0: [ExtResource("5_paqn1")],
+2: [ExtResource("6_y8fia"), ExtResource("7_pg5ka"), ExtResource("8_o12h8")],
+4: [ExtResource("5_paqn1")]
+})

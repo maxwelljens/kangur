@@ -1,0 +1,33 @@
+[gd_resource type="Resource" script_class="SoundSetDef" format=3]
+
+[ext_resource type="AudioStream" path="res://assets/audio/weapons/9mm/fire/9mm Single.wav" id="1_vxifi"]
+[ext_resource type="AudioStream" path="res://assets/audio/weapons/9mm/fire/9mm Single Isolated.wav" id="2_si8f2"]
+[ext_resource type="AudioStream" path="res://assets/audio/weapons/9mm/action/9mm Pistol Rack Part 2.wav" id="3_knxhn"]
+[ext_resource type="AudioStream" path="res://assets/audio/weapons/9mm/reload/9mm Magazine Unpack.wav" id="4_yivqs"]
+[ext_resource type="AudioStream" path="res://assets/audio/weapons/9mm/reload/9mm Magazine Pack.wav" id="5_2ks2o"]
+[ext_resource type="AudioStream" path="res://assets/audio/weapons/9mm/reload/9mm Pistol Reload 1.wav" id="6_nr8kh"]
+[ext_resource type="AudioStream" path="res://assets/audio/weapons/9mm/action/9mm Pistol Dry Fire.wav" id="7_4si76"]
+[ext_resource type="AudioStream" path="res://assets/audio/weapons/9mm/action/9mm Pistol Rack Part 1.wav" id="8_rvwlr"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/impacts/wood/wood_chip_1.ogg" id="9_lo1st"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/impacts/metal/metal_ping_1.ogg" id="10_ytqw8"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/impacts/metal/metal_ping_2.ogg" id="11_45a7p"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/impacts/metal/metal_clang_1.ogg" id="12_3qw0k"]
+[ext_resource type="Script" path="res://src/core/data/sound_set_def.gd" id="13_txnaa"]
+
+[resource]
+script = ExtResource("13_txnaa")
+id = &"9mm"
+display_name = "9mm (Adder / Vespa / Kedr)"
+actions = Dictionary[StringName, Array]({
+&"cycle": [ExtResource("3_knxhn")],
+&"draw": [ExtResource("8_rvwlr")],
+&"dry": [ExtResource("7_4si76")],
+&"fire": [ExtResource("1_vxifi"), ExtResource("2_si8f2")],
+&"reload_end": [ExtResource("5_2ks2o"), ExtResource("6_nr8kh")],
+&"reload_start": [ExtResource("4_yivqs")]
+})
+impacts = Dictionary[int, Array]({
+0: [ExtResource("9_lo1st")],
+2: [ExtResource("10_ytqw8"), ExtResource("11_45a7p"), ExtResource("12_3qw0k")],
+4: [ExtResource("9_lo1st")]
+})

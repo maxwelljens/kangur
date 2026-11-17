@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="DifficultyDef" format=3]
+
+[ext_resource type="Script" path="res://src/core/data/difficulty_def.gd" id="1_sliwm"]
+
+[resource]
+script = ExtResource("1_sliwm")
+id = &"elite"
+display_name = "Elite"
+reaction_range = Vector2(140, 220)
+aim_error_range = Vector2(1, 2.5)
+turn_rate_range = Vector2(460, 620)
+aggression_bias = 0.3
+discipline_bias = 0.4
+burst_range = Vector2i(5, 9)

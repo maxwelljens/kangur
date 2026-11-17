@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ClassDef" format=3]
+
+[ext_resource type="Script" path="res://src/core/data/class_def.gd" id="1_18dqc"]
+
+[resource]
+script = ExtResource("1_18dqc")
+id = &"pathfinder"
+display_name = "Pathfinder"
+description = "Recon. Fast, light, and first through the gap."
+armor_vest = 30.0
+bandages = 2
+primary_categories = Array[StringName]([&"smg", &"dmr"])
+equipment = Array[StringName]([&"smoke", &"flash"])
+perk_id = &"pathfinder"

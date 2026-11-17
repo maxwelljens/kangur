@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="WeaponDef" format=3]
+
+[ext_resource type="Script" path="res://src/core/data/weapon_def.gd" id="1_lrj3q"]
+
+[resource]
+script = ExtResource("1_lrj3q")
+id = &"kestrel"
+display_name = "AR \"Kestrel\""
+fire_modes = Array[int]([2, 1, 0])
+spread_base = 0.5
+bloom_per_shot = 0.4
+bloom_max = 5.0
+bloom_recovery = 7.5
+move_penalty_scale = 1.667
+recoil_kick = 1.3
+recoil_recovery = 7.5
+falloff_start = 700.0
+falloff_end = 1800.0
+min_mult = 0.65
+move_speed_mult = 0.96
+weight = 3.6
+sound_set = &"556"
+tracer_color = Color(1, 0.82, 0.45, 1)
+body_len = 16.0
+barrel_len = 11.0
+mag_len = 7.5
+mag_offset = 4.0
+stock_len = 6.0

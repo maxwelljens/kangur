@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="EquipmentDef" format=3]
+
+[ext_resource type="Script" path="res://src/core/data/equipment_def.gd" id="1_helkv"]
+
+[resource]
+script = ExtResource("1_helkv")
+id = &"frag"
+display_name = "Frag"
+damage = 150.0
+vision_block_time = 0.0

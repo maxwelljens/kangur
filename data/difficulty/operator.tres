@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="DifficultyDef" format=3]
+
+[ext_resource type="Script" path="res://src/core/data/difficulty_def.gd" id="1_dah2x"]
+
+[resource]
+script = ExtResource("1_dah2x")
+id = &"operator"
+display_name = "Operator"
+turn_rate_range = Vector2(300, 440)
+burst_range = Vector2i(3, 5)
