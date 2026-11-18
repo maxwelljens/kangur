@@ -94,16 +94,11 @@ func _process(dt: float) -> void:
 	queue_redraw()
 
 
-func _on_equipment_thrown(who: Node, kind: StringName, pos: Vector2) -> void:
+func _on_equipment_thrown(who: Node, kind: StringName, pos: Vector2,
+		cook: bool) -> void:
 	var def := Defs.equipment(kind)
 	if def == null:
 		return
-	# EventBus.equipment_thrown has no cook flag; the thrower's Intent still
-	# holds it in the same tick the throw was emitted from.
-	var intent: Variant = who.get(&"intent") if who != null else null
-	var cook := false
-	if intent is Intent and (intent as Intent).throw_equipment >= 0:
-		cook = (intent as Intent).cook
 	throw_grenade(def, who, pos, cook)
 
 

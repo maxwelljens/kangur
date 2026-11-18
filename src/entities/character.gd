@@ -160,7 +160,7 @@ func _handle_edges() -> void:
 	if intent.sprint and body.is_bandaging():
 		body.interrupt_bandage()
 	if intent.throw_equipment >= 0:
-		arsenal.throw_equipment(intent.throw_equipment)
+		arsenal.throw_equipment(intent.throw_equipment, intent.cook)
 
 func _try_fire() -> void:
 	# Design §7: cannot fire while bandaging.

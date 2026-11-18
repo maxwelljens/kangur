@@ -5,6 +5,8 @@ extends MenuScreen
 ## those lines live in the markdown and are rendered verbatim.
 
 const HoloButtonScript := preload("res://src/ui/holo_button.gd")
+## Table blocks need a fixed-width face for the column padding to line up.
+const MONO_FONT := "res://assets/ui/fonts/ShareTechMono-Regular.ttf"
 
 const CREDITS_DOC := "res://docs/credits.md"
 const MUSIC_DOC := "res://docs/research/music-attribution.md"
@@ -152,29 +154,23 @@ func _add_document(path: String) -> void:
 
 ## Minimal markdown → BBCode: headings, bold, inline code, lists, tables.
 ## Only what `docs/credits.md` and the music attribution doc actually use.
+## Table rows are buffered and padded into aligned columns; the mono font makes
+## the padding hold (the body font is proportional, so spaces would not line up).
 static func markdown_to_bbcode(md: String) -> String:
 	var out: PackedStringArray = []
-	var in_table := false
+	var table: Array[PackedStringArray] = []
 	for raw_line: String in md.split("\n"):
 		var line := raw_line.strip_edges(false, true)
 		if line.begins_with("|"):
-			# Tables carry the per-pack licence rows; keep them aligned and mono.
 			var cells := line.trim_prefix("|").trim_suffix("|").split("|")
-			var cleaned: PackedStringArray = []
+			var cleaned := PackedStringArray()
 			for cell: String in cells:
-				var cell_text := cell.strip_edges().replace("**", "")
-				cleaned.append(cell_text)
-			var rows := "  ·  ".join(cleaned).replace("---", "").strip_edges()
-			if rows.is_empty():
-				continue
-			if not in_table:
-				out.append("\n[font_size=12][color=#7e8f92]")
-				in_table = true
-			out.append(rows.replace("[", "(").replace("]", ")"))
+				cleaned.append(cell.strip_edges().replace("**", ""))
+			table.append(cleaned)
 			continue
-		if in_table:
-			out.append("[/color][/font_size]\n")
-			in_table = false
+		if not table.is_empty():
+			out.append(_table_block(table))
+			table.clear()
 		if line.begins_with("```"):
 			continue
 		if line.begins_with("### "):
@@ -191,9 +187,37 @@ static func markdown_to_bbcode(md: String) -> String:
 			out.append("")
 		else:
 			out.append(_inline(line))
-	if in_table:
-		out.append("[/color][/font_size]")
+	if not table.is_empty():
+		out.append(_table_block(table))
 	return "\n".join(out)
+
+## One markdown table as aligned mono columns inside a tinted block. Cells are
+## plain text (no inline BBCode): the mono font makes space padding hold, which
+## link/bold colour tags inside a cell would break.
+static func _table_block(rows: Array[PackedStringArray]) -> String:
+	var widths: PackedInt32Array = PackedInt32Array()
+	var kept: Array[PackedStringArray] = []
+	for row: PackedStringArray in rows:
+		# The `|---|` separator row carries no content.
+		var joined := "".join(row)
+		if joined.replace("-", "").replace(":", "").replace(" ", "").is_empty():
+			continue
+		var plain: PackedStringArray = []
+		for cell: String in row:
+			plain.append(cell.replace("`", "").replace("[", "(").replace("]", ")"))
+		kept.append(plain)
+		for i: int in plain.size():
+			if i >= widths.size():
+				widths.append(0)
+			widths[i] = maxi(widths[i], plain[i].length())
+	var lines: PackedStringArray = []
+	for row: PackedStringArray in kept:
+		var padded: PackedStringArray = []
+		for i: int in row.size():
+			padded.append(row[i] + " ".repeat(widths[i] - row[i].length()))
+		lines.append(" ".join(padded).strip_edges(false, true))
+	return "\n[font_size=12][font=%s][color=#7e8f92]%s[/color][/font][/font_size]" % [MONO_FONT,
+		"\n".join(lines)]
 
 ## Inline span conversion: **bold**, `code`, [label](url), <autolink>.
 ## Link runs are pulled out BEFORE brackets are escaped, otherwise the BBCode

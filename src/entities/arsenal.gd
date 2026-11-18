@@ -146,7 +146,9 @@ func switch_slot(new_slot: int) -> bool:
 
 ## Throw kit entry `index`. Returns the EquipmentDef (null when empty/invalid);
 ## the EquipmentSystem spawns the physical grenade from the emitted event.
-func throw_equipment(index: int) -> EquipmentDef:
+## `cook` (held frag) rides the event: by the time the EquipmentSystem handles
+## it, the thrower's Intent edges are already cleared for the next tick.
+func throw_equipment(index: int, cook: bool = false) -> EquipmentDef:
 	if index < 0 or index >= kit_ids.size() or kit_counts[index] <= 0:
 		return null
 	var def := Defs.equipment(kit_ids[index])
@@ -154,7 +156,7 @@ func throw_equipment(index: int) -> EquipmentDef:
 		return null
 	kit_counts[index] -= 1
 	var pos := _host.global_position + _aim_dir() * THROW_OFFSET
-	EventBus.equipment_thrown.emit(_host, def.id, pos)
+	EventBus.equipment_thrown.emit(_host, def.id, pos, cook)
 	return def
 
 func kit_count(index: int) -> int:

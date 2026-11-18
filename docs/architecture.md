@@ -224,7 +224,7 @@ signal weapon_switched(who: Node, weapon_id: StringName)
 signal fire_mode_changed(who: Node, mode: int)
 signal bandage_started(who: Node)
 signal bandage_finished(who: Node, part: int)
-signal equipment_thrown(who: Node, kind: StringName, pos: Vector2)
+signal equipment_thrown(who: Node, kind: StringName, pos: Vector2, cook: bool)
 signal equipment_detonated(kind: StringName, pos: Vector2, radius: float)
 signal flash_effect(who: Node, strength: float)   # applied to characters in LOS
 # perception / world
@@ -254,7 +254,10 @@ All defs: `class_name XDef extends Resource`, `@export var id: StringName`,
   spread_base/bloom_per_shot/bloom_max/bloom_recovery, move_penalty_scale,
   recoil_kick/recoil_recovery, penetration, falloff_start/end/min_mult,
   focus_mult, move_speed_mult, sound_set: StringName, sprite paths,
-  tracer_color, shell_color, weight.
+  tracer_color, shell_color, weight, and the procedural rig silhouette params
+  (body_len, barrel_len, body_width, mag_len, mag_offset, stock_len,
+  has_scope, gun_color — art-direction §1; `WeaponVisual` reads them, with the
+  category table as the fallback for defs still on the schema defaults).
 - `ClassDef`: speed_mult, armor_vest/armor_helmet (durability), bandages,
   primary_categories: Array[StringName], sidearm_id, equipment: Array[StringName],
   perk_id: StringName, icon, description.

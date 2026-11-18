@@ -213,3 +213,20 @@ func test_music_credits_name_every_incompetech_title() -> void:
 			"missing Incompetech title: %s" % title).is_true()
 	assert_bool(rendered.contains("Licensed under Creative Commons: By Attribution 4.0")).is_true()
 	assert_bool(rendered.contains("converted to Ogg Vorbis and edited for looping")).is_true()
+
+func test_credits_tables_render_as_aligned_columns() -> void:
+	# A collapsed one-line-per-row table loses the licence mapping (which file
+	# belongs to which author). Columns are padded for the mono face, so a
+	# shared left edge is the observable contract.
+	var credits_script: GDScript = load("res://src/ui/menus/credits_screen.gd")
+	var bbcode: String = credits_script.markdown_to_bbcode(
+		"| File | Author | Licence |\n|---|---|---|\n| `a.wav` | Ann | CC0 |\n| `bb.ogg` | Bob | CC BY |\n")
+	var rows: PackedStringArray = []
+	for line: String in bbcode.split("\n"):
+		if line.contains(".wav") or line.contains(".ogg"):
+			rows.append(line)
+	assert_array(rows).has_size(2)
+	# Same column count is not enough: the second column must start at the same
+	# offset in both rows, which is what the padding buys.
+	assert_int(rows[0].find("Ann")).is_equal(rows[1].find("Bob"))
+	assert_bool(bbcode.contains("---")).is_false()

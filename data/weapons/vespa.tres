@@ -33,3 +33,4 @@ body_width = 3.2
 mag_len = 7.0
 mag_offset = 3.0
 stock_len = 3.0
+gun_color = Color(0.31, 0.32, 0.33, 1)

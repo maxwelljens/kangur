@@ -121,7 +121,10 @@ func start(cfg: MatchConfig, p_sim: bool = false) -> void:
 	projectiles.call(&"setup", world, characters, cfg.seed)
 	equipment.call(&"setup", world, characters)
 	vision.setup_equipment(equipment)
-	vision.setup(characters, vision_player, world, cfg.seed, true)
+	# The Training Range is a sandbox (design §10): no fog of war, so every
+	# target, rack and readout is visible from the firing line.
+	vision.setup(characters, vision_player, world, cfg.seed, true,
+		mode != Enums.Mode.TRAINING)
 	# Vision is stepped by this node so the tick order is explicit.
 	vision.set_physics_process(false)
 	projectiles.set_physics_process(not sim_mode)

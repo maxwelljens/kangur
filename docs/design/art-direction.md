@@ -38,7 +38,8 @@ project setting if needed; test via screenshot).
   reload mag anim · bandage channel · hit flinch (offset + red flash 80 ms) ·
   death collapse (rotate ~90°, splay, blood pool grows) · flashblind (white
   overlay + stagger) · bleed droplet particles when wounded.
-- **Size**: footprint ~26 px, collision r=10. At zoom 1.6 ≈ 42 px on screen.
+- **Size**: footprint ~26 px, collision r=10. At the default zoom 1.8 ≈ 47 px on
+  screen (was 1.6 ≈ 42 px; see Settings → Camera zoom, 1.0–2.4).
 - **Faction palettes** (colorblind-safe blue vs orange):
   BASTION slate `#3E5C76` + amber `#F2A541`; SIROCCO burnt `#C4552D` +
   gunmetal `#4A4E54`. Visor glint: BASTION cyan, SIROCCO red-orange.

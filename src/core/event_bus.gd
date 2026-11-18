@@ -17,7 +17,8 @@ signal weapon_switched(who: Node, weapon_id: StringName)
 signal fire_mode_changed(who: Node, mode: int)
 signal bandage_started(who: Node)
 signal bandage_finished(who: Node, part: int)
-signal equipment_thrown(who: Node, kind: StringName, pos: Vector2)
+## cook: the frag was held past the cook window (EquipmentSystem shortens the fuse).
+signal equipment_thrown(who: Node, kind: StringName, pos: Vector2, cook: bool)
 signal equipment_detonated(kind: StringName, pos: Vector2, radius: float)
 ## Applied by Characters in LOS of a flash detonation. strength 0..1.
 signal flash_effect(who: Node, strength: float)

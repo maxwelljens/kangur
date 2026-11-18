@@ -79,8 +79,11 @@ func setup_equipment(equipment: Node) -> void:
 
 ## `seed` drives team-radio noise/delays (per match, deterministic).
 ## `enable_provenance` defaults to debug/sim builds (release strips it).
+## `fog_enabled` false keeps gating and the minimap cone but skips the fog of
+## war layer: the Training Range must show every target (design §10 sandbox).
 func setup(characters: Array[Character], player: Character, world: World,
-		seed: int = 0, enable_provenance: bool = false) -> void:
+		seed: int = 0, enable_provenance: bool = false,
+		fog_enabled: bool = true) -> void:
 	_characters = characters
 	_player = player
 	_world = world
@@ -114,7 +117,7 @@ func setup(characters: Array[Character], player: Character, world: World,
 	_overlay.debug_extra = debug_extra  # may already be set before setup()
 
 	if DisplayServer.get_name() != "headless" and player != null and world != null:
-		_build_cone(world.bounds())
+		_build_cone(world.bounds(), fog_enabled)
 	_active = true
 
 
@@ -251,11 +254,13 @@ func _refresh(step: float) -> void:
 		_fog.set_smoke(_overlay.smoke)
 
 
-func _build_cone(bounds: Rect2) -> void:
-	_fog = FogOverlayScript.new()
-	_fog.name = "FogOverlay"
-	add_child(_fog)
-	_fog.setup(bounds)  # (fog is res://-preloaded, so the script resource is first)
+func _build_cone(bounds: Rect2, with_fog: bool = true) -> void:
+	# The Range keeps the cone (minimap wedge, debug view) but not the fog.
+	if with_fog:
+		_fog = FogOverlayScript.new()
+		_fog.name = "FogOverlay"
+		add_child(_fog)
+		_fog.setup(bounds)  # (fog is res://-preloaded, so the script resource is first)
 
 	_cone_root = Node2D.new()
 	_cone_root.name = "PlayerCone"

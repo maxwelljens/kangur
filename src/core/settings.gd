@@ -11,7 +11,7 @@ const DEFAULTS: Dictionary[StringName, Dictionary] = {
 	&"video": {
 		&"fullscreen": false,
 		&"vsync": true,
-		&"zoom": 1.6,
+		&"zoom": 1.8,
 		&"screen_shake": true,
 		&"hud_scale": 1.0,
 	},

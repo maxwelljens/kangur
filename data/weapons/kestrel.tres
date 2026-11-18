@@ -26,3 +26,4 @@ barrel_len = 11.0
 mag_len = 7.5
 mag_offset = 4.0
 stock_len = 6.0
+gun_color = Color(0.27, 0.29, 0.31, 1)

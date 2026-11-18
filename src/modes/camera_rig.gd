@@ -5,13 +5,25 @@ extends Camera2D
 ## death it follows a living teammate; Space cycles (design §10 spectate).
 ##
 ## Settings read live: video/zoom (1.0–2.4), gameplay/camera_lean (0–1),
-## video/screen_shake.
+## video/screen_shake. Default 1.8: at 1.6 a 26 px operator is ~42 px on screen,
+## too small to read stance/weapon at a glance.
+##
+## Small maps: a map whose whole bounds fits the viewport at SMALL_MAP_FIT or
+## above (Range: 48×32 tiles) is drawn whole instead of keeping the player zoom,
+## which would leave it as a ring of fog around the pad.
 
 ## Camera lean: target = player + clamp((cursor − player) × lean, MAX_LEAN_PX).
 const MAX_LEAN_PX := 220.0
 const LEAN_RATE := 8.0
 const ZOOM_MIN := 1.0
 const ZOOM_MAX := 2.4
+## Fraction of the viewport the map may fill when fitting a small map; the rest
+## stays as a readable margin around the pad.
+const FIT_MARGIN := 0.96
+## A map whose bounds fit the viewport at this zoom or above is small enough
+## that keeping the player's zoom shows a ring of fog instead of the map
+## (Range: 48×32 tiles fits at ×0.88). Real maps fit far below ×0.5.
+const SMALL_MAP_FIT := 0.75
 ## Shot kick along the recoil direction, px and recovery per second.
 const RECOIL_KICK_PX := 10.0
 const RECOIL_RECOVERY := 9.0
@@ -130,8 +142,19 @@ func _clamp_to_bounds(pos: Vector2) -> Vector2:
 
 
 func _apply_zoom() -> void:
-	var value := clampf(float(Settings.get_value(&"video", &"zoom", 1.6)),
+	var value := clampf(float(Settings.get_value(&"video", &"zoom", 1.8)),
 		ZOOM_MIN, ZOOM_MAX)
+	if world != null:
+		# Genuinely small maps (Range: 48×32 tiles) otherwise render as a ring
+		# of fog around the pad. `fit >= SMALL_MAP_FIT` keeps this off the big
+		# maps, which would otherwise be zoomed all the way out.
+		var rect := world.bounds()
+		var viewport := get_viewport_rect().size
+		if rect.size.x > 0.0 and rect.size.y > 0.0 and viewport.x > 0.0:
+			var fit := minf(viewport.x / rect.size.x,
+				viewport.y / rect.size.y) * FIT_MARGIN
+			if fit >= SMALL_MAP_FIT:
+				value = clampf(fit, ZOOM_MIN, value)
 	zoom = Vector2(value, value)
 
 

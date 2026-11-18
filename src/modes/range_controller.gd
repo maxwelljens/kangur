@@ -32,6 +32,9 @@ var racks: Array[Vector2] = []
 var bandage_dummy: Node2D = null
 
 var _rails: Dictionary[Character, Dictionary] = {}
+## Rail phase clock: advanced from the physics tick, never wall clock, so a
+## headless sim reaches the same dummy positions as a live session.
+var _clock := 0.0
 var _rack_index := 0
 var _readout_accum := 0.0
 var _label: Label = null
@@ -58,18 +61,23 @@ func _exit_tree() -> void:
 		EventBus.character_hit.disconnect(_on_hit)
 
 
-## Stand on the first firing-line marker: the authored lane the range expects
-## (maps.md Range: markers x 8/16/24/32/40 at y=26).
+## Stand on the middle firing-line marker: the authored lanes are x 8/16/24/32/40
+## at y=26 (maps.md Range); the centre one puts the operator under the reticle
+## with the target rows ahead instead of against the HUD edge.
 func _place_player() -> void:
 	if run == null or run.player == null or run.world == null or run.world.map == null:
 		return
 	var markers := run.world.map.get_node_or_null(^"Markers")
 	if markers == null:
 		return
+	var lanes: Array[Node2D] = []
 	for child: Node in markers.get_children():
 		if String(child.get_meta(&"kind", "")) == "firing_line":
-			run.player.global_position = (child as Node2D).global_position
-			return
+			lanes.append(child as Node2D)
+	if lanes.is_empty():
+		return
+	lanes.sort_custom(func(a: Node2D, b: Node2D) -> bool: return a.position.x < b.position.x)
+	run.player.global_position = lanes[lanes.size() / 2].global_position
 
 
 func _physics_process(dt: float) -> void:
@@ -126,13 +134,13 @@ func _spawn_dummy(marker: Node2D) -> Character:
 	return dummy
 
 
-func _tick_rails(_dt: float) -> void:
-	var phase := float(Time.get_ticks_msec()) / 1000.0
+func _tick_rails(dt: float) -> void:
+	_clock += dt
 	for dummy: Character in _rails:
 		if dummy == null or not is_instance_valid(dummy):
 			continue
 		var rail: Dictionary = _rails[dummy]
-		var offset := sin(phase * TAU / RAIL_PERIOD_S + float(rail[&"lane"])) \
+		var offset := sin(_clock * TAU / RAIL_PERIOD_S + float(rail[&"lane"])) \
 			* RAIL_AMPLITUDE_PX
 		dummy.global_position = rail[&"origin"] + Vector2.RIGHT * offset
 

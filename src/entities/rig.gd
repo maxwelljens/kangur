@@ -362,14 +362,18 @@ func _arm(shoulder: Vector2, hand: Vector2) -> void:
 	draw_circle(hand, HAND_RADIUS, SKIN.darkened(0.05), true, -1.0, true)
 
 func _draw_weapon() -> void:
-	var def := weapon_def
-	var p := WeaponVisual.profile(def)
+	var p := WeaponVisual.profile(weapon_def)
 	var body_len := float(p[&"body_len"])
 	var barrel_len := float(p[&"barrel_len"])
 	var width := float(p[&"width"])
 	var mag_len := float(p[&"mag_len"])
+	var mag_offset := float(p[&"mag_offset"])
 	var stock := float(p[&"stock"])
 	var scope := float(p[&"scope"])
+	# Per-weapon gunmetal: body, recessed accents and the barrel highlight all
+	# derive from the authored colour so each gun keeps its own value ladder.
+	var gun: Color = p[&"color"]
+	var gun_dark := gun.darkened(0.5)
 	# Recoil pushes the whole gun back along aim; the arms follow via the grip.
 	var receiver_x := WeaponVisual.GRIP_X - _recoil
 	var gun_y := STOCK_Y_OFFSET
@@ -380,32 +384,33 @@ func _draw_weapon() -> void:
 		width *= 0.9
 	if stock > 0.0:
 		draw_rect(Rect2(receiver_x - stock, gun_y - width * 0.38, stock, width * 0.76),
-			GUNMETAL, true)
-	draw_rect(Rect2(receiver_x, gun_y - width * 0.5, body_len, width), GUNMETAL, true)
+			gun, true)
+	draw_rect(Rect2(receiver_x, gun_y - width * 0.5, body_len, width), gun, true)
 	draw_rect(Rect2(receiver_x, gun_y - width * 0.5, body_len * 0.3, width),
-		GUNMETAL_DARK, true)
+		gun_dark, true)
 	draw_line(Vector2(receiver_x + 1.0, gun_y - width * 0.5 + 0.6),
 		Vector2(receiver_x + body_len - 1.0, gun_y - width * 0.5 + 0.6),
-		GUNMETAL.lightened(0.3), 0.7, true)
+		gun.lightened(0.3), 0.7, true)
 	var barrel_start := receiver_x + body_len
 	draw_rect(Rect2(barrel_start, gun_y - width * 0.3, barrel_len, width * 0.6),
-		GUNMETAL.lightened(0.06), true)
+		gun.lightened(0.06), true)
 	draw_rect(Rect2(barrel_start, gun_y - width * 0.3, barrel_len * 0.25, width * 0.6),
-		GUNMETAL_DARK, true)
+		gun_dark, true)
 	if scope > 0.0:
 		draw_rect(Rect2(barrel_start - scope - 3.0, gun_y - width * 0.5 - 2.2, scope, 2.2),
-			GUNMETAL_DARK, true)
+			gun_dark, true)
 	# Muzzle blob: the visual tip matches WeaponVisual.muzzle_len exactly.
 	draw_rect(Rect2(barrel_start + barrel_len - 1.2, gun_y - width * 0.34, 1.2,
-		width * 0.68), GUNMETAL_DARK, true)
+		width * 0.68), gun_dark, true)
 	# Magazine: dips out during the mag-out stage of the reload animation.
 	var mag_drop := 0.0
 	if _reloading and _reload_progress < WeaponModel.RELOAD_STAGE_FRACTIONS[0]:
 		var stage := clampf(_reload_progress / WeaponModel.RELOAD_STAGE_FRACTIONS[0],
 			0.0, 1.0)
 		mag_drop = sin(stage * PI * 0.5) * 4.0
-	draw_rect(Rect2(receiver_x + 2.0, gun_y + width * 0.5 + mag_drop, 2.4,
-		mag_len * 0.6), GUNMETAL_DARK, true)
+	if mag_len > 0.0:
+		draw_rect(Rect2(receiver_x + mag_offset, gun_y + width * 0.5 + mag_drop, 2.4,
+			mag_len * 0.6), gun_dark, true)
 	# Faction accent dot on the receiver (design: gunmetal + faction accent).
 	draw_circle(Vector2(receiver_x + 1.8, gun_y), 1.2, faction_accent, true, -1.0, true)
 
