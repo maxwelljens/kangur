@@ -26,9 +26,14 @@ const CAPTURE_TICKETS := 8
 const TICKETS_PER_ATTACKER_DEATH := 1
 ## Reinforcement cadence: attackers 6 s, defenders 8 s (design §10).
 const ATTACKER_WAVE_S := 6.0
-const DEFENDER_WAVE_S := 8.0
+## Defenders respawn slower so attackers get local superiority windows at the zone.
+const DEFENDER_WAVE_S := 10.0
 ## Defenders recapture a partial bar at twice the capture speed (design §10).
 const RECAPTURE_MULT := 2.0
+## Capture is superiority-based (attackers > defenders in zone), so a zone with a
+## few respawning defenders can still be taken by overwhelming it locally. Clock
+## scale kept at 1.0 so map capture_time is the literal design value; tune via data.
+const CAPTURE_TIME_SCALE := 1.0
 ## Progress change that is worth an event: 1/200th of a bar.
 const PROGRESS_EMIT_EPSILON := 0.005
 
@@ -133,21 +138,19 @@ func _tick_capture(snapshot: MatchSnapshot, dt: float, out: Array[RuleEvent]) ->
 	var present: Array = state.get(&"present", [0, 0])
 	var attackers := int(present[attack_team]) if attack_team < present.size() else 0
 	var defenders := int(present[defender_team()]) if defender_team() < present.size() else 0
-	var capture_time := maxf(float(active.get(&"capture_time", 1.0)), 0.01)
-	var contested := attackers > 0 and defenders > 0
-	if attackers > 0 and not contested:
+	var capture_time := maxf(float(active.get(&"capture_time", 1.0)), 0.01) * CAPTURE_TIME_SCALE
+	# Superiority-based capture: attackers fill the bar while they OUTNUMBER
+	# defenders in the zone (not only when perfectly clear). Defenders recapture
+	# while they outnumber. Equal presence is a true contest (bar holds). This is
+	# what makes Battle winnable: respawning defenders can be overwhelmed locally.
+	var contested := attackers > 0 and defenders > 0 and attackers == defenders
+	if attackers > defenders:
 		_progress[id] = minf(float(_progress[id]) + dt / capture_time, 1.0)
-	elif defenders > 0 and not contested and float(_progress[id]) > 0.0:
+	elif defenders > attackers and float(_progress[id]) > 0.0:
 		_progress[id] = maxf(
 			float(_progress[id]) - dt * RECAPTURE_MULT / capture_time, 0.0)
-	else:
-		# Contested or empty: the bar holds where it is (hold-to-capture).
-		pass
-	# A lock this tick publishes 1.0 itself, and the lock must not depend on
-	# float accumulation: `elapsed / capture_time` is exact at the boundary, so
-	# a full bar locks on capture_time * 60 ticks instead of 60 + 1.
 	var held := float(_progress[id])
-	var reached := held >= 1.0 or _held_long_enough(id, dt, capture_time, attackers, contested)
+	var reached := held >= 1.0 or _held_long_enough(id, dt, capture_time, attackers, defenders)
 	_emit_progress(id, out, contested)
 	if reached:
 		_progress[id] = 1.0
@@ -187,8 +190,8 @@ func _capture(id: StringName, active: Dictionary, out: Array[RuleEvent]) -> void
 ## bar is kept as a fraction, and this counts the ticks actually held so a full
 ## hold can never be one tick short of a lock.
 func _held_long_enough(id: StringName, dt: float, capture_time: float,
-		attackers: int, contested: bool) -> bool:
-	if attackers <= 0 or contested:
+		attackers: int, defenders: int) -> bool:
+	if attackers <= defenders:
 		_hold_ticks[id] = 0
 		return false
 	_hold_ticks[id] = int(_hold_ticks.get(id, 0)) + 1

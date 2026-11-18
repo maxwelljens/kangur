@@ -135,7 +135,8 @@ func _physics_process(dt: float) -> void:
 	_try_fire()
 	body.tick(dt)
 	if not body.alive():
-		_die(null, &"")
+		# Bleed-out: attribute to the last damager, not the environment.
+		_die(_last_attacker, _last_weapon)
 		return
 	perception.tick(dt, stance, intent.focus, motor.is_sprinting())
 	rig.update(velocity, aim_dir, stance, _rig_state())
@@ -185,10 +186,18 @@ func take_pending_shots() -> Array[ShotRequest]:
 
 ## `part` is an Enums.Part (combat converts the hit offset with
 ## part_at_world_pos). Emits character_hit / character_died, drives the rig.
+## Last damager, so bleed-out deaths attribute to whoever caused the wound
+## (not "environment"). Fresh per spawn.
+var _last_attacker: Node = null
+var _last_weapon: StringName = &""
+
 func apply_hit(part: int, dmg: float, pen: float, attacker: Node, armor_piercing: bool = false) -> HitResult:
 	var result := HitResult.new()
 	if not alive:
 		return result
+	if attacker != null:
+		_last_attacker = attacker
+		_last_weapon = _weapon_id_of(attacker)
 	result = body.apply_hit(part, dmg, pen, attacker, armor_piercing)
 	rig.flinch(_incoming_dir(attacker))
 	if result.died:
