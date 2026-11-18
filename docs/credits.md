@@ -1,7 +1,7 @@
 # Credits & Asset Attribution — Kangur
 
 Kangur game code and original content: **Licensed under the EUPL-1.2** —
-see [`LICENSE`](../LICENSE). Copyright © the Kangur contributors.
+see [`LICENCE`](../LICENCE). Copyright © the Kangur contributors.
 
 Third-party assets are listed below with their own licences, which govern those
 files (not the EUPL). Everything shipped under `assets/` was verified against a

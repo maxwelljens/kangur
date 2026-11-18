@@ -14,7 +14,7 @@ Project skills (load via skill tool): `kangur-content` (add weapons/maps/classes
 - Godot **4.7.2** at `/usr/bin/godot` (Arch). Display `:0` available → real
   rendering + screenshots work. Headless (`--headless`) for logic tests only
   (no rendering, audio no-ops — code must tolerate both).
-- Repo: `master` branch, EUPL-1.2 (`LICENSE`). Conventional commits, scoped,
+- Repo: `master` branch, EUPL-1.2 (`LICENCE`). Conventional commits, scoped,
   tests green before commit. Never commit `reports/`, `.godot/`.
 - Asset library (read-only source): `/home/mjensen/Obrazy/Assets` — curated
   copies live in `assets/`. Inventory + licenses: `docs/research/asset-inventory.md`.

@@ -13,7 +13,7 @@ const MUSIC_DOC := "res://docs/research/music-attribution.md"
 const EMBLEM_BUILD := "res://assets/ui/art/bastion_emblem.svg"
 
 const INTRO := """[font_size=15][color=#7bebd4]KANGUR[/color] — singleplayer topdown tactical shooter.
-Game code and original content: [color=#dce7e4]EUPL-1.2[/color] (see LICENSE).
+Game code and original content: [color=#dce7e4]EUPL-1.2[/color] (see LICENCE).
 Copyright © the Kangur contributors.
 
 Third-party assets below keep their own licences; each shipped pack was checked
@@ -240,7 +240,7 @@ static func _inline(text: String) -> String:
 		var url := text.substr(open + 2, close - open - 2)
 		with_links += text.substr(cursor, label_start - cursor)
 		with_links += "\u0001%d\u0001" % tokens.size()
-		# Relative repo links (../LICENSE) are meaningless in-game: show the
+		# Relative repo links (../LICENCE) are meaningless in-game: show the
 		# label only; external URLs show the target so the credit is verifiable.
 		tokens.append("[color=#7bebd4]%s[/color]" % url if label.begins_with("http")
 			else "[color=#7bebd4]%s[/color]" % label)
