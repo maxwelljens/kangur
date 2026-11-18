@@ -70,6 +70,10 @@ godot --path . -- --shot=res://src/ui/title/title_screen.tscn:20:reports/screens
 
 # Full gate: unit + quick sims + UI screenshots
 tools/verify.sh
+
+# Release binaries (Linux + Windows, self-contained, into gitignored build/)
+# Installs/verifies export templates, exports, smoke-tests, zips, writes SHA256SUMS
+tools/build_release.sh
 ```
 
 ## Layout (ownership map)

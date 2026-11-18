@@ -11,7 +11,7 @@
 
 <p align="center">
   <a href="docs/media/promo.mp4">
-    <img src="docs/media/promo.gif" width="800" alt="Kangur gameplay: cone vision, firefights, wounds, smoke, live AI telemetry"/>
+	<img src="docs/media/promo.gif" width="800" alt="Kangur gameplay: cone vision, firefights, wounds, smoke, live AI telemetry"/>
   </a>
   <br/>
   <sub><a href="docs/media/promo.mp4">Watch the full promo, 90 seconds with the game's own soundtrack</a>. Captured in-engine from real matches.</sub>
@@ -124,6 +124,18 @@ at every difficulty.
   <img src="docs/media/shot_lobby.png" width="32%" alt="Operations desk: contract assembly"/>
   <img src="docs/media/shot_debrief.png" width="32%" alt="Debrief"/>
 </p>
+
+## Get the build
+
+Prebuilt binaries for **Linux x86_64** and **Windows x86_64** are on the
+[releases page](https://github.com/maxwelljens/kangur/releases/latest). Each
+archive holds one self-contained executable with the game data embedded — unzip
+and run, no installation or dependencies. `SHA256SUMS.txt` on the release lists
+the archive checksums.
+
+To build them yourself, run `tools/build_release.sh` with Godot 4.7.2; it
+installs and verifies the matching export templates, exports both presets, and
+writes the archives plus checksums into `build/`.
 
 ## Play the vertical slice
 
