@@ -92,7 +92,7 @@ func test_battle_rows_expose_the_chain_and_tickets() -> void:
 func test_tickets_start_at_the_config_value() -> void:
 	var arena := await _boot(Enums.Mode.BATTLE, &"terminal", 2)
 	assert_bool(arena.rules is BattleRules).is_true()
-	assert_int((arena.rules as BattleRules).tickets_left()).is_equal(36)
+	assert_int((arena.rules as BattleRules).tickets_left()).is_equal(MatchConfig.new().attacker_tickets)
 
 
 func test_match_ends_when_one_team_is_wiped() -> void:
