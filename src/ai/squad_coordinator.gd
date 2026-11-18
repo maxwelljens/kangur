@@ -15,10 +15,30 @@ const ROLE_SUPPORT := &"support"
 const ROLE_ANCHOR := &"anchor"
 ## Role rotation cadence while the objective phase is stable, seconds.
 const ROLE_ROTATE_S := 12.0
-## Attackers commit in waves, not as one blob (design §9.8).
-const WAVE_PERIOD_S := 14.0
+## Attackers commit in waves, not as one blob (design §9.8). A wave is only
+## closed for the following half of the squad: half the bodies are always on
+## the objective, so a capture is never stalled by a gate.
+const WAVE_PERIOD_S := 10.0
+## A contested zone reopens the wave instantly: contest is the moment to pile in.
+const RECAPTURE_ROTATE_S := 6.0
+## Share of attackers allowed through during a closed wave (rounded up).
+const WAVE_SHARE := 0.5
+## Attacker role split: one flanker per N bodies, one support per N bodies.
+## The flanker's job is to cut defender rotations BEFORE they reach the rect —
+## the bar only fills while no defender is inside, and a defender walks in from
+## spawn every 8 s (BattleRules.DEFENDER_WAVE_S). One flanker per six bots left
+## the approach uncovered and capped the bar at 0.38 every single attempt.
+const ATTACKER_FLANK_DIV := 4
+const ATTACKER_SUPPORT_DIV := 5
+## Defenders: share of living bodies anchored on the zone itself.
+const DEFENDER_ANCHOR_SHARE := 0.6
 ## A death is "witnessed" when a living teammate is this close, px.
 const WITNESS_RADIUS_PX := 900.0
+## A teammate's sighting stays the team's hunt anchor for this long, seconds.
+## Radio contact itself fades in ~12 s (TeamIntel TTL); without a longer memory
+## the survivors of a firefight scatter again and the match goes quiet. This
+## remembers WHERE a teammate saw somebody — never where they are now.
+const HUNT_ANCHOR_TTL_S := 45.0
 
 const GROUP := &"squad_coordinators"
 
@@ -43,6 +63,11 @@ var _rng := RandomNumberGenerator.new()
 var _killzone_cd: Dictionary = {}
 var _wave_timer: float = 0.0
 var _wave_open: bool = true
+## Instance ids of the bodies allowed to push while the wave is closed.
+var _wave_leaders: Dictionary = {}
+## Last place a teammate reported an enemy: {pos, time}. A *memory*, not a feed.
+var _hunt_anchor: Dictionary = {}
+var _clock: float = 0.0
 
 ## tree+team → coordinator. Survives across characters set up in one frame.
 static var _instances: Dictionary = {}
@@ -103,16 +128,21 @@ func _exit_tree() -> void:
 func _physics_process(dt: float) -> void:
 	if not is_inside_tree():
 		return
+	_clock += dt
 	intel.tick(dt)
 	danger.tick(dt)
 	_role_timer += dt
 	if _role_timer >= ROLE_ROTATE_S:
 		_role_timer = 0.0
 		_assign_roles()
+	# A contested zone is not a time to wait for the next wave.
+	var contested := bool(objective_info.get(&"obj_contested", false))
 	_wave_timer += dt
-	if _wave_timer >= WAVE_PERIOD_S:
+	if contested or _wave_timer >= WAVE_PERIOD_S:
 		_wave_timer = 0.0
-		_wave_open = not _wave_open
+		_wave_open = true
+		if not contested:
+			_rotate_wave_leaders()
 	_trim_members()
 
 # --- membership -------------------------------------------------------------
@@ -149,10 +179,32 @@ func role_counts() -> Dictionary:
 		counts[role] = int(counts.get(role, 0)) + 1
 	return counts
 
-## Attackers commit in waves: point/flank push while the wave is open.
+## Attackers commit in waves: the wave rotates through the squad so half the
+## bodies are pushing at any time. Flankers and point never wait (they are the
+## cutting edge), and a contested zone opens everything.
 func wave_open(controller: Node) -> bool:
+	if _wave_open:
+		return true
 	var role := role_for(controller)
-	return _wave_open or role == ROLE_POINT or role == ROLE_FLANK
+	if role == ROLE_POINT or role == ROLE_FLANK:
+		return true
+	return _wave_leaders.has(controller.get_instance_id())
+
+## Rotate the stuck-behind half so the same four bots never anchor forever.
+func _rotate_wave_leaders() -> void:
+	_wave_leaders.clear()
+	_trim_members()
+	var living: Array = _living()
+	if living.is_empty():
+		return
+	_wave_open = false
+	var allowed := int(ceil(float(living.size()) * WAVE_SHARE))
+	# Start at the current timer phase so the rotation is staggered, then take
+	# `allowed` members round-robin: no fixed "elite half" every wave.
+	var start := int(_rng.randi_range(0, living.size() - 1))
+	for i: int in mini(allowed, living.size()):
+		var member: Variant = living[(start + i) % living.size()]
+		_wave_leaders[member.get_instance_id()] = true
 
 # --- Match interface --------------------------------------------------------
 
@@ -160,38 +212,60 @@ func wave_open(controller: Node) -> bool:
 func set_objective_info(info: Dictionary) -> void:
 	var phase_changed := StringName(info.get(&"phase", &"")) \
 		!= StringName(objective_info.get(&"phase", &""))
+	var side_changed := bool(info.get(&"attacking", true)) \
+		!= bool(objective_info.get(&"attacking", true))
+	var become_contested := bool(info.get(&"obj_contested", false)) \
+		and not bool(objective_info.get(&"obj_contested", false))
 	objective_info.merge(info, true)
-	if phase_changed:
+	if phase_changed or side_changed:
 		_assign_roles()
-		_wave_open = true
 		_wave_timer = 0.0
+		_wave_open = true
+		_wave_leaders.clear()
+	elif become_contested:
+		# Contest is the moment to commit: everything flows in at once.
+		_wave_timer = 0.0
+		_wave_open = true
+		_wave_leaders.clear()
 
 # --- roles ------------------------------------------------------------------
 
 func _assign_roles() -> void:
 	_trim_members()
-	var living: Array = []
+	var living := _living()
+	if living.is_empty():
+		return
+	var count := living.size()
+	var attacking := bool(objective_info.get(&"attacking", true))
+	if not attacking:
+		# Defenders: most bodies sit IN the zone (only bodies in the rect
+		# contest the capture), the rest rotate onto the attacker approach.
+		var anchors := maxi(int(ceil(float(count) * DEFENDER_ANCHOR_SHARE)), 1)
+		for i: int in count:
+			_roles[living[i].get_instance_id()] = ROLE_ANCHOR if i < anchors \
+				else ROLE_FLANK
+		return
+	# Attackers: a couple of flankers cut the defenders' rotations, a couple
+	# of supports overwatch the approach, everyone else carries the zone.
+	var flankers := maxi(count / ATTACKER_FLANK_DIV, 1 if count >= 3 else 0)
+	var supports := maxi(count / ATTACKER_SUPPORT_DIV, 1 if count >= 4 else 0)
+	for i: int in count:
+		var role := ROLE_POINT
+		if i < flankers:
+			role = ROLE_FLANK
+		elif i < flankers + supports:
+			role = ROLE_SUPPORT
+		_roles[living[i].get_instance_id()] = role
+
+func _living() -> Array:
+	var out: Array = []
 	for member: Variant in _members:
 		if not is_instance_valid(member):
 			continue
 		var host: Variant = member.get(&"_host")
 		if host != null and host.get(&"alive") != false:
-			living.append(member)
-	if living.is_empty():
-		return
-	var count := living.size()
-	var flankers := 1 if count >= 3 else 0
-	var supports := 1 if count >= 4 else 0
-	var attacking := bool(objective_info.get(&"attacking", true))
-	for i: int in count:
-		var role := ROLE_POINT
-		if not attacking:
-			role = ROLE_ANCHOR
-		elif i == 0 and count >= 2:
-			role = ROLE_FLANK
-		elif i <= flankers + supports and i > flankers - 1 and i > 0:
-			role = ROLE_SUPPORT
-		_roles[living[i].get_instance_id()] = role
+			out.append(member)
+	return out
 
 func _trim_members() -> void:
 	for i: int in range(_members.size() - 1, -1, -1):
@@ -211,6 +285,33 @@ func _on_enemy_spotted(spotter: Node, enemy: Node, pos: Vector2) -> void:
 	# Radio it to the team: queued at sighting time, delivered 0.4–1.5 s later
 	# with position noise — never a live enemy feed.
 	intel.report_sighting(enemy.get_instance_id(), pos, _team_of(enemy))
+	_hunt_anchor = {&"pos": pos, &"time": _clock}
+
+## Where the team last believed an enemy was, or ZERO when that memory faded.
+## A reported position with an age, exactly like a radio contact — it can
+## justify hunting toward a place, never a shot.
+func hunt_anchor() -> Vector2:
+	if _hunt_anchor.is_empty():
+		return Vector2.ZERO
+	if _clock - float(_hunt_anchor[&"time"]) > HUNT_ANCHOR_TTL_S:
+		return Vector2.ZERO
+	return _hunt_anchor[&"pos"]
+
+func _centroid(points: Array[Vector2]) -> Vector2:
+	if points.is_empty():
+		return Vector2.ZERO
+	var mean := Vector2.ZERO
+	for point: Vector2 in points:
+		mean += point
+	return mean / float(points.size())
+
+func _find_world() -> World:
+	if not is_inside_tree():
+		return null
+	for node: Node in get_tree().root.find_children("*", "", true, false):
+		if node is World:
+			return node
+	return null
 
 func _on_character_died(victim: Node, _attacker: Node, _weapon: StringName,
 		pos: Vector2, _distance: float) -> void:

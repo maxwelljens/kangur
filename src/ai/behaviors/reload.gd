@@ -7,8 +7,19 @@ const LOW_MAG := 0.30
 const URGENT_MAG := 0.08
 const SAFE_AGE_S := 1.5
 
+## True while the shared Body is mid-bandage channel.
+func _bandaging(bb: Blackboard) -> bool:
+	var body_node := bb.body()
+	return body_node != null and body_node.has_method(&"is_bandaging") \
+		and bool(body_node.call(&"is_bandaging"))
+
 func score(bb: Blackboard) -> float:
 	if bb.is_reloading() or bb.mag_ratio() > LOW_MAG:
+		return 0.0
+	# Bandaging is a 2.8 s channel that a reload cancels outright
+	# (Character._handle_edges). Bleeding out beats a partial mag; only a
+	# completely dry weapon still takes precedence.
+	if _bandaging(bb) and bb.mag_ratio() > 0.0:
 		return 0.0
 	var value := BASE + 0.55 if bb.mag_ratio() <= URGENT_MAG else BASE + 0.30
 	value += 0.15 * bb.trait_of(&"discipline")

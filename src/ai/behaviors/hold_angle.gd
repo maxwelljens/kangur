@@ -6,10 +6,20 @@ extends "res://src/ai/behaviors/behavior.gd"
 const BASE := 0.16
 const ARRIVE_PX := 26.0
 const HOTSPOT_RADIUS := 480.0
+## Free hunt: camping is only worth it where the fight is. A bot with no contact
+## and no radio sitting on a far corner is a stalemate contributor (sims: half
+## the roster camped while the other half walked past them).
+const HUNT_GATE_PX := 700.0
+## Off the hunt point and nothing to shoot: score zero, go find them instead.
+const OFF_HUNT_PENALTY := 0.45
 ## A camp has a budget: even a camper eventually moves (design §9.3 tempo).
-## Campiness scales it; a pure camper still leaves after ~20 s.
-const DWELL_MIN_S := 7.0
-const DWELL_MAX_S := 16.0
+## Campiness scales it; a pure camper still leaves after ~9 s (sims showed a
+## 7–16 s budget pinned half the roster on one angle until the clock ran out).
+const DWELL_MIN_S := 4.0
+const DWELL_MAX_S := 9.0
+## Dwell is deliberately worse in an objective mode: holding a corner while the
+## bar is not moving is how Battle timed out with zero captures.
+const OBJECTIVE_DWELL_MULT := 0.6
 
 func score(bb: Blackboard) -> float:
 	# Dwell budget spent: hand the tick to Advance so patrols keep flowing.
@@ -18,21 +28,31 @@ func score(bb: Blackboard) -> float:
 	var value := BASE + 0.40 * bb.trait_of(&"campiness")
 	if bb.role == SquadCoordinator.ROLE_ANCHOR:
 		value += 0.18
-	if bb.mode() == Enums.Mode.BATTLE and not bb.attacking() and bb.has_objective():
-		value += 0.22
+	# Defenders holding the zone is the job; attackers camping a corner is not.
+	if bb.mode() == Enums.Mode.BATTLE and bb.has_objective():
+		value += 0.22 if not bb.attacking() else -0.20
 	if bb.intel_contact().is_empty():
 		value += 0.10
 	if bb.killzone_at(bb.host_pos()) > 0.0:
 		value += 0.10
 	if bb.stalled():
-		value -= 0.15
+		value -= 0.25
+	# Nothing heard, nothing seen, and far from where the squad is hunting:
+	# a corner here is not a camp, it is an absence.
+	if bb.mode() != Enums.Mode.BATTLE and bb.intel_contact().is_empty():
+		var hunt := bb.hunt_point()
+		if hunt != Vector2.ZERO and bb.host_pos().distance_to(hunt) > HUNT_GATE_PX:
+			value -= OFF_HUNT_PENALTY
 	return clampf(value, 0.0, 1.0)
 
 func enter(bb: Blackboard, controller: Node) -> void:
 	var hotspot := _hotspot(bb)
 	bb.action_data[&"hold_pos"] = hotspot
-	bb.action_data[&"hold_left"] = bb.rng().randf_range(DWELL_MIN_S, DWELL_MAX_S) \
+	var budget := bb.rng().randf_range(DWELL_MIN_S, DWELL_MAX_S) \
 		* (0.6 + 0.8 * bb.trait_of(&"campiness"))
+	if bb.mode() == Enums.Mode.BATTLE:
+		budget *= OBJECTIVE_DWELL_MULT
+	bb.action_data[&"hold_left"] = budget
 	bb.set_nav_target(hotspot)
 	bb.check_six_timer = bb.roll_check_six()
 	if bb.at(hotspot, ARRIVE_PX):
@@ -91,4 +111,7 @@ func _hotspot(bb: Blackboard) -> Vector2:
 	if not contact.is_empty():
 		var to: Vector2 = contact[&"pos"] - bb.host_pos()
 		return bb.host_pos() + to.normalized() * HOTSPOT_RADIUS * 0.5
-	return bb.host_pos() + bb.personal_offset()
+	# Nothing seen and nothing heard: the squad's hunt point, not a random spot.
+	var hunt := bb.hunt_point()
+	return hunt + bb.personal_offset() if hunt != Vector2.ZERO \
+		else bb.host_pos() + bb.personal_offset()

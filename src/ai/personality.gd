@@ -10,15 +10,17 @@ const TRAIT_NAMES: Array[StringName] = [
 ]
 
 ## Roll ranges per trait. Wide enough that two NPCs read differently, narrow
-## enough that nobody is a caricature.
+## enough that nobody is a caricature. Centres are pulled toward the decisive
+## side of the scale: sims showed a campy roster producing elimination
+## timeouts (design §9 "human tempo", not "hold a corner for eight minutes").
 const RANGES: Dictionary[StringName, Vector2] = {
-	&"aggression": Vector2(0.10, 0.90),
-	&"caution": Vector2(0.15, 0.90),
+	&"aggression": Vector2(0.25, 0.95),
+	&"caution": Vector2(0.10, 0.85),
 	&"discipline": Vector2(0.10, 0.95),
 	&"aim_skill": Vector2(0.20, 0.95),
 	&"reaction": Vector2(0.20, 0.95),
-	&"campiness": Vector2(0.00, 0.90),
-	&"curiosity": Vector2(0.10, 0.90),
+	&"campiness": Vector2(0.00, 0.75),
+	&"curiosity": Vector2(0.15, 0.90),
 	&"independence": Vector2(0.00, 0.85),
 }
 ## Bell-curve width: average of 3 uniform rolls ≈ human-ish center weighting.

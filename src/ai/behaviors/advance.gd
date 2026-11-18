@@ -6,6 +6,8 @@ const ARRIVE_PX := 28.0
 const SPRINT_MIN_DIST := 240.0
 ## A waypoint is "worth a linger" when it is this close and the roll says so.
 const LINGER_CHANCE := 0.45
+## Free-hunt scatter when the map gives us no spawn anchors (px).
+const HUNT_SCATTER_PX := 260.0
 const BASE := 0.34
 
 func score(bb: Blackboard) -> float:
@@ -14,8 +16,13 @@ func score(bb: Blackboard) -> float:
 	var value := BASE + 0.26 * bb.trait_of(&"aggression") + 0.14 * bb.trait_of(&"curiosity")
 	if bb.mode() == Enums.Mode.BATTLE and bb.has_objective():
 		value += 0.22
+	# Battle attackers that just won a duel go take ground, not a new angle.
+	if bb.pushing():
+		value += 0.20
+	# Stalling means the current angle produced nothing: push instead of settling
+	# in for another minute (sims: camp-heavy rosters timed out Elimination).
 	if bb.stalled():
-		value -= 0.2
+		value += 0.15
 	return clampf(value, 0.0, 1.0)
 
 func enter(bb: Blackboard, _controller: Node) -> void:
@@ -49,12 +56,19 @@ func tick(bb: Blackboard, _controller: Node, _dt: float) -> void:
 
 func _pick_goal(bb: Blackboard) -> void:
 	var base := Vector2.ZERO
+	var shared := false
 	if bb.mode() == Enums.Mode.BATTLE and bb.has_objective():
 		base = bb.objective_pos()
-	elif bb.world != null and bb.nav_ready():
-		base = bb.world.random_patrol_point(bb.rng(), bb.team)
+		shared = true
 	else:
-		base = bb.host_pos() + Vector2.RIGHT.rotated(bb.rng().randf_range(0.0, TAU)) * 260.0
-	bb.goal = base + bb.personal_offset()
+		# Free hunt converges: freshest radio contact, else the enemy half.
+		# Twelve independent patrols only meet by luck, which is what turned
+		# Elimination into 14 kills in eight minutes.
+		base = bb.hunt_point()
+		shared = base != Vector2.ZERO
+		if base == Vector2.ZERO:
+			base = bb.host_pos() + Vector2.RIGHT.rotated(
+				bb.rng().randf_range(0.0, TAU)) * HUNT_SCATTER_PX
+	bb.goal = base + (bb.converge_offset() if shared else bb.personal_offset())
 	bb.action_data[&"goal_done"] = false
 	bb.set_nav_target(bb.goal)

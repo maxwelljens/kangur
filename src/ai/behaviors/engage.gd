@@ -7,6 +7,11 @@ extends "res://src/ai/behaviors/behavior.gd"
 const BURST_GAP_MIN_S := 0.18
 const BURST_GAP_MAX_S := 0.55
 const BASE := 0.55
+## Battle attackers: a duel across the map is not progress. If the zone needs
+## bodies, shooting at long range loses to CaptureObjective (push-not-farm).
+const OBJECTIVE_URGENT_PENALTY := 0.28
+## "Long range" for that test: twice the brace range.
+const FARM_RANGE_MULT := 2.0
 
 func score(bb: Blackboard) -> float:
 	if not bb.has_target():
@@ -19,7 +24,18 @@ func score(bb: Blackboard) -> float:
 	# Discipline pulls the trigger less eagerly at silly ranges.
 	if threat_dist(bb) > FOCUS_RANGE_PX * 2.0:
 		value -= 0.15 * (1.0 - bb.trait_of(&"discipline"))
+	if _farming(bb):
+		value -= OBJECTIVE_URGENT_PENALTY
 	return clampf(value, 0.0, 1.4)
+
+## Attacker in Battle, target far away, and the zone still wants bodies: this
+## shot is farming, not pushing. Defenders and Elimination keep full Engage.
+func _farming(bb: Blackboard) -> bool:
+	if bb.mode() != Enums.Mode.BATTLE or not bb.has_objective() or not bb.attacking():
+		return false
+	if threat_dist(bb) <= FOCUS_RANGE_PX * FARM_RANGE_MULT:
+		return false
+	return bb.contested() or bb.objective_distance() > FOCUS_RANGE_PX * FARM_RANGE_MULT
 
 func enter(bb: Blackboard, _controller: Node) -> void:
 	bb.action_data[&"burst_left"] = _burst_len(bb)
