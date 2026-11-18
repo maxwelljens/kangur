@@ -18,7 +18,7 @@ var difficulty_id: StringName = &"operator"
 var seed: int = 0
 ## Elimination default 8 min, Battle 15 min (design §10).
 var time_limit_s: float = 480.0
-var attacker_tickets: int = 36
+var attacker_tickets: int = 48
 var player_callsign: String = "Kestrel"
 
 func bot_count(team: int) -> int:

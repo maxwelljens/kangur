@@ -27,7 +27,7 @@ const TICKETS_PER_ATTACKER_DEATH := 1
 ## Reinforcement cadence: attackers 6 s, defenders 8 s (design §10).
 const ATTACKER_WAVE_S := 6.0
 ## Defenders respawn slower so attackers get local superiority windows at the zone.
-const DEFENDER_WAVE_S := 10.0
+const DEFENDER_WAVE_S := 12.0
 ## Defenders recapture a partial bar at twice the capture speed (design §10).
 const RECAPTURE_MULT := 2.0
 ## Capture is superiority-based (attackers > defenders in zone), so a zone with a
