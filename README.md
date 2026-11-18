@@ -163,7 +163,21 @@ Regenerate the promo video: `tools/promo/capture.sh` records real matches
 in-engine, then `deno run -A docs/media/promo/promo.ts` composites and encodes.
 Details: `docs/media/promo/README.md`.
 
-## License
+## The metaproject & thoughts
 
-Code: **EUPL-1.2** (`LICENSE`). Third-party assets keep their own licenses
+What you see here is a pretty generic project made with LLMs, but I think
+there's a few interesting words about how it was achieved. I was testing [Qwen4
+Max](https://qwen.ai/blog?id=qwen4-max) (+ DeepSeek V4.1 Flash subagents) to
+see how far the Chinese have advanced in affordable frontier LLMs.
+
+All of what you see here was the product of almost one prompt. I only made
+minor corrections with some input and NPC issues. Otherwise, the entire game
+project was generated with one prompt. The promotional video was another
+prompt. Yet all of this cost me one maxed out 7 dollar plan from Alibaba Cloud.
+Probably could have cost me even less with something like OpenCode Go, but
+nevertheless highly compelling results for very little cost.
+
+## Licence
+
+Code: **EUPL-1.2** (`LICENCE`). Third-party assets keep their own licenses
 (CC0/CC-BY), attributed in `docs/credits.md` and the in-game Credits screen.
