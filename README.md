@@ -5,7 +5,7 @@
 <h1 align="center">KANGUR</h1>
 
 <p align="center">
-  <b>Near-future Europe. Two corporate armies. One contract at a time.</b><br/>
+  <b>Near-future Europe, two corporate armies, one contract at a time.</b><br/>
   <sub>A singleplayer topdown tactical shooter where the enemy plays like people.</sub>
 </p>
 
@@ -14,32 +14,32 @@
     <img src="docs/media/promo.gif" width="800" alt="Kangur gameplay: cone vision, firefights, wounds, smoke, live AI telemetry"/>
   </a>
   <br/>
-  <sub>▶ <a href="docs/media/promo.mp4">Watch the full promo — 90 seconds, the game's own soundtrack</a> · captured in-engine from real matches</sub>
+  <sub><a href="docs/media/promo.mp4">Watch the full promo, 90 seconds with the game's own soundtrack</a>. Captured in-engine from real matches.</sub>
 </p>
 
-> CS2D's look and camera. Hotline Miami's lethality. Firearm handling that rewards
-> stopping, bracing, and bursting. Wounds that matter. NPCs that perceive exactly
-> what you perceive — and play like people.
+> It borrows CS2D's look and camera and Hotline Miami's lethality. Firearms
+> reward stopping, bracing, and bursting, wounds matter, and NPCs perceive
+> exactly what you perceive and play like people.
 
 ## About This Game
 
-The ports went private years ago. Now **Bastion Security Group** and **Sirocco
-Extraction Corps** fight proxy wars over terminals, docks, and old-town power
-seats. Deniable contracts, paid in full.
+The ports went private years ago. Bastion Security Group and Sirocco Extraction
+Corps now fight proxy wars over terminals, docks, and old-town power seats on
+deniable contracts, paid in full.
 
-You are a contractor. Pick a faction, a class, a loadout. Choose how many
-operators you want against you — up to **12v12** — and how sharp they are.
-Then deploy.
+You are a contractor. Pick a faction, a class, and a loadout, choose how many
+operators you want against you (up to 12v12) and how sharp they are, then deploy.
 
-Underneath the vector art runs a simulation. Bullets are real projectiles that
-penetrate, falloff, and bloom. Bodies are parts that bleed and cripple. And the
-people shooting at you camp, flank, check their six, panic out of kill zones,
-and linger at corners — because they see, hear, and remember through the same
-sensors you do. Every match is seeded fresh. No two contracts play the same.
+Bullets are real projectiles that penetrate and lose damage over range, with
+spread that blooms under sustained fire. Bodies are split into parts that bleed
+and cripple. The people shooting at you camp,
+flank, check their six, panic out of kill zones, and linger at corners, because
+they see, hear, and remember through the same sensors you do. Every match is
+seeded fresh.
 
-**Key features**
+Features
 
-- Fair, human-feeling NPCs: cone vision, occluded hearing, delayed noisy radio. No wallhacks, ever — asserted by simulation.
+- Fair, human-feeling NPCs: cone vision, occluded hearing, delayed noisy radio. Headless sims assert zero wallhacks.
 - Firearm handling that rewards stopping, bracing, and bursting.
 - Body-part wounds: legs slow you, arms ruin your aim, bleeding kills you.
 - Frag, flash, and smoke that interact with the vision simulation itself.
@@ -57,23 +57,22 @@ sight. Sprinting narrows your cone; crouching behind low cover drops you out of
 the enemy's picture. Gunshots carry across the map, but concrete muffles them
 and distance eats them. Your team's radio is delayed and noisy: contacts arrive
 late, jittered, and fade from the minimap. You know what your operator knows.
-Nothing more.
 
 ## They play like people
 
 ![Live AI telemetry: perception cones, nav paths, actions, danger heat](docs/media/shot_ai.png)
 <sub>Live AI telemetry (F3): perception cones, nav paths, current actions, danger heat, radio log.</sub>
 
-Seventeen behaviors drive every NPC — advance, engage, suppress, take cover,
+Seventeen behaviors drive every NPC: advance, engage, suppress, take cover,
 peek, flank, hold angle, check six, investigate, retreat, regroup, bandage,
 reload, avoid danger, use equipment, capture and defend objectives.
 Personalities are rolled per match. Squads rotate point, flank, support, and
 anchor roles. Danger maps remember where people died, and kill zones make bots
-route around them — or panic through them.
+route around them or panic through them.
 
-The fairness rule is absolute: an NPC may only shoot at what it has seen or
-recently heard, through the same sensors you have. Headless battle simulations
-assert zero wallhacks, no bunching, and clean termination on every gate.
+An NPC may only shoot at what it has seen or recently heard, using the same
+sensors you have. Headless battle simulations assert zero wallhacks, no
+bunching, and clean termination on every gate.
 
 ## Stop. Brace. Burst.
 
@@ -85,40 +84,38 @@ bite through thin concrete. Damage falls off with range. Spread blooms with
 movement and sustained fire, and recovers when you stop, crouch, or brace.
 Recoil kicks the rig and the camera. Reloads are commitments.
 
-Running and gunning is a panic option. The fight goes to whoever stops first.
-
 ## Wounds that matter
 
 ![Vitals panel: body diagram, bleeding, bandage channel](docs/media/shot_wounds.png)
 
-Heads take triple damage. Torsos are the clock. Arms and legs are parts, not
-hitpoints: a crippled leg cuts your speed nearly in half and kills your sprint;
-a ruined arm widens every burst and slows every reload. Limb wounds bleed.
-Torso wounds bleed faster. The vitals panel shows every part and every droplet
-while the low-HP vignette closes in — fight, or find cover and hold the bandage
-key for a 2.8-second channel you have to survive.
+Heads take triple damage. Arms, legs, and torso each have their own health: a
+crippled leg cuts your speed nearly in half and kills your sprint; a ruined arm
+widens every burst and slows every reload. Limb wounds bleed; torso wounds bleed
+faster. The vitals panel shows every part and every droplet while the low-HP
+vignette closes in. Fight, or find cover and hold the bandage key for a
+2.8-second channel you have to survive.
 
 ## Smoke kills vision
 
 ![Smoke punching holes in the fog of war](docs/media/shot_smoke.png)
 
-Grenades are physical: lobbed arcs, cookable fuses, bounce. Smoke grows into
-the vision simulation itself — it punches holes in everyone's fog, yours
-included, and a push through smoke is a push blind. Flashbangs blind through
-line of sight only. Frags delete cover camps, and the danger map remembers.
+Grenades are physical: lobbed arcs, cookable fuses, bounce. Smoke is part of
+the vision simulation: it punches holes in everyone's fog, including yours, so
+a push through smoke is a push blind. Flashbangs blind through line of sight
+only. Frags clear cover camps.
 
 ## Three ways to fight
 
 ![Battle mode: A→B→C objective chain and tickets](docs/media/shot_battle.png)
 
-- **Elimination** — one life each. Surviving team wins; timeout counts survivors, then torso HP. *Dustworks, Compound.*
-- **Battle** — attackers chain A→B→C under a ticket clock; defenders hold, recapture, and bleed the assault dry. *Terminal (the port), Oldtown (plaza, church, administration).*
-- **Training Range** — no fog, no clock. Five lanes, static and rail-moving dummies, weapon racks, a bandage dummy. Learn the bloom before you sell your life.
+- Elimination: one life each. Surviving team wins; timeout counts survivors, then torso HP. *Dustworks, Compound.*
+- Battle: attackers chain A→B→C under a ticket clock; defenders hold, recapture, and bleed the assault dry. *Terminal (the port), Oldtown (plaza, church, administration).*
+- Training Range: no fog, no clock. Five lanes, static and rail-moving dummies, weapon racks, a bandage dummy. Learn the bloom before you sell your life.
 
-Five classes: **Vanguard** (line assault), **Bulwark** (belt-fed support),
-**Ram** (breacher), **Pathfinder** (recon), **Longshot** (marksman). Four bot
-skills, Recruit to Elite, tune reaction, aim error, and aggression — never
-sensors.
+Five classes: Vanguard (line assault), Bulwark (belt-fed support), Ram
+(breacher), Pathfinder (recon), Longshot (marksman). Four bot skills, Recruit
+to Elite, tune reaction, aim error, and aggression. Perception stays the same
+at every difficulty.
 
 ## Screenshots
 
@@ -130,14 +127,14 @@ sensors.
 
 ## Play the vertical slice
 
-Kangur is a **playable end-to-end vertical slice**: the full title → lobby →
-match → debrief flow works, Elimination and Battle run with up to 12v12 fair
-NPCs, and the Training Range is open. 583 unit tests green; the verify gate
-runs headless battle sims that assert the fairness invariants. Balance tuning
-(Battle captures, Elimination decisiveness) is underway — the honest gap list
-lives in `docs/production-todo.md`.
+Kangur is a playable end-to-end vertical slice: the full title → lobby → match
+→ debrief flow works, Elimination and Battle run with up to 12v12 fair NPCs,
+and the Training Range is open. 583 unit tests green; the verify gate runs
+headless battle sims that assert the fairness invariants. Balance tuning
+(Battle captures, Elimination decisiveness) is underway. The gap list lives in
+`docs/production-todo.md`.
 
-**Requirements:** [Godot 4.7.2](https://godotengine.org) (standard build, not
+Requirements: [Godot 4.7.2](https://godotengine.org) (standard build, not
 .NET), GL Compatibility renderer. No other dependencies.
 
 ```bash
@@ -146,16 +143,16 @@ godot --path .           # play
 tools/verify.sh          # full gate: unit tests + battle sims + screenshots
 ```
 
-Contributors: run Godot through `tools/godot.sh` (flock-serialized — concurrent
+Contributors: run Godot through `tools/godot.sh` (flock-serialized; concurrent
 runs corrupt the import cache).
 
 ## For developers & modders
 
-Start with **[AGENTS.md](AGENTS.md)**, the development manual. Technical
-contracts: `docs/architecture.md`. Design bible: `docs/design/game-design.md`.
+Start with [AGENTS.md](AGENTS.md), the development manual. Technical contracts:
+`docs/architecture.md`. Design bible: `docs/design/game-design.md`.
 
-Adding weapons, classes, maps, factions, or difficulty presets requires **no
-code** — everything is `.tres` data under `data/`. See `docs/adding-content.md`.
+Adding weapons, classes, maps, factions, or difficulty presets needs no code:
+everything is `.tres` data under `data/`. See `docs/adding-content.md`.
 Gameplay math lives in pure RefCounted models behind node shells, which is what
 makes the headless tests and seeded battle sims possible.
 
@@ -179,5 +176,5 @@ nevertheless highly compelling results for very little cost.
 
 ## Licence
 
-Code: **EUPL-1.2** (`LICENCE`). Third-party assets keep their own licenses
+Code: EUPL-1.2 (`LICENCE`). Third-party assets keep their own licenses
 (CC0/CC-BY), attributed in `docs/credits.md` and the in-game Credits screen.
