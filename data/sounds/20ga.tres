@@ -4,10 +4,17 @@
 [ext_resource type="AudioStream" path="res://assets/audio/weapons/20ga/fire/20 Gauge Single Isolated.wav" id="2_3do0t"]
 [ext_resource type="AudioStream" path="res://assets/audio/weapons/20ga/reload/Single Shotgun Load.wav" id="3_pgo0i"]
 [ext_resource type="AudioStream" path="res://assets/audio/weapons/9mm/action/9mm Pistol Dry Fire.wav" id="4_a3uci"]
-[ext_resource type="AudioStream" path="res://assets/audio/sfx/impacts/wood/wood_chip_1.ogg" id="5_paqn1"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/impacts/concrete/concrete_chip_1.ogg" id="5_paqn1"]
 [ext_resource type="AudioStream" path="res://assets/audio/sfx/impacts/metal/metal_ping_1.ogg" id="6_y8fia"]
 [ext_resource type="AudioStream" path="res://assets/audio/sfx/impacts/metal/metal_ping_2.ogg" id="7_pg5ka"]
 [ext_resource type="AudioStream" path="res://assets/audio/sfx/impacts/metal/metal_clang_1.ogg" id="8_o12h8"]
+[ext_resource type="AudioStream" path="res://assets/audio/weapons/20ga/action/pump_cycle_1.wav" id="10_pump1"]
+[ext_resource type="AudioStream" path="res://assets/audio/weapons/20ga/action/pump_cycle_2.wav" id="11_pump2"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/impacts/concrete/concrete_chip_2.ogg" id="12_cnc02"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/impacts/concrete/concrete_ricochet_1.ogg" id="13_cnc03"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/impacts/glass/glass_shatter_1.ogg" id="14_gls01"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/impacts/glass/glass_shatter_2.ogg" id="15_gls02"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/impacts/wood/wood_chip_1.ogg" id="16_wood1"]
 [ext_resource type="Script" path="res://src/core/data/sound_set_def.gd" id="9_ycd8e"]
 
 [resource]
@@ -15,6 +22,7 @@ script = ExtResource("9_ycd8e")
 id = &"20ga"
 display_name = "20 gauge (Breve / Automa)"
 actions = Dictionary[StringName, Array]({
+&"cycle": [ExtResource("10_pump1"), ExtResource("11_pump2")],
 &"draw": [ExtResource("3_pgo0i")],
 &"dry": [ExtResource("4_a3uci")],
 &"fire": [ExtResource("1_53lt1"), ExtResource("2_3do0t")],
@@ -22,7 +30,8 @@ actions = Dictionary[StringName, Array]({
 &"reload_start": [ExtResource("3_pgo0i")]
 })
 impacts = Dictionary[int, Array]({
-0: [ExtResource("5_paqn1")],
+0: [ExtResource("5_paqn1"), ExtResource("12_cnc02"), ExtResource("13_cnc03")],
 2: [ExtResource("6_y8fia"), ExtResource("7_pg5ka"), ExtResource("8_o12h8")],
-4: [ExtResource("5_paqn1")]
+4: [ExtResource("16_wood1")],
+5: [ExtResource("14_gls01"), ExtResource("15_gls02")]
 })

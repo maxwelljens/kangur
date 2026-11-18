@@ -5,10 +5,15 @@
 [ext_resource type="AudioStream" path="res://assets/audio/weapons/shared/reload/AR PolyMag Unpack.wav" id="3_78a6i"]
 [ext_resource type="AudioStream" path="res://assets/audio/weapons/shared/reload/AR PolyMag Pack.wav" id="4_jmvro"]
 [ext_resource type="AudioStream" path="res://assets/audio/weapons/9mm/action/9mm Pistol Dry Fire.wav" id="5_fddtk"]
-[ext_resource type="AudioStream" path="res://assets/audio/sfx/impacts/wood/wood_chip_1.ogg" id="6_brupv"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/impacts/concrete/concrete_chip_1.ogg" id="6_brupv"]
 [ext_resource type="AudioStream" path="res://assets/audio/sfx/impacts/metal/metal_ping_1.ogg" id="7_try3w"]
 [ext_resource type="AudioStream" path="res://assets/audio/sfx/impacts/metal/metal_ping_2.ogg" id="8_fjmr5"]
 [ext_resource type="AudioStream" path="res://assets/audio/sfx/impacts/metal/metal_clang_1.ogg" id="9_acc1n"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/impacts/concrete/concrete_chip_2.ogg" id="11_cnc02"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/impacts/concrete/concrete_ricochet_1.ogg" id="12_cnc03"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/impacts/glass/glass_shatter_1.ogg" id="13_gls01"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/impacts/glass/glass_shatter_2.ogg" id="14_gls02"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/impacts/wood/wood_chip_1.ogg" id="15_wood1"]
 [ext_resource type="Script" path="res://src/core/data/sound_set_def.gd" id="10_yfobj"]
 
 [resource]
@@ -23,7 +28,8 @@ actions = Dictionary[StringName, Array]({
 &"reload_start": [ExtResource("3_78a6i")]
 })
 impacts = Dictionary[int, Array]({
-0: [ExtResource("6_brupv")],
+0: [ExtResource("6_brupv"), ExtResource("11_cnc02"), ExtResource("12_cnc03")],
 2: [ExtResource("7_try3w"), ExtResource("8_fjmr5"), ExtResource("9_acc1n")],
-4: [ExtResource("6_brupv")]
+4: [ExtResource("15_wood1")],
+5: [ExtResource("13_gls01"), ExtResource("14_gls02")]
 })

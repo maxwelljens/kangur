@@ -1,28 +1,37 @@
 [gd_resource type="Resource" script_class="SoundSetDef" format=3]
 
-[ext_resource type="AudioStream" path="res://assets/audio/weapons/556/fire/rifle.wav" id="1_3sdp0"]
+[ext_resource type="AudioStream" path="res://assets/audio/weapons/556/fire/556_m4carbine_single.wav" id="1_3sdp0"]
 [ext_resource type="AudioStream" path="res://assets/audio/weapons/shared/reload/AR PolyMag Unpack.wav" id="2_jlkn2"]
 [ext_resource type="AudioStream" path="res://assets/audio/weapons/shared/reload/AR PolyMag Pack.wav" id="3_8wst2"]
 [ext_resource type="AudioStream" path="res://assets/audio/weapons/9mm/action/9mm Pistol Dry Fire.wav" id="4_vr7x1"]
-[ext_resource type="AudioStream" path="res://assets/audio/sfx/impacts/wood/wood_chip_1.ogg" id="5_7hx5e"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/impacts/concrete/concrete_chip_1.ogg" id="5_7hx5e"]
 [ext_resource type="AudioStream" path="res://assets/audio/sfx/impacts/metal/metal_ping_1.ogg" id="6_uycqt"]
 [ext_resource type="AudioStream" path="res://assets/audio/sfx/impacts/metal/metal_ping_2.ogg" id="7_l6pi1"]
 [ext_resource type="AudioStream" path="res://assets/audio/sfx/impacts/metal/metal_clang_1.ogg" id="8_5h5jn"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/impacts/glass/glass_shatter_1.ogg" id="10_gls01"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/impacts/glass/glass_shatter_2.ogg" id="11_gls02"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/impacts/concrete/concrete_chip_2.ogg" id="12_cnc02"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/impacts/concrete/concrete_ricochet_1.ogg" id="13_cnc03"]
+[ext_resource type="AudioStream" path="res://assets/audio/weapons/556/fire/556_ar15_pistol_single.wav" id="14_556b"]
+[ext_resource type="AudioStream" path="res://assets/audio/weapons/556/fire/556_rifle_single_outdoor.wav" id="15_556c"]
+[ext_resource type="AudioStream" path="res://assets/audio/weapons/556/fire/rifle.wav" id="16_556fb"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/impacts/wood/wood_chip_1.ogg" id="17_wood1"]
 [ext_resource type="Script" path="res://src/core/data/sound_set_def.gd" id="9_8tc6d"]
 
 [resource]
 script = ExtResource("9_8tc6d")
 id = &"556"
-display_name = "5.56 stopgap (Kestrel)"
+display_name = "5.56 (Kestrel)"
 actions = Dictionary[StringName, Array]({
 &"draw": [ExtResource("2_jlkn2")],
 &"dry": [ExtResource("4_vr7x1")],
-&"fire": [ExtResource("1_3sdp0")],
+&"fire": [ExtResource("1_3sdp0"), ExtResource("14_556b"), ExtResource("15_556c"), ExtResource("16_556fb")],
 &"reload_end": [ExtResource("3_8wst2")],
 &"reload_start": [ExtResource("2_jlkn2")]
 })
 impacts = Dictionary[int, Array]({
-0: [ExtResource("5_7hx5e")],
+0: [ExtResource("5_7hx5e"), ExtResource("12_cnc02"), ExtResource("13_cnc03")],
 2: [ExtResource("6_uycqt"), ExtResource("7_l6pi1"), ExtResource("8_5h5jn")],
-4: [ExtResource("5_7hx5e")]
+4: [ExtResource("17_wood1")],
+5: [ExtResource("10_gls01"), ExtResource("11_gls02")]
 })

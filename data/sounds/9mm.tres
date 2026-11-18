@@ -8,10 +8,15 @@
 [ext_resource type="AudioStream" path="res://assets/audio/weapons/9mm/reload/9mm Pistol Reload 1.wav" id="6_nr8kh"]
 [ext_resource type="AudioStream" path="res://assets/audio/weapons/9mm/action/9mm Pistol Dry Fire.wav" id="7_4si76"]
 [ext_resource type="AudioStream" path="res://assets/audio/weapons/9mm/action/9mm Pistol Rack Part 1.wav" id="8_rvwlr"]
-[ext_resource type="AudioStream" path="res://assets/audio/sfx/impacts/wood/wood_chip_1.ogg" id="9_lo1st"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/impacts/concrete/concrete_chip_1.ogg" id="9_lo1st"]
 [ext_resource type="AudioStream" path="res://assets/audio/sfx/impacts/metal/metal_ping_1.ogg" id="10_ytqw8"]
 [ext_resource type="AudioStream" path="res://assets/audio/sfx/impacts/metal/metal_ping_2.ogg" id="11_45a7p"]
 [ext_resource type="AudioStream" path="res://assets/audio/sfx/impacts/metal/metal_clang_1.ogg" id="12_3qw0k"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/impacts/concrete/concrete_chip_2.ogg" id="14_cnc02"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/impacts/concrete/concrete_ricochet_1.ogg" id="15_cnc03"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/impacts/glass/glass_shatter_1.ogg" id="16_gls01"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/impacts/glass/glass_shatter_3.ogg" id="17_gls03"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/impacts/wood/wood_chip_1.ogg" id="18_wood1"]
 [ext_resource type="Script" path="res://src/core/data/sound_set_def.gd" id="13_txnaa"]
 
 [resource]
@@ -27,7 +32,8 @@ actions = Dictionary[StringName, Array]({
 &"reload_start": [ExtResource("4_yivqs")]
 })
 impacts = Dictionary[int, Array]({
-0: [ExtResource("9_lo1st")],
+0: [ExtResource("9_lo1st"), ExtResource("14_cnc02"), ExtResource("15_cnc03")],
 2: [ExtResource("10_ytqw8"), ExtResource("11_45a7p"), ExtResource("12_3qw0k")],
-4: [ExtResource("9_lo1st")]
+4: [ExtResource("18_wood1")],
+5: [ExtResource("16_gls01"), ExtResource("17_gls03")]
 })
