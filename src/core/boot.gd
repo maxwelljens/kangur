@@ -5,6 +5,11 @@ extends Node
 
 func _ready() -> void:
 	if Dev.harness_active:
+		# `--sim` owns the run: boot only hosts the harness (src/modes/sim_runner).
+		if Dev.sim_request != null:
+			var runner := SimRunner.new()
+			runner.name = "SimRunner"
+			add_child(runner)
 		return
 	if ResourceLoader.exists(Game.TITLE_SCENE):
 		Game.to_title()

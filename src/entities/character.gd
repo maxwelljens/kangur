@@ -222,6 +222,30 @@ func _die(attacker: Node, weapon_id: StringName) -> void:
 
 # --- HUD / AI getters ------------------------------------------------------
 
+## HUD bind contract (architecture §11a): the HUD reads these defensively and
+## falls back to properties, but the getters are the documented path.
+func get_team() -> int:
+	return team
+
+func get_body_model() -> BodyModel:
+	return body.model
+
+func get_weapon_model() -> WeaponModel:
+	return arsenal.current()
+
+func get_bandages() -> int:
+	return body.bandages_left
+
+## Kit counts, index-aligned with ClassDef.equipment (`{kind, count}`).
+func get_equipment_counts() -> Array[Dictionary]:
+	var out: Array[Dictionary] = []
+	for i: int in arsenal.kit_ids.size():
+		var def := Defs.equipment(arsenal.kit_ids[i])
+		if def == null:
+			continue
+		out.append({"kind": def.kind, "count": arsenal.kit_count(i)})
+	return out
+
 func weapon_id() -> StringName:
 	return arsenal.current_id()
 

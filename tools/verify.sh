@@ -24,9 +24,24 @@ if [ "$UNIT_EXIT" -ne 0 ]; then
 	exit "$UNIT_EXIT"
 fi
 
-# TODO(sim): seeded battle sims — parity + fairness invariants.
-#   tools/godot.sh --headless --path . -- --sim=<map>:<mode>:<seed>:<count>
-# TODO(screenshots): UI screenshots via the shot harness (needs DISPLAY).
-#   tools/godot.sh --path . -- --shot=res://src/ui/title/title_screen.tscn:20:reports/screenshots/title.png
+# Seeded battle sims: the three quick maps from tests/simulation/README.md
+# (one seeded match each, hard invariants only). --fixed-fps 60 is mandatory:
+# the harness steps the engine loop by hand (one sim tick per physics frame,
+# because bullet sweeps read the physics space state), so real-time pacing
+# would make a gate run take the full match length in wall clock.
+echo "==> battle sims (fairness / termination / bunching)"
+"$GODOT" --headless --path . --fixed-fps 60 -- --sim=dustworks:elimination:1:1
+"$GODOT" --headless --path . --fixed-fps 60 -- --sim=compound:elimination:1:1
+"$GODOT" --headless --path . --fixed-fps 60 -- --sim=terminal:battle:1:1
+
+# Game-flow screenshots need a display; skipped on a headless box rather than
+# failing the gate (CI without :0 still verifies all gameplay logic above).
+if [ -n "${DISPLAY:-}" ]; then
+	echo "==> game flow screenshots (title → lobby → match → debrief)"
+	"$GODOT" --path . --resolution 2560x1440 tools/shot_flow.tscn \
+		-- --mode=0 --map=dustworks --bots=6 --combat-frames=200
+else
+	echo "==> game flow screenshots skipped (no DISPLAY)"
+fi
 
 echo "==> verify OK"

@@ -80,6 +80,16 @@ Balance gates (flag regressions, don't hard-fail unless egregious):
 ## Quick gate (tools/verify.sh)
 3 quick sims (dustworks elimination seed 1, compound elimination seed 1,
 terminal battle seed 1), count=1 each, assert hard invariants only (fast).
+
+Implementation notes pinned by `src/modes/sim_runner.gd`:
+- `--count` is the number of seeded matches (`seed`, `seed+1`, …), **not** the
+  roster. The roster is the full 12/team; `--bots=N` (after `--`) shrinks it
+  for quick local runs.
+- `--fixed-fps 60` is required. The harness advances one sim tick per physics
+  frame because bullet sweeps and LOS rays read the physics space state, which
+  only answers inside the step; real-time pacing would make a gate run take the
+  full match duration in wall clock.
+- Exit 0 = all hard invariants held; 100 = failure (`SIM_FAIL` + per-seed lines).
 Full balance suite (200 seeds) is a separate, slower invocation — not in the
 per-commit gate.
 
