@@ -6,9 +6,11 @@ extends Node
 ## graph alive), only PLAYBACK no-ops. Gameplay never depends on this: if the
 ## director is absent or muted, `sound_emitted` still fires for AI hearing.
 ##
-## Weapon-id gap: EventBus.sound_emitted has no weapon parameter, so gunshots
-## encode it in the kind as `&"gunshot:<weapon_id>"` (`&"gunshot"` alone uses the
-## generic rifle set). Documented in the integration notes; see `_stream_for`.
+## Weapon sounds resolve through `SoundSetDef` (data/sounds) keyed by
+## `WeaponDef.sound_set`; the folder scan is only the fallback for kinds no set
+## models (foley) or ids no def owns. `sound_emitted` accepts the weapon id as
+## a kind suffix (`&"gunshot:<weapon_id>"`, action as a third part); the plain
+## `&"gunshot"` path is `shot_fired`, which is what actually fires in game.
 
 const BUS_LAYOUT_PATH := "res://assets/audio/default_bus_layout.tres"
 const POOL_SIZE := 32
@@ -26,13 +28,33 @@ const UI_DIR := "res://assets/audio/ui"
 const VOICE_DIR := "res://assets/audio/voice"
 const WEAPON_DIR := "res://assets/audio/weapons"
 const SFX_DIR := "res://assets/audio/sfx"
-## Fallback gunshot set: 5.56 is the only complete rifle set (credits §1).
-const DEFAULT_GUNSHOT_SET := "556"
+## Generic weapon set: 5.56 is the complete rifle set (credits §1) and every
+## authored set carries the same chip/metal/wood/glass impact tables.
+const DEFAULT_GUNSHOT_SET := &"556"
+## Weapon kind → SoundSetDef action. A third kind part (`gunshot:judge:cycle`)
+## overrides it, so action hooks need no new mapping.
+const KIND_ACTIONS: Dictionary[StringName, StringName] = {
+	&"gunshot": &"fire", &"cycle": &"cycle", &"dry": &"dry", &"draw": &"draw",
+	&"reload": &"reload_start", &"reload_start": &"reload_start",
+	&"reload_end": &"reload_end",
+}
+## Bullet-impact reach, px: a chip carries about as far as a sprinting step.
+const IMPACT_LOUDNESS := 420.0
+## Body hits have no Enums.Surface value; this key selects the flesh table.
+const IMPACT_FLESH := -1
+## Impact folders for surfaces no authored set lists; the nearest recording
+## keeps every tile audibly chipping.
+const IMPACT_FOLDERS: Dictionary[int, String] = {
+	IMPACT_FLESH: "flesh",
+	Enums.Surface.CONCRETE: "concrete", Enums.Surface.SAND: "concrete",
+	Enums.Surface.METAL: "metal", Enums.Surface.GRASS: "wood",
+	Enums.Surface.WOOD: "wood", Enums.Surface.GLASS: "glass",
+	Enums.Surface.WATER: "concrete",
+}
 
 ## kind → [folder, filename filter]. The filter keeps rustle and thud apart
 ## inside the shared body-foley folder; "" means any file.
 const KIND_STREAMS: Dictionary[StringName, Array] = {
-	&"reload": [WEAPON_DIR + "/shared/reload", ""],
 	&"bandage": [SFX_DIR + "/body", "cloth"],
 	&"bodyfall": [SFX_DIR + "/body", "body_fall"],
 }
@@ -41,16 +63,6 @@ const FALLBACK_DIR := SFX_DIR + "/impacts/metal"
 ## Adaptive match score (design §12). `clutch` ships as a standalone track.
 const TENSION_TRACKS: Dictionary[StringName, StringName] = {
 	&"calm": &"match_calm", &"engaged": &"match_engaged", &"clutch": &"clutch",
-}
-## weapon id → fire/reload folder (credits §1 mapping).
-const WEAPON_SETS: Dictionary[StringName, StringName] = {
-	&"adder": &"9mm", &"vespa": &"9mm", &"kedr": &"9mm",
-	&"kestrel": &"556",
-	&"volk": &"308", &"falx": &"308", &"sokol": &"308", &"lynx": &"308", &"mule": &"308",
-	&"breve": &"20ga", &"automa": &"20ga",
-	## No .357 recording exists (credits §1: action/reload only). The .308
-	## single is the closest heavy-bore boom available.
-	&"judge": &"308",
 }
 ## Explosion has no verified recording yet; the 20-gauge blast is the closest
 ## available low boom (body foley read as cloth rustle through walls).
@@ -67,6 +79,17 @@ var _pending: Array[Dictionary] = []
 var _rng := RandomNumberGenerator.new()
 ## `dir|filter` → audio filenames. Never mutated by Settings or gameplay.
 var _file_cache: Dictionary[String, Array] = {}
+## weapon id → SoundSetDef (null when unknown), resolved once per id so a bad
+## kind cannot flood the log on every shot.
+var _set_cache: Dictionary[StringName, SoundSetDef] = {}
+## weapon id → SoundSetDef id, from Defs. Built on first weapon sound, not at
+## boot: the director loads before data/ is guaranteed (zero-content boot).
+## shortcut: caches assume Defs is loaded once, restart after Defs.refresh().
+var _sets_by_weapon: Dictionary[StringName, StringName] = {}
+## surface → impact streams, assembled once from data/sounds.
+var _impact_cache: Dictionary[int, Array] = {}
+## weapon ids that fire a bolt/pump action, built once from Defs.
+var _cycle_cache: Dictionary[StringName, bool] = {}
 
 var _music_a: AudioStreamPlayer
 var _music_b: AudioStreamPlayer
@@ -85,7 +108,21 @@ func _ready() -> void:
 	_build_pool()
 	_build_players()
 	EventBus.sound_emitted.connect(_on_sound_emitted)
+	EventBus.shot_fired.connect(_on_shot_fired)
+	EventBus.bullet_impact.connect(_on_bullet_impact)
+	EventBus.character_hit.connect(_on_character_hit)
 	EventBus.settings_changed.connect(_on_settings_changed)
+
+func _exit_tree() -> void:
+	for pair: Array in [
+		[EventBus.sound_emitted, _on_sound_emitted],
+		[EventBus.shot_fired, _on_shot_fired],
+		[EventBus.bullet_impact, _on_bullet_impact],
+		[EventBus.character_hit, _on_character_hit],
+		[EventBus.settings_changed, _on_settings_changed],
+	]:
+		if (pair[0] as Signal).is_connected(pair[1]):
+			(pair[0] as Signal).disconnect(pair[1])
 
 func _physics_process(_dt: float) -> void:
 	if _pending.is_empty():
@@ -159,10 +196,55 @@ func _make_player(bus: StringName, node_name: String) -> AudioStreamPlayer:
 
 ## Queue rather than play: the wall raycast needs a physics frame, and signals
 ## may arrive from idle or from inside a query flush.
-func _on_sound_emitted(pos: Vector2, loudness: float, kind: StringName, _source: Node, surface: int) -> void:
+func _on_sound_emitted(pos: Vector2, loudness: float, kind: StringName, source: Node, surface: int) -> void:
+	_queue(pos, loudness, kind, source, surface)
+
+## Gunshot audio is driven by `shot_fired` (the only signal carrying the weapon
+## id): the `gunshot:<weapon_id>` kind exists but no entity emits it, and the
+## director must not depend on a tone nobody plays. Bolt/pump weapons also queue
+## their `cycle` action foley — a report alone hides the pump.
+func _on_shot_fired(_shooter: Node, weapon_id: StringName, origin: Vector2,
+		_dir: Vector2, _pellets: int) -> void:
+	var kind := "gunshot:" + String(weapon_id)
+	_queue(origin, OcclusionMath.LOUDNESS_GUNSHOT, StringName(kind), null, 0)
+	if _cycle_weapons().has(weapon_id):
+		_queue(origin, OcclusionMath.LOUDNESS_RELOAD, StringName(kind + ":cycle"), null, 0)
+
+## Bolt/pump weapons have a distinct action sound; semi/auto cadences do not.
+## Built once from Defs, like `_weapon_sets()`.
+func _cycle_weapons() -> Dictionary[StringName, bool]:
+	if _cycle_cache.is_empty():
+		for weapon_def: WeaponDef in Defs.all_weapons():
+			for mode: int in weapon_def.fire_modes:
+				if mode == Enums.FireMode.BOLT or mode == Enums.FireMode.PUMP:
+					_cycle_cache[weapon_def.id] = true
+					break
+	return _cycle_cache
+
+func _queue(pos: Vector2, loudness: float, kind: StringName, source: Node, surface: int) -> void:
 	if _headless or _pending.size() >= POOL_SIZE or not is_audible(pos, loudness):
 		return  # headless: no output device, skip the queue (gameplay unaffected)
-	_pending.append({"pos": pos, "reach": OcclusionMath.max_distance(loudness), "stream": _stream_for(kind, surface)})
+	_pending.append({"pos": pos, "reach": OcclusionMath.max_distance(loudness),
+		"stream": _stream_for(kind, surface, source)})
+
+## Bullet chips are audio-only: they stay off `sound_emitted` so AI hearing does
+## not treat a wall strike as a position of its own (suppression reads
+## `bullet_impact` directly, ai_controller).
+func _on_bullet_impact(pos: Vector2, _normal: Vector2, surface: int, _penetrated: bool) -> void:
+	_queue_impact(pos, surface)
+
+## Flesh has no Enums.Surface value, so a body hit keys the lookup separately.
+func _on_character_hit(_victim: Node, _attacker: Node, _part: int, _damage: float,
+		_fatal: bool, pos: Vector2) -> void:
+	_queue_impact(pos, IMPACT_FLESH)
+
+func _queue_impact(pos: Vector2, surface: int) -> void:
+	if _headless or _pending.size() >= POOL_SIZE or not is_audible(pos, IMPACT_LOUDNESS):
+		return
+	_pending.append({
+		"pos": pos, "reach": OcclusionMath.max_distance(IMPACT_LOUDNESS),
+		"stream": _impact_stream(surface),
+	})
 
 ## Would a source at `pos` with this loudness be heard at the listener at all?
 func is_audible(pos: Vector2, loudness: float) -> bool:
@@ -217,31 +299,85 @@ func count_walls(from: Vector2, to: Vector2) -> int:
 			break
 	return walls
 
-## Weapon-aware stream lookup. `kind` is `&"gunshot"`, `&"gunshot:<weapon_id>"`,
+## Stream lookup. `kind` is `&"gunshot"`, `&"gunshot:<weapon_id>"` (a third part
+## names the action, e.g. `:cycle`), `&"reload:<weapon_id>"`, `&"impact"`,
 ## `&"footstep"` (surface drives the set) or a plain SFX kind.
-func _stream_for(kind: StringName, surface: int) -> AudioStream:
+func _stream_for(kind: StringName, surface: int, source: Node = null) -> AudioStream:
 	var parts := String(kind).split(":")
 	var base := StringName(parts[0])
-	var weapon_id := StringName(parts[1]) if parts.size() > 1 else &""
-
 	match base:
 		&"footstep":
 			return Footsteps.surface_stream(surface, _rng)
 		&"explosion":
 			return _random_stream(EXPLOSION_DIR)
-		&"gunshot", &"reload":
-			var set_dir := String(WEAPON_SETS.get(weapon_id, &""))
-			if set_dir.is_empty():
-				set_dir = DEFAULT_GUNSHOT_SET if base == &"gunshot" else "shared"
-			var sub := "fire" if base == &"gunshot" else "reload"
-			var stream := _random_stream("%s/%s/%s" % [WEAPON_DIR, set_dir, sub])
-			if stream == null and base == &"gunshot":
-				stream = _random_stream("%s/%s/fire" % [WEAPON_DIR, DEFAULT_GUNSHOT_SET])
-			return stream
-	var entry: Array = KIND_STREAMS.get(base, [])
-	if not entry.is_empty():
-		return _random_stream(entry[0], entry[1])
-	return _random_stream(FALLBACK_DIR)  # unknown kind stays audible
+		&"impact":
+			return _impact_stream(surface)
+	if not KIND_ACTIONS.has(base):
+		var entry: Array = KIND_STREAMS.get(base, [])
+		if not entry.is_empty():
+			return _random_stream(entry[0], entry[1])
+		return _random_stream(FALLBACK_DIR)  # unknown kind stays audible
+	# Kinds a SoundSetDef models: the set answers, the folder is the fallback.
+	var action: StringName = KIND_ACTIONS[base] if parts.size() < 3 else StringName(parts[2])
+	var weapon_id: StringName = StringName(parts[1]) if parts.size() > 1 else &""
+	var stream := _set_stream(_sound_set(weapon_id, source), action)
+	if stream != null:
+		return stream
+	var reload := base == &"reload" or base == &"reload_start" or base == &"reload_end"
+	return _random_stream("%s/%s/%s" % [WEAPON_DIR,
+		"shared" if reload else String(DEFAULT_GUNSHOT_SET), "reload" if reload else "fire"])
+
+## Random variant of an action from `set`, or null when the set lacks it.
+func _set_stream(set: SoundSetDef, action: StringName) -> AudioStream:
+	if set == null:
+		return null
+	var streams := set.streams(action)
+	return null if streams.is_empty() else streams[_rng.randi_range(0, streams.size() - 1)]
+
+## Impact variant for `surface`: the first authored set that lists it (every
+## set ships the same chip/metal/wood/glass tables), else that surface's folder,
+## so a tile never lands silently. `bullet_impact` carries no weapon, so the
+## firing set's own table is not consulted — they are identical anyway.
+func _impact_stream(surface: int) -> AudioStream:
+	var streams := _impact_tables().get(surface, []) as Array
+	if not streams.is_empty():
+		return streams[_rng.randi_range(0, streams.size() - 1)]
+	return _random_stream("%s/impacts/%s" % [SFX_DIR, IMPACT_FOLDERS.get(surface, "concrete")])
+
+## Enums.Surface → streams, assembled once from data/sounds. Built on first
+## impact: the director loads before data/ is guaranteed to exist.
+func _impact_tables() -> Dictionary[int, Array]:
+	if _impact_cache.is_empty():
+		for set: SoundSetDef in Defs.all_sound_sets():
+			for surface: int in set.impacts:
+				if not _impact_cache.has(surface):
+					_impact_cache[surface] = set.surface_streams(surface)
+	return _impact_cache
+
+## The set a weapon kind resolves to: `weapon_id` from the kind, else the
+## source's equipped weapon (`reload` carries no id). Null ⇒ folder fallback.
+func _sound_set(weapon_id: StringName, source: Node) -> SoundSetDef:
+	var set_id := &""
+	if weapon_id != &"":
+		set_id = _weapon_sets().get(weapon_id, &"")  # never Defs.weapon(bad id)
+	else:
+		var arsenal: Variant = source.get(&"arsenal") if source != null else null
+		var held: Variant = arsenal.current_def() if arsenal != null else null
+		set_id = held.sound_set if held != null else &""
+	if set_id == &"":
+		return null
+	if not _set_cache.has(set_id):
+		_set_cache[set_id] = Defs.sound_set(set_id)  # logs once on bad data
+	return _set_cache[set_id]
+
+## weapon id → SoundSetDef id, from Defs. Built on first shot, not at boot: the
+## director must load before data/ exists (zero-content boot, fixtures).
+func _weapon_sets() -> Dictionary[StringName, StringName]:
+	if _sets_by_weapon.is_empty():
+		for weapon_def: WeaponDef in Defs.all_weapons():
+			if weapon_def.sound_set != &"":
+				_sets_by_weapon[weapon_def.id] = weapon_def.sound_set
+	return _sets_by_weapon
 
 ## Random audio file in `dir`, optionally only names containing `filter`.
 ## Listings are cached: this runs on every gunshot.

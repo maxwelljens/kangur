@@ -13,7 +13,7 @@ const SOURCES: Array[Dictionary] = [
 	{"label": "outside gunshot range", "pos": Vector2(5000, 0)},
 ]
 
-const KINDS: Array[StringName] = [&"gunshot", &"gunshot:kestrel", &"gunshot:judge", &"footstep", &"reload", &"bandage", &"bodyfall", &"explosion", &"unknown_kind"]
+const KINDS: Array[StringName] = [&"gunshot", &"gunshot:kestrel", &"gunshot:judge", &"gunshot:breve", &"impact", &"footstep", &"reload", &"bandage", &"bodyfall", &"explosion", &"unknown_kind"]
 
 func _initialize() -> void:
 	var director: Node = load("res://src/audio/audio_director.gd").new()
@@ -69,6 +69,21 @@ func _initialize() -> void:
 	for kind: StringName in KINDS:
 		var stream: AudioStream = director._stream_for(kind, Enums.Surface.CONCRETE)
 		print("%-18s %s" % [kind, stream.resource_path if stream else "MISSING"])
+
+	print("\n=== WEAPON SETS (WeaponDef.sound_set -> data/sounds/<set> -> stream) ===")
+	var sets: Dictionary = director._weapon_sets()
+	var weapon_ids: Array = sets.keys()
+	weapon_ids.sort()
+	for weapon_id: StringName in weapon_ids:
+		var shot: AudioStream = director._stream_for(&"gunshot:" + String(weapon_id), Enums.Surface.CONCRETE)
+		print("%-9s set=%-8s shot=%s" % [weapon_id, sets[weapon_id],
+			shot.resource_path if shot else "MISSING"])
+
+	print("\n=== IMPACTS BY SURFACE ===")
+	for surface: int in director.IMPACT_FOLDERS:
+		var stream: AudioStream = director._stream_for(&"impact", surface)
+		var label: String = Enums.Surface.keys()[surface] if surface >= 0 else "FLESH"
+		print("%-10s %s" % [label, stream.resource_path if stream else "MISSING"])
 
 	print("\n=== FOOTSTEPS BY SURFACE ===")
 	var rng := RandomNumberGenerator.new()
