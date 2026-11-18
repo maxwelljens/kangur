@@ -249,3 +249,19 @@ func test_arsenal_throw_spawns_a_grenade_and_decrements_the_kit() -> void:
 	assert_bool(grenade is RigidBody2D).is_true()
 	assert_int(grenade.collision_layer).is_equal(Layers.EQUIPMENT_BIT)
 	assert_int(grenade.collision_mask).is_equal(Layers.EQUIPMENT_MASK)
+
+
+## The cook flag rides the event, so it survives the Intent edge being cleared
+## before the EquipmentSystem handles the throw (the old read-intent path did not).
+func test_cooked_throw_through_arsenal_shortens_the_fuse() -> void:
+	var system := _system(false)
+	var thrower := _character(Vector2(400.0, 400.0), [&"frag", &"frag"])
+	var plain := Defs.equipment(&"frag").fuse
+	assert_object(thrower.arsenal.throw_equipment(0, false)).is_not_null()
+	assert_float(system.get_child(0).get(&"fuse_left")).is_equal_approx(plain, 0.001)
+	# Clear the intent edges exactly like the next controller tick would.
+	thrower.intent.clear_edges()
+	thrower.intent.cook = false
+	assert_object(thrower.arsenal.throw_equipment(1, true)).is_not_null()
+	assert_float(system.get_child(1).get(&"fuse_left")) \
+		.is_equal_approx(plain * EquipmentScript.COOK_FUSE_MULT, 0.001)

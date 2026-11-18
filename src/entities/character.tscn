@@ -1,0 +1,44 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://src/entities/character.gd" id="1_character"]
+[ext_resource type="Script" path="res://src/entities/motor.gd" id="2_motor"]
+[ext_resource type="Script" path="res://src/entities/body.gd" id="3_body"]
+[ext_resource type="Script" path="res://src/entities/arsenal.gd" id="4_arsenal"]
+[ext_resource type="Script" path="res://src/entities/aim.gd" id="5_aim"]
+[ext_resource type="Script" path="res://src/entities/perception.gd" id="6_perception"]
+[ext_resource type="Script" path="res://src/entities/rig.gd" id="7_rig"]
+[ext_resource type="Script" path="res://src/entities/player_controller.gd" id="8_controller"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_body"]
+radius = 10.0
+
+[node name="Character" type="CharacterBody2D"]
+collision_layer = 2
+collision_mask = 47
+motion_mode = 1
+script = ExtResource("1_character")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_body")
+
+[node name="Motor" type="Node" parent="."]
+script = ExtResource("2_motor")
+
+[node name="Body" type="Node" parent="."]
+script = ExtResource("3_body")
+
+[node name="Arsenal" type="Node" parent="."]
+script = ExtResource("4_arsenal")
+
+[node name="Aim" type="Node" parent="."]
+script = ExtResource("5_aim")
+
+[node name="Perception" type="Node" parent="."]
+script = ExtResource("6_perception")
+
+[node name="Rig" type="Node2D" parent="."]
+z_index = 2
+script = ExtResource("7_rig")
+
+[node name="Controller" type="Node" parent="."]
+script = ExtResource("8_controller")

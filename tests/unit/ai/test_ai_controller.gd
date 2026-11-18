@@ -249,9 +249,13 @@ func test_advance_goals_carry_a_personal_offset() -> void:
 	var gb: Blackboard = b.controller.get(&"bb")
 	assert_bool(ga.has_nav_target).is_true()
 	assert_bool(gb.has_nav_target).is_true()
-	# Same spawn, different people: Advance plans different patrol goals.
+	# Same spawn, different people: Advance plans different goals.
 	assert_float(ga.goal.distance_to(gb.goal)).is_greater(1.0) \
 		.override_failure_message("bots share one goal: conga line")
-	# And each goal is a patrol leg (260 px) plus a bounded personal offset.
-	var leg := ga.goal.distance_to(ga.host_pos())
-	assert_float(leg).is_between(200.0, 260.0 + Blackboard.GOAL_OFFSET_PX * 1.5 + 1.0)
+	# Free hunt converges on the squad hunt point (radio contact, else the
+	# enemy half) plus a personal convergence offset — not a random 260 px
+	# patrol, which let 24 bots walk the map without ever meeting.
+	var hunt := ga.hunt_point()
+	assert_float(ga.goal.distance_to(hunt)).is_less(
+		Blackboard.CONVERGE_OFFSET_PX * 1.5 + 1.0) \
+		.override_failure_message("Advance goal left the hunt point")

@@ -212,6 +212,60 @@ func test_capture_is_inert_outside_battle() -> void:
 	assert_float(_defend.score(bb)).is_equal(0.0)
 
 
+## Attackers must prefer taking the zone over camping a corner (sims: Battle
+## never captured because HoldAngle beat CaptureObjective for every body).
+func test_attackers_prefer_the_objective_over_holding_a_corner() -> void:
+	var attack := _bb()
+	attack.objective_info[&"mode"] = Enums.Mode.BATTLE
+	attack.objective_info[&"obj_pos"] = Vector2(600, 400)
+	attack.objective_info[&"attacking"] = true
+	attack.objective_info[&"phase"] = &"push"
+	var hold := preload("res://src/ai/behaviors/hold_angle.gd").new()
+	assert_float(_capture.score(attack)).is_greater(hold.score(attack)) \
+		.override_failure_message("attacker camps instead of capturing")
+	# A contested zone is worth more than an idle one: bodies stop the bar.
+	var calm := _capture.score(attack)
+	attack.objective_info[&"obj_contested"] = true
+	assert_float(_capture.score(attack)).is_greater(calm)
+
+
+## Defenders must want the zone, not a patrol leg, and contention sharpens it.
+func test_defenders_prefer_the_contested_objective() -> void:
+	var defend := _bb()
+	defend.objective_info[&"mode"] = Enums.Mode.BATTLE
+	defend.objective_info[&"obj_pos"] = Vector2(600, 400)
+	defend.objective_info[&"attacking"] = false
+	defend.objective_info[&"phase"] = &"hold"
+	var calm := _defend.score(defend)
+	defend.objective_info[&"obj_contested"] = true
+	assert_float(_defend.score(defend)).is_greater(calm)
+	var advance := preload("res://src/ai/behaviors/advance.gd").new()
+	assert_float(_defend.score(defend)).is_greater(advance.score(defend)) \
+		.override_failure_message("defender wanders instead of defending")
+
+
+## Battle attackers push the zone instead of farming a distant duel, and a
+## fresh kill makes the objective (and the move) more attractive.
+func test_battle_attacker_does_not_farm_a_long_range_duel() -> void:
+	var bb := _bb()
+	bb.objective_info[&"mode"] = Enums.Mode.BATTLE
+	bb.objective_info[&"obj_pos"] = Vector2(700, 400)
+	bb.objective_info[&"attacking"] = true
+	_see(bb, bb.host_pos() + Vector2(900, 0))
+	assert_float(_engage.score(bb)).is_less(
+		preload("res://src/ai/behaviors/engage.gd").BASE) \
+		.override_failure_message("attacker farms a long duel instead of pushing")
+	# Same duel, but now the objective is right here: shooting is fine again.
+	bb.objective_info[&"obj_pos"] = bb.host_pos() + Vector2(120, 0)
+	assert_float(_engage.score(bb)).is_greater(0.5)
+	# A kill opens a push window: the objective goes up in priority.
+	bb.objective_info[&"obj_pos"] = Vector2(700, 400)
+	var capture_before := _capture.score(bb)
+	bb.note_kill()
+	assert_bool(bb.pushing()).is_true()
+	assert_float(_capture.score(bb)).is_greater(capture_before)
+
+
 ## --- selection --------------------------------------------------------------
 
 func test_choose_prefers_the_visible_enemy_over_patrolling() -> void:
