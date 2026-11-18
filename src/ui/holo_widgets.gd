@@ -470,10 +470,19 @@ class Crosshair extends Control:
 	var color: Color = KangurTheme.HOLO
 	var spread_deg: float = 0.0
 	var gap: float = BASE_GAP
+	## HUD crosshair tracks the cursor (CS2D-style); the Settings preview centres.
+	var follow_mouse: bool = true
+	var _center: Vector2 = Vector2.ZERO
 
 	func _init() -> void:
 		mouse_filter = Control.MOUSE_FILTER_IGNORE
 		set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+
+	func _process(_delta: float) -> void:
+		var c := get_local_mouse_position() if follow_mouse else size * 0.5
+		if c.distance_squared_to(_center) > 0.01:
+			_center = c
+			queue_redraw()
 
 	func set_spread_deg(deg: float) -> void:
 		var clamped := clampf(deg, 0.0, 30.0)
@@ -484,7 +493,7 @@ class Crosshair extends Control:
 		queue_redraw()
 
 	func _draw() -> void:
-		var c := size * 0.5
+		var c := _center
 		var shadow := Color(0.0, 0.0, 0.0, 0.45)
 		var col := color
 		col.a = 0.95
@@ -520,21 +529,31 @@ class Hitmarker extends Control:
 
 	var lethal: bool = false
 	var _fade := 0.0
+	var follow_mouse: bool = true
+	var _center: Vector2 = Vector2.ZERO
 
 	func _init() -> void:
 		mouse_filter = Control.MOUSE_FILTER_IGNORE
 		set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 		modulate.a = 0.0
 
+	func _process(_delta: float) -> void:
+		var c := get_local_mouse_position() if follow_mouse else size * 0.5
+		if c.distance_squared_to(_center) > 0.01:
+			_center = c
+			if modulate.a > 0.0:
+				queue_redraw()
+
 	func flash(kill: bool) -> void:
 		lethal = kill
+		_center = get_local_mouse_position() if follow_mouse else size * 0.5
 		modulate.a = 1.0
 		queue_redraw()
 		var tween := create_tween()
 		tween.tween_property(self, "modulate:a", 0.0, 0.18).set_delay(0.06)
 
 	func _draw() -> void:
-		var c := size * 0.5
+		var c := _center
 		var arm := KILL_SIZE if lethal else SIZE
 		var col := KangurTheme.DANGER if lethal else KangurTheme.TEXT
 		for dir: Vector2 in [Vector2(1, 1), Vector2(-1, 1), Vector2(1, -1), Vector2(-1, -1)]:

@@ -58,8 +58,13 @@ static func install() -> void:
 			InputMap.add_action(action)
 		if MOVE_ACTIONS.has(action):
 			InputMap.action_set_deadzone(action, MOVE_DEADZONE)
+		# Add every binding directly. Do NOT use apply_binding() here: it erases
+		# the action's events on each call (single-rebind semantics), which would
+		# drop all but the last binding (e.g. WASD erased, leaving only arrows).
 		for binding: Dictionary in BINDINGS[action]:
-			apply_binding(action, binding)
+			var event := event_from(binding)
+			if event != null:
+				InputMap.action_add_event(action, event)
 
 ## Replace one action's events with a single descriptor.
 static func apply_binding(action: StringName, binding: Dictionary) -> void:

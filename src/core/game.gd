@@ -88,7 +88,7 @@ func _go(scene_path: String, kind: StringName, capture_mouse: bool) -> void:
 func _capture_mouse(capture: bool) -> void:
 	if DisplayServer.get_name() == "headless":
 		return
-	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED if capture else Input.MOUSE_MODE_VISIBLE
+	Input.mouse_mode = Input.MOUSE_MODE_CONFINED_HIDDEN if capture else Input.MOUSE_MODE_VISIBLE
 
 func _build_fade_overlay() -> void:
 	var layer := CanvasLayer.new()

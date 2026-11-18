@@ -108,7 +108,7 @@ func _resume() -> void:
 	UiFx.back()
 	visible = false
 	get_tree().paused = false
-	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	Input.mouse_mode = Input.MOUSE_MODE_CONFINED_HIDDEN
 	resumed.emit()
 
 func _settings() -> void:

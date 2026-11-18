@@ -196,6 +196,7 @@ func _build_preview_rail(caption: String, lines: PackedStringArray,
 		frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		plate.add_child(frame)
 		var preview := HW.Crosshair.new()
+		preview.follow_mouse = false
 		preview.style = int(Settings.get_value(&"gameplay", &"crosshair_style", 0))
 		preview.color = Settings.get_value(&"gameplay", &"crosshair_color", KangurTheme.HOLO)
 		preview.set_spread_deg(2.2)
