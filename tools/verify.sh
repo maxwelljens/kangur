@@ -24,15 +24,14 @@ if [ "$UNIT_EXIT" -ne 0 ]; then
 	exit "$UNIT_EXIT"
 fi
 
-# Seeded battle sims: the three quick maps from tests/simulation/README.md
-# (one seeded match each, hard invariants only). --fixed-fps 60 is mandatory:
-# the harness steps the engine loop by hand (one sim tick per physics frame,
-# because bullet sweeps read the physics space state), so real-time pacing
-# would make a gate run take the full match length in wall clock.
-echo "==> battle sims (fairness / termination / bunching)"
-"$GODOT" --headless --path . --fixed-fps 60 -- --sim=dustworks:elimination:1:1
-"$GODOT" --headless --path . --fixed-fps 60 -- --sim=compound:elimination:1:1
-"$GODOT" --headless --path . --fixed-fps 60 -- --sim=terminal:battle:1:1
+# Seeded battle sims: short 100 s matches (5th CLI field) so the per-commit gate
+# finishes fast while still asserting fairness / termination / bunching. Full-
+# length balance runs omit the limit: --sim=<map>:<mode>:<seed>:<count>.
+# --fixed-fps 60 is mandatory (one sim tick per physics frame).
+echo "==> battle sims (fairness / termination / bunching, 100s gate matches)"
+"$GODOT" --headless --path . --fixed-fps 60 -- --sim=dustworks:elimination:1:1:100
+"$GODOT" --headless --path . --fixed-fps 60 -- --sim=compound:elimination:1:1:100
+"$GODOT" --headless --path . --fixed-fps 60 -- --sim=terminal:battle:1:1:100
 
 # Game-flow screenshots need a display; skipped on a headless box rather than
 # failing the gate (CI without :0 still verifies all gameplay logic above).

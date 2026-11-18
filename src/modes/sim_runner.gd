@@ -82,7 +82,7 @@ func _run_one(seed_value: int) -> void:
 	# 0 lets Match pick the mode default (8 min Elimination / 15 min Battle).
 	# MatchConfig's own default is the Elimination value, which would silently
 	# shorten a Battle sim by seven minutes.
-	config.time_limit_s = 0.0
+	config.time_limit_s = request.time_limit_s  # 0 lets Match pick the mode default
 	config.seed = seed_value
 	var run := MatchScript.new() as Match
 	if run == null:
