@@ -153,6 +153,7 @@ func _build_blackboard() -> void:
 	squad = SquadCoordinator.for_team(get_tree(), bb.team)
 	if squad != null:
 		squad.call(&"register", self)
+		bb.squad = squad
 		bb.team_intel = squad.get(&"intel")
 		bb.danger_map = squad.get(&"danger")
 		bb.objective_info = squad.get(&"objective_info")
@@ -259,14 +260,28 @@ func _shooter_suppression() -> float:
 ## Kill calls: only the killer reports, and only for a kill (never assists).
 func _on_character_died(victim: Node, attacker: Node, _weapon: StringName,
 		_pos: Vector2, _distance: float) -> void:
-	if bb == null or attacker != _host or victim == _host:
+	if bb == null or victim == _host:
 		return
+	# Invalidate dead enemies immediately so we never target corpses: the aim
+	# fallback (memory.freshest) and Suppress would otherwise keep firing at them.
+	if int(victim.get(&"team")) != int(_host.get(&"team")):
+		var vid := victim.get_instance_id()
+		bb.memory.forget(vid)
+		bb.remove_visible(vid)
+		if _aim_key == vid:
+			_release_aim()
+	if attacker != _host:
+		return
+	bb.note_kill()
 	say(&"kill", 1)
 
 ## "I'm hit bad" — once per life, at the low-HP threshold.
 func _on_character_hit(victim: Node, _attacker: Node, _part: int, _damage: float,
 		_fatal: bool, _pos: Vector2) -> void:
-	if bb == null or victim != _host or _low_hp_called:
+	if bb == null or victim != _host:
+		return
+	bb.note_hit()
+	if _low_hp_called:
 		return
 	if bb.torso_ratio() < LOW_HP_CALL_RATIO:
 		_low_hp_called = true
@@ -287,6 +302,7 @@ func fill_intent(intent: Intent, dt: float) -> void:
 	intent.fire = false
 	intent.focus = false
 	intent.sprint = false
+	intent.bandage = false
 	intent.stance = Enums.Stance.STAND
 	if bb == null or _host.get(&"alive") == false:
 		intent.move = Vector2.ZERO
@@ -297,6 +313,11 @@ func fill_intent(intent: Intent, dt: float) -> void:
 	bb.memory.tick(dt)
 	_refresh_visible()
 	_follow_path()
+	# A bandage channel is asserted for its whole duration, not just while the
+	# Bandage action happens to hold the tick: Character._handle_edges only
+	# feeds `intent.bandage` through, and an action switch mid-channel used to
+	# drop it (sims: 13 channels started, 5 finished, 8 charges wasted).
+	intent.bandage = _body_bandaging()
 	_decision_accum += dt
 	if _decision_accum >= _decision_period:
 		_decision_accum = fmod(_decision_accum, _decision_period)
@@ -371,6 +392,15 @@ func _apply_aim(intent: Intent) -> void:
 	elif bb.action_data.has(&"face"):
 		point = bb.host_pos() + Vector2(bb.action_data[&"face"]) * 200.0
 		key = -hash(Vector2(bb.action_data[&"face"]).round())
+	# Track the LIVE sensor position of a visible target each tick. Sighting events
+	# refresh slowly (SPOT_REFRESH_S); aiming at that stale pos let strafing enemies
+	# outrun the aim. live_pos is sensor-gated (fair) and returns INF when not visible.
+	if key > 0:
+		var perc: Node = _host.get(&"perception")
+		if perc != null and perc.has_method(&"live_pos"):
+			var live: Vector2 = perc.call(&"live_pos", key)
+			if live != Vector2.INF:
+				point = live
 	if point == Vector2.ZERO:
 		intent.aim = _host_aim()
 		if _engaged:
@@ -641,6 +671,17 @@ func _name_of(node: Object) -> String:
 func _host_aim() -> Vector2:
 	var dir: Variant = _host.get(&"aim_dir") if _host != null else null
 	return dir if dir is Vector2 else Vector2.RIGHT
+
+## True while the shared Body is mid-bandage channel (fixtures without a Body
+## report false, never crash).
+func _body_bandaging() -> bool:
+	var body_node: Variant = _host.get(&"body") if _host != null else null
+	if body_node == null or not (body_node is Node):
+		body_node = _host.get_node_or_null(^"Body") if _host != null else null
+	if body_node == null:
+		return false
+	return (body_node as Node).has_method(&"is_bandaging") \
+		and bool((body_node as Node).call(&"is_bandaging"))
 
 func _aim_float(prop: StringName) -> float:
 	var aim: Node = _host.get(&"aim") if _host != null else null

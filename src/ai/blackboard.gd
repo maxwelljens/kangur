@@ -7,6 +7,9 @@ extends RefCounted
 ## Decision cadence (design §9: 5–10 Hz, staggered per NPC).
 const DECISION_HZ_MIN := 5.0
 const DECISION_HZ_MAX := 10.0
+## After a kill, the winner repositions toward the objective for this long
+## instead of sitting on the corpse farming the next duel (design §9.8 push).
+const PUSH_AFTER_KILL_S := 6.0
 ## Hysteresis: the running action gets this bonus so borderline scores do not
 ## flip-flop (design §9.2 "hysteresis prevents jitter").
 const HYSTERESIS_BONUS := 0.12
@@ -16,6 +19,12 @@ const ACTION_MIN_S := 0.35
 const STALL_S := 6.0
 ## Personal goal offset radius, px (skill: route jitter / spacing ±40 px).
 const GOAL_OFFSET_PX := 40.0
+## When the whole squad shares a waypoint (free hunt axis, objective) the goal
+## offset above is too small: twelve bodies inside ±40 px bunch (sims: 33 px,
+## under the 48 px gate). Converging squads spread this wide instead.
+const CONVERGE_OFFSET_PX := 150.0
+## Rejection samples when a free-hunt patrol point lands outside the enemy half.
+const HUNT_ATTEMPTS := 12
 ## Linger window at corners/waypoints (design §9.3).
 const LINGER_MIN_S := 0.5
 const LINGER_MAX_S := 2.0
@@ -30,6 +39,12 @@ const REPATH_S := 0.4
 const OVERPEEK_CHANCE := 0.18
 ## Keep goals this far inside the map rect (px).
 const MAP_EDGE_PX := 48.0
+## A limb bleed is a slower clock than a torso bleed (design §7 rates).
+const LIMB_BLEED_WEIGHT := 0.6
+## How long "I just got shot" stays fresh enough to duck (design §9.5 cover).
+const HIT_MEMORY_S := 1.2
+## How far from the cover spot still counts as "in cover" (one body step).
+const COVER_STICK_PX := 40.0
 
 # --- identity / ownership ---------------------------------------------------
 var host: Node2D = null
@@ -56,6 +71,10 @@ var has_nav_target: bool = false
 ## Long-term intent (objective / patrol waypoint), before personal offset.
 var goal: Vector2 = Vector2.ZERO
 var stall_timer: float = 0.0
+## Seconds left on the post-kill push window (Battle attackers).
+var push_timer: float = 0.0
+## Seconds since this NPC last took damage (>0 = taking hits right now).
+var hit_timer: float = 0.0
 var linger_timer: float = 0.0
 var check_six_timer: float = 0.0
 var repath_accum: float = 0.0
@@ -70,6 +89,13 @@ var path_index: int = 0
 var visible_contacts: Array[Dictionary] = []
 ## Set by TakeCover/DefendObject on arrival — the rig/behaviors read it.
 var in_cover: bool = false
+## Where the current cover was taken. `in_cover` is derived from this each tick,
+## so an NPC keeps its covered state across action switches (Peek needs it) and
+## loses it exactly when it actually leaves the spot.
+var cover_anchor: Vector2 = Vector2.ZERO
+## Lean direction of that cover (into the open). Outlives action switches for the
+## same reason: Peek reads it but only TakeCover/DefendObjective choose it.
+var cover_lean: Vector2 = Vector2.ZERO
 ## Own-team characters (spacing only — never used to locate enemies).
 var teammates: Array[Node2D] = []
 
@@ -115,6 +141,12 @@ func has_target() -> bool:
 	return not visible_contacts.is_empty()
 
 ## Closest currently-sighted enemy.
+## Drop a visible contact by entity id (e.g. the enemy died — stop targeting it).
+func remove_visible(id: int) -> void:
+	for i: int in range(visible_contacts.size() - 1, -1, -1):
+		if int(visible_contacts[i][&"id"]) == id:
+			visible_contacts.remove_at(i)
+
 func primary_visible() -> Dictionary:
 	var best: Dictionary = {}
 	var best_dist := INF
@@ -184,8 +216,98 @@ func has_objective() -> bool:
 func objective_pos() -> Vector2:
 	return objective_info.get(&"obj_pos", Vector2.ZERO)
 
+func objective_distance() -> float:
+	var pos := objective_pos()
+	return INF if pos == Vector2.ZERO else host_pos().distance_to(pos)
+
 func attacking() -> bool:
 	return bool(objective_info.get(&"attacking", true))
+
+func contested() -> bool:
+	return bool(objective_info.get(&"obj_contested", false))
+
+func phase() -> StringName:
+	return StringName(objective_info.get(&"phase", &""))
+
+## Authoritative capture area when the map has a shaped zone, else a point.
+func objective_rect() -> Rect2:
+	if world != null:
+		var zone := world.objective(StringName(objective_info.get(&"obj_id", &"")))
+		if zone != null:
+			var rect := zone.capture_rect()
+			if rect.size.x > 0.0 and rect.size.y > 0.0:
+				return rect
+	return Rect2(objective_pos(), Vector2.ZERO)
+
+## Mean of the other team's authored spawn markers: static map knowledge, never
+## a live enemy position (the same thing a player reads off the map).
+func enemy_spawn_centroid() -> Vector2:
+	if world == null:
+		return Vector2.ZERO
+	return _centroid(world.spawn_points(Enums.other_team(team)))
+
+func own_spawn_centroid() -> Vector2:
+	if world == null:
+		return Vector2.ZERO
+	return _centroid(world.spawn_points(team))
+
+## Where a free hunt converges: the freshest radio contact if the team has one,
+## else a patrol point inside the enemy half. Design §9.8 "TDM → hunt via intel
+## + patrol hotspots": a patrol that ignores the enemy half never meets anybody.
+func hunt_point() -> Vector2:
+	var contact := intel_contact()
+	if not contact.is_empty():
+		return contact[&"pos"]
+	var half := enemy_half_bounds()
+	if half.size.x <= 0.0 or half.size.y <= 0.0 or world == null:
+		return Vector2.ZERO
+	for _attempt: int in HUNT_ATTEMPTS:
+		var candidate := world.random_patrol_point(_rng, team)
+		if half.has_point(candidate):
+			return candidate
+	return half.get_center()
+
+## The half of the map on the other team's side, split on whichever axis
+## separates the two spawn groups. Static map knowledge, never enemy truth.
+func enemy_half_bounds() -> Rect2:
+	if world == null:
+		return Rect2()
+	var rect := world.bounds()
+	var enemy := enemy_spawn_centroid()
+	var own := own_spawn_centroid()
+	if rect.size.x <= 0.0 or enemy == Vector2.ZERO or own == Vector2.ZERO:
+		return Rect2()
+	var mid := (own + enemy) * 0.5
+	var out := rect
+	if absf(enemy.y - own.y) >= absf(enemy.x - own.x):
+		var edge_y := clampf(mid.y, rect.position.y, rect.end.y)
+		out.position.y = edge_y if enemy.y > own.y else rect.position.y
+		out.end.y = rect.end.y if enemy.y > own.y else edge_y
+	else:
+		var edge_x := clampf(mid.x, rect.position.x, rect.end.x)
+		out.position.x = edge_x if enemy.x > own.x else rect.position.x
+		out.end.x = rect.end.x if enemy.x > own.x else edge_x
+	return out.abs()
+
+## Direction from us toward the other team's spawns (unit, ZERO when unknown).
+## For a defender that is exactly the attacker approach: two teams, so the
+## other team *is* the attacking team.
+func toward_enemy_spawns() -> Vector2:
+	return _toward(enemy_spawn_centroid())
+
+func _toward(target: Vector2) -> Vector2:
+	if target == Vector2.ZERO:
+		return Vector2.ZERO
+	var to := target - host_pos()
+	return to.normalized() if to.length() > 1.0 else Vector2.ZERO
+
+func _centroid(points: Array[Vector2]) -> Vector2:
+	if points.is_empty():
+		return Vector2.ZERO
+	var mean := Vector2.ZERO
+	for point: Vector2 in points:
+		mean += point
+	return mean / float(points.size())
 
 # --- host state (read-only helpers; the Character owns the truth) ------------
 
@@ -212,6 +334,23 @@ func torso_ratio() -> float:
 func bleeding() -> bool:
 	var body_node := body()
 	return bool(body_node.call(&"is_bleeding_any")) if body_node != null else false
+
+## 0..1 urgency of the current bleed: full for a torso bleed, scaled for limbs.
+## Reading the wound type (not just torso HP) is the difference between a bot
+## that bandages a bleeding arm and one that dies of it at full torso.
+func bleed_urgency() -> float:
+	var body_node := body()
+	if body_node == null:
+		return 0.0
+	var model: Variant = body_node.get(&"model")
+	if model == null or not (model is RefCounted):
+		return 1.0 if bleeding() else 0.0
+	var drain: float = float(model.call(&"bleed_rate_total"))
+	if drain <= 0.0:
+		return 0.0
+	var torso := float(model.call(&"is_bleeding", Enums.Part.TORSO))
+	var weight := 1.0 if torso > 0.0 else LIMB_BLEED_WEIGHT
+	return clampf(drain / BodyModel.TORSO_BLEED_RATE, 0.0, 1.0) * weight
 
 func bandages() -> int:
 	var body_node := body()
@@ -335,12 +474,29 @@ func at(pos: Vector2, arrive_px: float = 24.0) -> bool:
 func tick_timers(dt: float) -> void:
 	action_time += dt
 	stall_timer += dt
+	push_timer = maxf(0.0, push_timer - dt)
+	hit_timer = maxf(0.0, hit_timer - dt)
 	linger_timer = maxf(0.0, linger_timer - dt)
 	check_six_timer = maxf(0.0, check_six_timer - dt)
 	repath_accum += dt
+	# Cover is a place, not a mood: standing on the cover spot IS being covered,
+	# whichever action is running (Peek/Engage both read it).
+	in_cover = at_cover()
 
 func note_progress() -> void:
 	stall_timer = 0.0
+
+## Taking fire: the one signal that legitimately outranks shooting back.
+func note_hit() -> void:
+	hit_timer = HIT_MEMORY_S
+
+## Battle attacker just won a duel: go take ground, do not farm the spot.
+func note_kill() -> void:
+	if mode() == Enums.Mode.BATTLE and has_objective() and attacking():
+		push_timer = PUSH_AFTER_KILL_S
+
+func pushing() -> bool:
+	return push_timer > 0.0
 
 func roll_linger() -> float:
 	var bias := 0.35 + 0.65 * trait_of(&"caution")
@@ -357,6 +513,29 @@ func personal_offset() -> Vector2:
 	var spread := GOAL_OFFSET_PX * (0.5 + trait_of(&"independence"))
 	return Vector2.RIGHT.rotated(_rng.randf_range(0.0, TAU)) * _rng.randf_range(0.0, spread)
 
+## Convergence offset for a point the whole squad shares (hunt axis, objective):
+## a ring this wide, so a converging squad arrives spread rather than stacked.
+func converge_offset() -> Vector2:
+	var spread := CONVERGE_OFFSET_PX * (0.6 + 0.6 * trait_of(&"independence"))
+	return Vector2.RIGHT.rotated(_rng.randf_range(0.0, TAU)) * _rng.randf_range(
+		CONVERGE_OFFSET_PX * 0.35, spread)
+
 ## Occasional peek-too-far mistake: low caution leaks overpeeks (design §9.3).
 func roll_overpeek() -> bool:
 	return _rng.randf() < OVERPEEK_CHANCE * (1.0 - trait_of(&"caution"))
+
+## Covered = still standing on the spot where cover was taken. Derived, not a
+## flag the action layer has to remember to re-set on every switch.
+func at_cover() -> bool:
+	return cover_anchor != Vector2.ZERO and at(cover_anchor, COVER_STICK_PX)
+
+func take_cover_at(pos: Vector2, lean: Vector2 = Vector2.ZERO) -> void:
+	cover_anchor = pos
+	in_cover = true
+	if lean != Vector2.ZERO:
+		cover_lean = lean
+
+func leave_cover() -> void:
+	cover_anchor = Vector2.ZERO
+	in_cover = false
+	cover_lean = Vector2.ZERO

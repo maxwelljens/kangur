@@ -42,6 +42,9 @@ var sprinting: bool = false
 var _host: CharacterBody2D = null
 var _scan_accum: float = 0.0
 var _last_spot: Dictionary[int, float] = {}
+## Currently-visible enemies (id -> Node2D), refreshed by _scan. live_pos() reads
+## their live position so the AI tracks moving targets instead of a stale sighting.
+var _visible: Dictionary = {}
 ## Simulation clock: advanced from tick(dt), never wall clock, so headless sims
 ## (fixed dt) and the fixed-fps fast-forward see the same sighting cadence.
 var _clock: float = 0.0
@@ -76,6 +79,18 @@ func can_see(target_pos: Vector2, target_stance: Enums.Stance) -> bool:
 	if not in_cone(target_pos):
 		return false
 	return has_los(target_pos, target_stance)
+
+## Live sensor position of a currently-visible enemy (fairness: only enemies the
+## cone+LOS scan confirms). Vector2.INF when not visible. The AI queries this each
+## tick to track a moving target rather than aiming at a stale sighting position.
+func live_pos(id: int) -> Vector2:
+	if not _visible.has(id):
+		return Vector2.INF
+	var enemy: Node2D = _visible[id]
+	if not is_instance_valid(enemy) or not bool(enemy.get(&"alive")):
+		_visible.erase(id)
+		return Vector2.INF
+	return enemy.global_position
 
 ## Pure cone test, no physics — unit-testable outside a physics frame.
 func in_cone(target_pos: Vector2) -> bool:
@@ -149,14 +164,17 @@ func _scan() -> void:
 			continue
 		if int(node.get(&"team")) == int(_host.get(&"team")):
 			continue
+		var id := node.get_instance_id()
 		if not bool(node.get(&"alive")):
+			_visible.erase(id)
 			continue
 		var enemy := node as Node2D
 		var target_stance: Enums.Stance = int(enemy.get(&"stance"))
 		if not can_see(enemy.global_position, target_stance):
-			_last_spot.erase(enemy.get_instance_id())
+			_last_spot.erase(id)
+			_visible.erase(id)
 			continue
-		var id := enemy.get_instance_id()
+		_visible[id] = enemy
 		var last: float = _last_spot.get(id, -SPOT_REFRESH_S)
 		if now - last < SPOT_REFRESH_S:
 			continue

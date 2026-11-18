@@ -71,6 +71,10 @@ func best_threat() -> Dictionary:
 func last_seen(id: int) -> Dictionary:
 	return contacts.get(id, {})
 
+## Invalidate a contact immediately (e.g. the enemy died — stop targeting corpses).
+func forget(id: int) -> void:
+	contacts.erase(id)
+
 ## Seconds since the last sighting of `id`; -1 when never seen / forgotten.
 func contact_age(id: int) -> float:
 	var contact: Dictionary = contacts.get(id, {})
