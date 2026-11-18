@@ -24,3 +24,7 @@ Thumbs.db
 
 # Local scratch
 scratch/
+
+# Promo pipeline scratch (final media in docs/media/ IS committed)
+docs/media/promo/frames/
+docs/media/promo/footage/
