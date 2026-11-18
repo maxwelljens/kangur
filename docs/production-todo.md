@@ -37,8 +37,18 @@ resolved; keep this current for orchestration continuity.
       detail tiles. Verified readable via reports/screenshots/dustworks.png.
 - [ ] Weapon sound-set .tres instances (filename→weapon mapping in docs/credits.md §1).
 - [ ] Radio line .tres instances from docs/design/radio-lines.md.
-- [ ] Balance suite: 200-seed winrates per map/mode, TTK tables, cover% — after AI+Match land.
-- [ ] Terminal + Oldtown (Battle maps) + Range — after Dustworks/Compound verified.
+- [ ] Balance suite: 200-seed winrates per map/mode (Battle now winnable both maps;
+      needs full calibration). BLOCKED on sim throughput (~real-time pace; bullet
+      sweeps read physics space, 1 tick/frame). Fast gate uses 100s matches instead.
+- [ ] Elimination still mostly timeouts (survivors avoid re-meeting) — add late-game
+      hunt pressure / shorter default clock; dustworks cover 27.3% (<30% gate).
+- [ ] check_six metric reads 0 in short sims (behavior exists; verify sampling/trigger).
+- [x] Terminal + Oldtown (Battle maps) + Range built (193 probe checks, specs exact).
+- [ ] Range training controller: spawn target dummies (static + rail-moving), weapon
+      racks (switch any weapon), infinite-ammo toggle, live spread/recoil readout,
+      TTK dummy with body-part display, bandage dummy. Markers exist (markers.json).
+- [ ] Fold markers.json into BlockoutDef.markers field (world schema was frozen during
+      battle-maps wave; markers currently a sidecar workaround).
 
 ## Deferred scope (design §14 — revisit after core excellence)
 - Campaign story missions between matches (lore currently in briefings/debriefs).
@@ -47,6 +57,17 @@ resolved; keep this current for orchestration continuity.
 
 ## Resolved
 - [x] Movement/headshot/TTK design arithmetic (genre research fixes applied).
-- [x] Music licensing (Incompetech CC BY 4.0 verified, downloading).
+- [x] Music licensing (Incompetech CC BY 4.0 verified + downloaded).
 - [x] Concurrent-godot cache races (tools/godot.sh flock wrapper).
 - [x] vision-cone frozen FOV / apex / mask (patched, probe-green).
+- [x] Playtest: WASD dropped by install() multi-binding bug; crosshair stuck center
+      (CAPTURED->CONFINED_HIDDEN + widgets track cursor).
+- [x] Playtest: AI passive/inaccurate (stale aim pos -> perception.live_pos tracking);
+      AI shooting corpses (death invalidates memory/visible contacts + releases aim).
+- [x] Battle capture structurally impossible -> superiority-based capture model;
+      both Terminal+Oldtown attacker-winnable (verified sims, fairness 0).
+- [x] Bleed-out deaths attributed to "environment" -> last damager tracked.
+- [x] Silent guns -> shot_fired wired to SoundSetDef resolution; all 12 weapons audible.
+- [x] Audio gaps filled (CC0 5.56/.357/suppressed/impacts/cycling).
+- [x] Cook timing, weapon silhouettes, range camera/fog, zoom 1.8, credits tables.
+- [x] Fast per-commit gate (100s sim matches); full gate GREEN (582 tests + sims + flow).
