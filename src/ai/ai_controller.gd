@@ -281,6 +281,14 @@ func _on_character_hit(victim: Node, _attacker: Node, _part: int, _damage: float
 	if bb == null or victim != _host:
 		return
 	bb.note_hit()
+	# React to being shot: turn toward the damage direction (a fair cue — the round
+	# came from there) so the NPC faces its attacker and seeks cover; perception then
+	# acquires the shooter for return fire. hit_timer alone left it staring the wrong
+	# way, which read as ignoring the gunfire entirely.
+	if _attacker is Node2D and int(_attacker.get(&"team")) != int(_host.get(&"team")):
+		var to := (_attacker as Node2D).global_position - _host.global_position
+		if to.length() > 1.0:
+			bb.action_data[&"face"] = to.normalized()
 	if _low_hp_called:
 		return
 	if bb.torso_ratio() < LOW_HP_CALL_RATIO:
@@ -414,8 +422,9 @@ func _apply_aim(intent: Intent) -> void:
 		if key > 0:
 			_acquire(intent.aim)
 		elif _engaged:
+			# No real target (just a facing hint): release combat tracking so the
+			# NPC faces its movement direction freely instead of snap-aiming.
 			_release_aim()
-			_acquire(intent.aim)
 		_aim_key = key
 
 func _acquire(dir: Vector2) -> void:

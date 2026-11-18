@@ -332,7 +332,9 @@ func _update_gating(step: float) -> void:
 			continue
 		var id := c.get_instance_id()
 		if not c.alive:
-			# Corpses persist once discovered; never leak an unseen death.
+			# Corpses persist once discovered; never leak an unseen death. Drop the
+			# spotted ghost so no live-enemy marker sits on a corpse.
+			_ghosts.erase(id)
 			c.rig.visible = _discovered.get(id, false)
 			continue
 		if _player_sees(c):

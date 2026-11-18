@@ -449,39 +449,46 @@ func test_part_at_offset_beyond_head_radius_is_torso() -> void:
 
 
 func test_part_at_offset_side_is_arm() -> void:
-	assert_int(BodyModel.part_at_offset(Vector2(0.0, 7.0))).is_equal(Enums.Part.ARM_R)
-	assert_int(BodyModel.part_at_offset(Vector2(0.0, -7.0))).is_equal(Enums.Part.ARM_L)
+	assert_int(BodyModel.part_at_offset(Vector2(0.0, 9.0))).is_equal(Enums.Part.ARM_R)
+	assert_int(BodyModel.part_at_offset(Vector2(0.0, -9.0))).is_equal(Enums.Part.ARM_L)
 
 
 func test_part_at_offset_rear_is_leg() -> void:
-	assert_int(BodyModel.part_at_offset(Vector2(-6.0, 0.0))).is_equal(Enums.Part.LEG_L)
+	assert_int(BodyModel.part_at_offset(Vector2(-9.0, 0.0))).is_equal(Enums.Part.LEG_L)
 
 
 func test_part_at_offset_rear_right_is_right_leg() -> void:
-	assert_int(BodyModel.part_at_offset(Vector2(-6.0, 3.0))).is_equal(Enums.Part.LEG_R)
+	assert_int(BodyModel.part_at_offset(Vector2(-9.0, 3.0))).is_equal(Enums.Part.LEG_R)
 
 
 func test_part_at_offset_wide_rear_is_leg() -> void:
-	assert_int(BodyModel.part_at_offset(Vector2(-3.0, 9.0))).is_equal(Enums.Part.LEG_R)
+	assert_int(BodyModel.part_at_offset(Vector2(-9.0, 9.0))).is_equal(Enums.Part.LEG_R)
 
 
 func test_part_at_offset_front_shoulders_are_torso() -> void:
 	assert_int(BodyModel.part_at_offset(Vector2(4.0, 5.0))).is_equal(Enums.Part.TORSO)
 
 
+func test_part_at_offset_center_mass_is_torso() -> void:
+	# Torso-dominant: most of the body is torso so hits contribute to the kill
+	# (wide limb zones made enemies bullet sponges — playtest fix).
+	assert_int(BodyModel.part_at_offset(Vector2(0.0, 7.0))).is_equal(Enums.Part.TORSO)
+	assert_int(BodyModel.part_at_offset(Vector2(-6.0, 0.0))).is_equal(Enums.Part.TORSO)
+
+
 func test_part_at_offset_covers_every_part() -> void:
 	var seen := {}
-	for x: float in [-8.0, -2.0, 2.0, 6.0, 10.0]:
+	for x: float in [-10.0, -2.0, 2.0, 6.0, 10.0]:
 		for y: float in [-9.0, -3.0, 0.0, 3.0, 9.0]:
 			seen[BodyModel.part_at_offset(Vector2(x, y))] = true
 	assert_int(seen.size()).is_equal(Enums.PART_COUNT)
 
 
 func test_part_at_offset_mirrors_arms_and_legs() -> void:
-	assert_int(BodyModel.part_at_offset(Vector2(0.0, 7.0))).is_equal(Enums.Part.ARM_R)
-	assert_int(BodyModel.part_at_offset(Vector2(0.0, -7.0))).is_equal(Enums.Part.ARM_L)
-	assert_int(BodyModel.part_at_offset(Vector2(-8.0, 2.0))).is_equal(Enums.Part.LEG_R)
-	assert_int(BodyModel.part_at_offset(Vector2(-8.0, -2.0))).is_equal(Enums.Part.LEG_L)
+	assert_int(BodyModel.part_at_offset(Vector2(0.0, 9.0))).is_equal(Enums.Part.ARM_R)
+	assert_int(BodyModel.part_at_offset(Vector2(0.0, -9.0))).is_equal(Enums.Part.ARM_L)
+	assert_int(BodyModel.part_at_offset(Vector2(-9.0, 2.0))).is_equal(Enums.Part.LEG_R)
+	assert_int(BodyModel.part_at_offset(Vector2(-9.0, -2.0))).is_equal(Enums.Part.LEG_L)
 
 
 func test_bandage_refused_when_dead() -> void:

@@ -159,7 +159,11 @@ func _noise() -> Vector2:
 ## Only a death our team could actually see earns a skull hint.
 func _on_character_died(victim: Node, _attacker: Node, _weapon_id: StringName,
 		pos: Vector2, _distance: float) -> void:
-	if not (victim is Character) or (victim as Character).team != _team:
+	if not (victim is Character):
+		return
+	if (victim as Character).team != _team:
+		# Dead enemy: drop its shared contact so no spotted marker lingers on a corpse.
+		_contacts.erase(victim.get_instance_id())
 		return
 	for c: Character in _characters:
 		if c == null or not c.alive or c.perception == null:

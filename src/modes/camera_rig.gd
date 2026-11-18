@@ -25,10 +25,12 @@ const FIT_MARGIN := 0.96
 ## (Range: 48×32 tiles fits at ×0.88). Real maps fit far below ×0.5.
 const SMALL_MAP_FIT := 0.75
 ## Shot kick along the recoil direction, px and recovery per second.
-const RECOIL_KICK_PX := 10.0
+const RECOIL_KICK_PX := 2.0
 const RECOIL_RECOVERY := 9.0
+## Cap accumulated recoil so automatic fire doesn't build into huge displacement.
+const RECOIL_MAX_PX := 7.0
 ## Shake amplitude: your own hit vs an explosion nearby.
-const HIT_SHAKE_PX := 5.0
+const HIT_SHAKE_PX := 3.0
 const BLAST_SHAKE_PX := 9.0
 const SHAKE_DECAY := 5.5
 const SHAKE_FREQ := 38.0
@@ -165,7 +167,7 @@ func _on_shot_fired(shooter: Node, _weapon: StringName, _origin: Vector2,
 		dir: Vector2, _pellets: int) -> void:
 	if shooter == null or shooter != player:
 		return
-	_recoil += dir.normalized() * RECOIL_KICK_PX
+	_recoil = (_recoil + dir.normalized() * RECOIL_KICK_PX).limit_length(RECOIL_MAX_PX)
 
 
 func _on_character_hit(victim: Node, attacker: Node, _part: int, _damage: float,
@@ -173,7 +175,7 @@ func _on_character_hit(victim: Node, attacker: Node, _part: int, _damage: float,
 	if victim == player:
 		_add_shake(HIT_SHAKE_PX)
 	elif attacker == player:
-		_add_shake(HIT_SHAKE_PX * 0.35)
+		_add_shake(HIT_SHAKE_PX * 0.15)
 
 
 func _on_detonated(_kind: StringName, pos: Vector2, _radius: float) -> void:

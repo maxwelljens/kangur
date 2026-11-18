@@ -149,11 +149,14 @@ func can_sprint() -> bool:
 static func part_at_offset(local_offset: Vector2) -> Enums.Part:
 	var forward := local_offset.x
 	var lateral := absf(local_offset.y)
-	if (local_offset - Vector2(2.0, 0.0)).length() <= 5.0:
+	# Torso-dominant: center mass is torso so most hits contribute to the kill.
+	# Head is a small center-forward disc; limbs only at the extreme periphery
+	# (wide limb zones made most hits non-lethal arm/leg chips -> bullet sponges).
+	if (local_offset - Vector2(3.0, 0.0)).length() <= 4.0:
 		return Enums.Part.HEAD
-	if lateral > 6.0 and forward > -2.0:
+	if lateral > 8.5 and forward > -1.0:
 		return Enums.Part.ARM_R if local_offset.y > 0.0 else Enums.Part.ARM_L
-	if forward < -4.0 or (lateral > 8.0 and forward <= -2.0):
+	if forward < -8.0:
 		return Enums.Part.LEG_R if local_offset.y > 0.0 else Enums.Part.LEG_L
 	return Enums.Part.TORSO
 

@@ -220,6 +220,7 @@ func _die(attacker: Node, weapon_id: StringName) -> void:
 	if not alive:
 		return
 	alive = false
+	velocity = Vector2.ZERO
 	body.model.alive = false
 	rig.die()
 	var distance := 0.0
