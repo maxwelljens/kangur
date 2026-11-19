@@ -186,6 +186,9 @@ prompt. Yet all of this cost me one maxed out 7 dollar plan from Alibaba Cloud.
 Probably could have cost me even less with something like OpenCode Go, but
 nevertheless highly compelling results for very little cost.
 
+The prompt for the whole game project can be found under
+[`docs/first-prompt.md`](docs/first-prompt.md).
+
 ## Licence
 
 Code: EUPL-1.2 (`LICENCE`). Third-party assets keep their own licenses
